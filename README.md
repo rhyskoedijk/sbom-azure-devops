@@ -5,7 +5,7 @@
     <span>SBOM Tool Azure DevOps Extension</span>
 </h1>
 
-Unoffical Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool); Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts. 
+Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool); Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts. 
 
 ## Install
 
