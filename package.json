@@ -1,0 +1,33 @@
+{
+  "name": "sbom-azure-devops",
+  "version": "1.1.1",
+  "description": "SBOM Tool Azure DevOps Extension",
+  "main": "task/index.js",
+  "scripts": {
+    "build": "cp -r node_modules task/node_modules && tsc",
+    "package": "npx tfx-cli extension create --manifest-globs vss-extension.json"
+  },
+  "keywords": [
+    "sbom",
+    "sbom-tool",
+    "azure",
+    "devops",
+    "spdx",
+    "dependency",
+    "dependencies"
+  ],
+  "author": "Rhys Koedijk",
+  "license": "MIT",
+  "homepage": "https://github.com/rhyskoedijk/sbom-azure-devops#readme",
+  "bugs": {
+    "url": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
+  },
+  "dependencies": {
+    "azure-pipelines-task-lib": "^4.17.3"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.9",
+    "@types/node": "^22.8.0",
+    "@types/q": "^1.5.8"
+  }
+}
