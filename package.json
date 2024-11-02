@@ -25,6 +25,7 @@
     "url": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
   },
   "dependencies": {
+    "@vizdom/vizdom-ts-node": "^0.1.17",
     "azure-pipelines-task-lib": "^4.17.3"
   },
   "devDependencies": {

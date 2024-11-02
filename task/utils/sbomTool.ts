@@ -1,6 +1,7 @@
 import { debug, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
 import * as path from 'path';
 import { section } from './azureDevOps/formattingCommands';
+import { spdxToSvg } from './spdxGraph';
 
 const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases';
 
@@ -98,6 +99,12 @@ export class SbomTool {
     if (sbomToolResultCode != 0) {
       throw new Error(`SBOM Tool failed with exit code ${sbomToolResultCode}`);
     }
+
+    // Generate SBOM graph
+    section(`Generating SPDX graph`);
+    spdxToSvg(
+      path.join(args.manifestDirPath || args.buildDropPath || './', '_manifest', 'spdx_2.2', 'manifest.spdx.json'),
+    );
   }
 
   // Get sbom-tool path, install if missing
