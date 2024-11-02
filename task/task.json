@@ -14,7 +14,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 0
+    "Patch": 6
   },
   "instanceNameFormat": "SBOM Tool",
   "groups": [
@@ -40,16 +40,16 @@
     },
     {
       "name": "buildDropPath",
-      "type": "filePath",
+      "type": "string",
       "label": "Build Drop Path",
-      "defaultValue": "$(Build.StagingDirectory)",
+      "defaultValue": "$(Build.ArtifactStagingDirectory)",
       "required": true,
       "helpMarkDown": "The root folder of the drop directory for which the SBOM file will be generated.",
       "visibleRule": "command=generate"
     },
     {
       "name": "buildComponentPath",
-      "type": "filePath",
+      "type": "string",
       "label": "Build Component Path",
       "defaultValue": "$(Build.SourcesDirectory)",
       "required": true,
@@ -58,7 +58,7 @@
     },
     {
       "name": "buildListFile",
-      "type": "filePath",
+      "type": "string",
       "label": "Build List File",
       "defaultValue": "",
       "required": false,
@@ -67,7 +67,7 @@
     },
     {
       "name": "manifestDirPath",
-      "type": "filePath",
+      "type": "string",
       "label": "Manifest Directory Path",
       "defaultValue": "",
       "required": false,
@@ -78,7 +78,7 @@
       "name": "packageName",
       "type": "string",
       "label": "Package Name",
-      "defaultValue": "",
+      "defaultValue": "$(System.TeamProject)",
       "required": true,
       "helpMarkDown": "The name of the package this SBOM represents. If this is not provided, we will try to infer this name from the build that generated this package, if that also fails, the SBOM generation fails.",
       "visibleRule": "command=generate"
@@ -87,7 +87,7 @@
       "name": "packageVersion",
       "type": "string",
       "label": "Package Version",
-      "defaultValue": "",
+      "defaultValue": "$(Build.BuildNumber)",
       "required": true,
       "helpMarkDown": "The version of the package this SBOM represents. If this is not provided, we will try to infer the version from the build that generated this package, if that also fails, the SBOM generation fails.",
       "visibleRule": "command=generate"
@@ -96,7 +96,7 @@
       "name": "packageSupplier",
       "type": "string",
       "label": "Package Supplier",
-      "defaultValue": "",
+      "defaultValue": "$(System.CollectionId)",
       "required": true,
       "helpMarkDown": "Supplier of the package that this SBOM represents.",
       "visibleRule": "command=generate"
@@ -121,7 +121,7 @@
     },
     {
       "name": "externalDocumentReferenceListFile",
-      "type": "filePath",
+      "type": "string",
       "label": "External Document Reference List File",
       "defaultValue": "",
       "required": false,
@@ -141,7 +141,7 @@
       "name": "namespaceUriBase",
       "type": "string",
       "label": "Namespace URI Base",
-      "defaultValue": "",
+      "defaultValue": "https://$(System.CollectionId).com/",
       "required": true,
       "helpMarkDown": "The base path of the SBOM namespace URI.",
       "visibleRule": "command=generate"
@@ -150,7 +150,7 @@
       "name": "fetchLicenseInformation",
       "type": "boolean",
       "label": "Fetch License Information",
-      "defaultValue": "false",
+      "defaultValue": false,
       "required": false,
       "helpMarkDown": "If set to true, we will attempt to fetch license information of packages detected in the SBOM from the ClearlyDefinedApi.",
       "visibleRule": "command=generate"
@@ -159,7 +159,7 @@
       "name": "enablePackageMetadataParsing",
       "type": "boolean",
       "label": "Enable Package Metadata Parsing",
-      "defaultValue": "false",
+      "defaultValue": false,
       "required": false,
       "helpMarkDown": "If set to true, we will attempt to parse license and supplier info from the packages metadata file (RubyGems, NuGet, Maven, Npm).",
       "visibleRule": "command=generate"

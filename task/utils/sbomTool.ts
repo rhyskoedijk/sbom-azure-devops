@@ -2,7 +2,7 @@ import { debug, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
 import * as path from 'path';
 import { section } from './azureDevOps/formattingCommands';
 
-const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases/';
+const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases';
 
 export interface SbomGenerateArgs {
   buildDropPath?: string;
@@ -23,11 +23,13 @@ export interface SbomGenerateArgs {
 
 export class SbomTool {
   private toolsDirectory: string;
+  private toolArchitecture: string;
   private toolVersion?: string;
   private debug: boolean;
 
   constructor(version?: string) {
     this.toolsDirectory = getVariable('Agent.ToolsDirectory') || __dirname;
+    this.toolArchitecture = getVariable('Agent.OSArchitecture') || 'x64';
     this.toolVersion = version;
     this.debug = getVariable('System.Debug')?.toLocaleLowerCase() == 'true';
   }
@@ -100,7 +102,7 @@ export class SbomTool {
 
   // Get sbom-tool path, install if missing
   private async getToolPath(installIfMissing: boolean = true): Promise<string> {
-    const toolPath = which('sbom-tool', false);
+    let toolPath: string | undefined = which('sbom-tool', false);
     if (toolPath) {
       return toolPath;
     }
@@ -109,28 +111,31 @@ export class SbomTool {
     }
 
     debug('SBOM Tool install was not found, attempting to install now...');
-    section('Installing SBOM Tool');
     const agentOperatingSystem = getVariable('Agent.OS');
-    switch (agentOperatingSystem) {
+    switch (getVariable('Agent.OS')) {
       case 'Darwin':
       case 'Linux':
-        await installToolLinux(this.toolsDirectory, this.toolVersion);
+        toolPath = await installToolLinux(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
         break;
       case 'Windows_NT':
-        await installToolWindows(this.toolsDirectory, this.toolVersion);
+        toolPath = await installToolWindows(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
         break;
       default:
-        throw new Error(`Unable to install SBOM Tool, unsupported agent OS '${agentOperatingSystem}'`);
+        throw new Error(`Unable to install SBOM Tool, unsupported agent OS '${getVariable('Agent.OS')}'`);
     }
 
-    return which('sbom-tool', true);
+    return toolPath || which('sbom-tool', true);
   }
 }
 
 /**
  * Install sbom-tool using Brew (if available), or manual download via Bash
  */
-async function installToolLinux(directory: string, version?: string) {
+async function installToolLinux(
+  directory: string,
+  architecture?: string,
+  version?: string,
+): Promise<string | undefined> {
   const brewToolPath = which('brew', false);
   if (brewToolPath) {
     await tool(brewToolPath)
@@ -141,16 +146,21 @@ async function installToolLinux(directory: string, version?: string) {
     await tool(which('bash', true))
       .arg([
         '-c',
-        `curl "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/download/sbom-tool-linux-x64" -Lo "${toolPath}" && chmod +x "${toolPath}"`,
+        `curl "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/download/sbom-tool-linux-${architecture}" -Lo "${toolPath}" && chmod +x "${toolPath}"`,
       ])
       .execAsync();
+    return toolPath;
   }
 }
 
 /**
  * Install sbom-tool using WinGet (if available), or manual download via PowerShell
  */
-async function installToolWindows(directory: string, version?: string) {
+async function installToolWindows(
+  directory: string,
+  architecture?: string,
+  version?: string,
+): Promise<string | undefined> {
   const wingetToolPath = which('winget', false);
   if (wingetToolPath) {
     await tool(wingetToolPath)
@@ -161,8 +171,9 @@ async function installToolWindows(directory: string, version?: string) {
     await tool(which('powershell', true))
       .arg([
         `-Command`,
-        `Invoke-WebRequest -Uri "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/sbom-tool-win-x64.exe" -OutFile "${toolPath}"`,
+        `Invoke-WebRequest -Uri "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/sbom-tool-win-${architecture}.exe" -OutFile "${toolPath}"`,
       ])
       .execAsync();
+    return toolPath;
   }
 }
