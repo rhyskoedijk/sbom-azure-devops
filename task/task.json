@@ -24,7 +24,147 @@
       "isExpanded": false
     }
   ],
-  "inputs": [],
+  "inputs": [
+    {
+      "name": "command",
+      "type": "pickList",
+      "label": "Command",
+      "defaultValue": "generate",
+      "required": true,
+      "helpMarkDown": "The merge strategy to use. Learn more [here](https://learn.microsoft.com/en-us/rest/api/azure/devops/git/pull-requests/update?view=azure-devops-rest-5.1&tabs=HTTP#gitpullrequestmergestrategy).",
+      "options": {
+        "generate": "Generate",
+        "validate": "Validate",
+        "redact": "Redact"
+      }
+    },
+    {
+      "name": "buildDropPath",
+      "type": "filePath",
+      "label": "Build Drop Path",
+      "defaultValue": "$(Build.StagingDirectory)",
+      "required": true,
+      "helpMarkDown": "The root folder of the drop directory for which the SBOM file will be generated.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "buildComponentPath",
+      "type": "filePath",
+      "label": "Build Component Path",
+      "defaultValue": "$(Build.SourcesDirectory)",
+      "required": true,
+      "helpMarkDown": "The folder containing the build components and packages.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "buildListFile",
+      "type": "filePath",
+      "label": "Build List File",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The file path to a file containing a list of files one file per line for which the SBOM file will be generated. Only files listed in the file will be included in the generated SBOM.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "manifestDirPath",
+      "type": "filePath",
+      "label": "Manifest Directory Path",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The path of the directory where the generated SBOM files will be placed. A folder named '_manifest' will be created at this location, where all generated SBOMs will be placed. If this parameter is not specified, the files will be placed in {BuildDropPath}/_manifest directory.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "packageName",
+      "type": "string",
+      "label": "Package Name",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The name of the package this SBOM represents. If this is not provided, we will try to infer this name from the build that generated this package, if that also fails, the SBOM generation fails.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "packageVersion",
+      "type": "string",
+      "label": "Package Version",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The version of the package this SBOM represents. If this is not provided, we will try to infer the version from the build that generated this package, if that also fails, the SBOM generation fails.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "packageSupplier",
+      "type": "string",
+      "label": "Package Supplier",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "Supplier of the package that this SBOM represents.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "dockerImagesToScan",
+      "type": "string",
+      "label": "Docker Images To Scan",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for packages, ex: ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "additionalComponentDetectorArgs",
+      "type": "string",
+      "label": "Additional Component Detector Args",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Additional set of arguments for Component Detector. An appropriate usage of this would be a space-delimited list of `--key value` pairs, representing command-line arguments.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "externalDocumentReferenceListFile",
+      "type": "filePath",
+      "label": "External Document Reference List File",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The path to a file containing a list of external SBOMs that will be included as external document reference in the output SBOM. SPDX 2.2 is the only supported format for now.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "namespaceUriUniquePart",
+      "type": "string",
+      "label": "Namespace URI Unique Part",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "A unique valid URI part that will be appended to the SPDX SBOM namespace URI. This value should be globally unique.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "namespaceUriBase",
+      "type": "string",
+      "label": "Namespace URI Base",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The base path of the SBOM namespace URI.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "fetchLicenseInformation",
+      "type": "boolean",
+      "label": "Fetch License Information",
+      "defaultValue": "false",
+      "required": false,
+      "helpMarkDown": "If set to true, we will attempt to fetch license information of packages detected in the SBOM from the ClearlyDefinedApi.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "enablePackageMetadataParsing",
+      "type": "boolean",
+      "label": "Enable Package Metadata Parsing",
+      "defaultValue": "false",
+      "required": false,
+      "helpMarkDown": "If set to true, we will attempt to parse license and supplier info from the packages metadata file (RubyGems, NuGet, Maven, Npm).",
+      "visibleRule": "command=generate"
+    }
+  ],
   "execution": {
     "Node20_1": {
       "target": "index.js"
