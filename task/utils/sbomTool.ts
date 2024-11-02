@@ -178,7 +178,7 @@ async function installToolWindows(
     await tool(which('powershell', true))
       .arg([
         `-Command`,
-        `Invoke-WebRequest -Uri "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/sbom-tool-win-${architecture}.exe" -OutFile "${toolPath}"`,
+        `Invoke-WebRequest -Uri "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/download/sbom-tool-win-${architecture}.exe" -OutFile "${toolPath}"`,
       ])
       .execAsync();
     return toolPath;
