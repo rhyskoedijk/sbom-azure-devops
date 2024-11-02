@@ -1,3 +1,4 @@
+_manifest
 **/node_modules
 **/*.js
 **/*.vsix
