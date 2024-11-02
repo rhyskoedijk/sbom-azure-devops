@@ -5,11 +5,11 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    target-branch: "main"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    target-branch: 'main'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "saturday"
-      time: "06:00"
-      timezone: "Pacific/Auckland"
+      interval: 'weekly'
+      day: 'saturday'
+      time: '06:00'
+      timezone: 'Pacific/Auckland'

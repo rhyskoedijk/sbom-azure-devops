@@ -1,38 +1,33 @@
 {
-    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "79d7e0df-bd9a-4658-9897-ae059fc992c5",
-    "name": "sbom-tool",
-    "friendlyName": "SBOM Tool",
-    "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
-    "helpMarkDown": "For help, please raise an issue at https://github.com/rhyskoedijk/sbom-azure-devops/issues",
-    "helpUrl": "https://github.com/rhyskoedijk/sbom-azure-devops/issues",
-    "releaseNotes": "https://github.com/rhyskoedijk/sbom-azure-devops/releases",
-    "category": "Build",
-    "visibility": [
-        "Build"
-    ],
-    "runsOn": [
-        "Agent"
-    ],
-    "author": "Rhys Koedijk",
-    "version": {
-        "Major": 1,
-        "Minor": 0,
-        "Patch": 0
-    },
-    "instanceNameFormat": "SBOM Tool",
-    "groups": [
-        {
-            "name": "advanced",
-            "displayName": "Advanced",
-            "isExpanded": false
-        }
-    ],
-    "inputs": [
-    ],
-    "execution": {
-        "Node20_1": {
-            "target": "index.js"
-        }
+  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+  "id": "79d7e0df-bd9a-4658-9897-ae059fc992c5",
+  "name": "sbom-tool",
+  "friendlyName": "SBOM Tool",
+  "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
+  "helpMarkDown": "For help, please raise an issue at https://github.com/rhyskoedijk/sbom-azure-devops/issues",
+  "helpUrl": "https://github.com/rhyskoedijk/sbom-azure-devops/issues",
+  "releaseNotes": "https://github.com/rhyskoedijk/sbom-azure-devops/releases",
+  "category": "Build",
+  "visibility": ["Build"],
+  "runsOn": ["Agent"],
+  "author": "Rhys Koedijk",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "instanceNameFormat": "SBOM Tool",
+  "groups": [
+    {
+      "name": "advanced",
+      "displayName": "Advanced",
+      "isExpanded": false
     }
+  ],
+  "inputs": [],
+  "execution": {
+    "Node20_1": {
+      "target": "index.js"
+    }
+  }
 }

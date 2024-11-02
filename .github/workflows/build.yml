@@ -12,19 +12,19 @@ jobs:
     name: Build extension
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18.x'
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: NPM Install
-      run: npm install
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
 
-    - name: NPM Build
-      run: npm run build
+      - name: NPM Install
+        run: npm install
 
-    - name: NPM Package
-      run: npm run package
+      - name: NPM Build
+        run: npm run build
+
+      - name: NPM Package
+        run: npm run package
