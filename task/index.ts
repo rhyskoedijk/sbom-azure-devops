@@ -25,7 +25,7 @@ async function run() {
         });
         break;
       default:
-        throw new Error(`Invalid comand: ${sbomCommand}`);
+        throw new Error(`Invalid command: ${sbomCommand}`);
     }
 
     setResult(TaskResult.Succeeded, 'Success');
