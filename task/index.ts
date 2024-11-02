@@ -1,11 +1,10 @@
-import { getBoolInput } from 'azure-pipelines-task-lib';
-import { getInput, setResult, TaskResult } from 'azure-pipelines-task-lib/task';
+import { getBoolInput, getInput, setResult, TaskResult } from 'azure-pipelines-task-lib/task';
 import { SbomTool } from './utils/sbomTool';
 
 async function run() {
   try {
-    const sbomTool = new SbomTool(true);
-    const sbomCommand = getInput('sbomCommand', true);
+    const sbomTool = new SbomTool(getInput('version', false));
+    const sbomCommand = getInput('command', true);
     switch (sbomCommand) {
       case 'generate':
         await sbomTool.generate({

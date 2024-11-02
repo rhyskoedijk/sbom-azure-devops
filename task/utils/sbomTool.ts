@@ -1,6 +1,8 @@
-import { debug, tool, which } from 'azure-pipelines-task-lib/task';
-import { ToolRunner } from 'azure-pipelines-task-lib/toolrunner';
+import { debug, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
+import * as path from 'path';
 import { section } from './azureDevOps/formattingCommands';
+
+const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases/';
 
 export interface SbomGenerateArgs {
   buildDropPath?: string;
@@ -20,10 +22,14 @@ export interface SbomGenerateArgs {
 }
 
 export class SbomTool {
+  private toolsDirectory: string;
+  private toolVersion?: string;
   private debug: boolean;
 
-  constructor(debug: boolean) {
-    this.debug = debug;
+  constructor(version?: string) {
+    this.toolsDirectory = getVariable('Agent.ToolsDirectory') || __dirname;
+    this.toolVersion = version;
+    this.debug = getVariable('System.Debug')?.toLocaleLowerCase() == 'true';
   }
 
   // Run `sbom-tool generate` command
@@ -102,22 +108,61 @@ export class SbomTool {
       throw new Error('SBOM Tool install not found');
     }
 
-    let installRunner: ToolRunner;
-    const wingetToolPath = which('winget', true);
-    const brewToolPath = which('brew', true);
-    if (wingetToolPath) {
-      installRunner = tool(wingetToolPath).arg(['install', 'Microsoft.SbomTool']);
-    } else if (brewToolPath) {
-      installRunner = tool(brewToolPath).arg(['install', 'sbom-tool']);
-    } else {
-      throw new Error(
-        'No package manager found tht can install SBOM Tool. Please install `sbom-tool` or a supported package manager (`winget`, `brew`), then try again.',
-      );
-    }
-
     debug('SBOM Tool install was not found, attempting to install now...');
     section('Installing SBOM Tool');
-    await installRunner.execAsync();
+    const agentOperatingSystem = getVariable('Agent.OS');
+    switch (agentOperatingSystem) {
+      case 'Darwin':
+      case 'Linux':
+        await installToolLinux(this.toolsDirectory, this.toolVersion);
+        break;
+      case 'Windows_NT':
+        await installToolWindows(this.toolsDirectory, this.toolVersion);
+        break;
+      default:
+        throw new Error(`Unable to install SBOM Tool, unsupported agent OS '${agentOperatingSystem}'`);
+    }
+
     return which('sbom-tool', true);
+  }
+}
+
+/**
+ * Install sbom-tool using Brew (if available), or manual download via Bash
+ */
+async function installToolLinux(directory: string, version?: string) {
+  const brewToolPath = which('brew', false);
+  if (brewToolPath) {
+    await tool(brewToolPath)
+      .arg(['install', version ? `sbom-tool@${version}` : 'sbom-tool'])
+      .execAsync();
+  } else {
+    const toolPath = path.join(directory, 'sbom-tool');
+    await tool(which('bash', true))
+      .arg([
+        '-c',
+        `curl "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/download/sbom-tool-linux-x64" -Lo "${toolPath}" && chmod +x "${toolPath}"`,
+      ])
+      .execAsync();
+  }
+}
+
+/**
+ * Install sbom-tool using WinGet (if available), or manual download via PowerShell
+ */
+async function installToolWindows(directory: string, version?: string) {
+  const wingetToolPath = which('winget', false);
+  if (wingetToolPath) {
+    await tool(wingetToolPath)
+      .arg(['install', 'Microsoft.SbomTool'].concat(version ? ['--version', version] : []))
+      .execAsync();
+  } else {
+    const toolPath = path.join(directory, 'sbom-tool.exe');
+    await tool(which('powershell', true))
+      .arg([
+        `-Command`,
+        `Invoke-WebRequest -Uri "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/sbom-tool-win-x64.exe" -OutFile "${toolPath}"`,
+      ])
+      .execAsync();
   }
 }
