@@ -93,7 +93,6 @@ export async function getSecurityAdvisoriesAsync(
     return vulnerabilities.map((vulnerabilitity: any) => {
       return {
         package: pkg,
-        // TODO: Handle multiple, https://github.com/advisories/GHSA-8g4q-xg66-9fp4
         affectedVersionRange: vulnerabilitity.vulnerableVersionRange,
         identifiers: vulnerabilitity.advisory?.identifiers?.map((id: any) => ({
           type: id.type,

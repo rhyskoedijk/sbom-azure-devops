@@ -14,7 +14,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 10
+    "Patch": 11
   },
   "instanceNameFormat": "SBOM Tool",
   "groups": [
@@ -160,7 +160,7 @@
       "label": "Package Supplier",
       "defaultValue": "$(System.CollectionId)",
       "required": true,
-      "helpMarkDown": "The supplier of the package that this SBOM represents. Defaults to the parent collection name.",
+      "helpMarkDown": "The supplier of the package that this SBOM represents. Defaults to the parent collection GUID.",
       "visibleRule": "command=generate"
     },
     {
@@ -168,9 +168,9 @@
       "name": "packageNamespaceUriBase",
       "type": "string",
       "label": "Package Namespace URI Base",
-      "defaultValue": "https://$(System.CollectionId).com/",
+      "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The base path of the SBOM namespace URI. If empty, the value `https://{packageSupplier}.com` is used. For example, the namespace base URI value of `https://companyName.com/teamName` will create the (unique) namespace `https://companyName.com/teamName/{packageName}/{packageVersion}/{newGuid}`.",
+      "helpMarkDown": "The base path of the SBOM namespace URI. Defaults to `https://{packageSupplier}.com`. For example, a URI base of `https://companyName.com/teamName` will create the (unique) namespace `https://companyName.com/teamName/{packageName}/{packageVersion}/{newGuid}`.",
       "visibleRule": "command=generate"
     },
     {
@@ -190,7 +190,7 @@
       "label": "Docker Images To Scan",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for packages. For example, `ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab`.",
+      "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for package dependencies. For example, `ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab`.",
       "visibleRule": "command=generate"
     },
     {
@@ -204,6 +204,7 @@
       "visibleRule": "command=generate"
     },
     {
+      "groupName": "advanced",
       "name": "externalDocumentReferenceList",
       "type": "string",
       "label": "External Document Reference List",

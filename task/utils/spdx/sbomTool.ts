@@ -8,6 +8,9 @@ import { spdxGraphToSvgAsync } from './spdxGraphToSvg';
 import { spdxAddPackageSecurityAdvisoryExternalRefsAsync } from './spdxPackageSecurityAdvisories';
 
 const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases';
+const MANIFEST_DIR_NAME = '_manifest';
+const MANIFEST_FORMAT = 'spdx';
+const MANIFEST_VERSION = '2.2';
 
 export interface SbomGenerateArgs {
   buildSourcePath: string;
@@ -103,9 +106,9 @@ export class SbomTool {
     }
     const sbomPath = path.join(
       args.manifestOutputPath || args.buildArtifactPath || __dirname,
-      '_manifest',
-      'spdx_2.2',
-      'manifest.spdx.json',
+      MANIFEST_DIR_NAME,
+      `${MANIFEST_FORMAT}_${MANIFEST_VERSION}`,
+      `manifest.${MANIFEST_FORMAT}.json`,
     );
     if (!fileExistsSync(sbomPath)) {
       throw new Error(`SBOM Tool did not generate SPDX file: '${sbomPath}'`);
