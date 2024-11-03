@@ -1,11 +1,13 @@
 {
   "name": "sbom-azure-devops",
-  "version": "1.1.1",
+  "version": "1.0.0",
   "description": "SBOM Tool Azure DevOps Extension",
   "main": "task/index.js",
   "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "build": "cp -r node_modules task/node_modules && tsc",
-    "package": "npx tfx-cli extension create --manifest-globs vss-extension.json"
+    "package": "npx tfx-cli extension create --manifest-globs vss-extension.json --output-path dist"
   },
   "keywords": [
     "sbom",
@@ -23,11 +25,18 @@
     "url": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
   },
   "dependencies": {
-    "azure-pipelines-task-lib": "^4.17.3"
+    "@types/axios": "^0.14.4",
+    "@types/semver": "^7.5.8",
+    "@vizdom/vizdom-ts-node": "^0.1.17",
+    "axios": "^1.7.7",
+    "azure-pipelines-task-lib": "^4.17.3",
+    "semver": "^7.6.3"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.9",
     "@types/node": "^22.8.6",
-    "@types/q": "^1.5.8"
+    "@types/q": "^1.5.8",
+    "prettier": "3.3.3",
+    "prettier-plugin-organize-imports": "4.1.0"
   }
 }
