@@ -1,4 +1,4 @@
-_manifest
+dist
 **/node_modules
 **/*.js
 **/*.vsix

@@ -14,7 +14,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 6
+    "Patch": 10
   },
   "instanceNameFormat": "SBOM Tool",
   "groups": [
@@ -147,6 +147,15 @@
       "visibleRule": "command=generate"
     },
     {
+      "name": "enablePackageMetadataParsing",
+      "type": "boolean",
+      "label": "Enable Package Metadata Parsing",
+      "defaultValue": false,
+      "required": false,
+      "helpMarkDown": "If set to true, we will attempt to parse license and supplier info from the packages metadata file (RubyGems, NuGet, Maven, Npm).",
+      "visibleRule": "command=generate"
+    },
+    {
       "name": "fetchLicenseInformation",
       "type": "boolean",
       "label": "Fetch License Information",
@@ -156,12 +165,30 @@
       "visibleRule": "command=generate"
     },
     {
-      "name": "enablePackageMetadataParsing",
+      "name": "fetchSecurityAdvisories",
       "type": "boolean",
-      "label": "Enable Package Metadata Parsing",
+      "label": "Fetch Security Advisory Information",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to true, we will attempt to parse license and supplier info from the packages metadata file (RubyGems, NuGet, Maven, Npm).",
+      "helpMarkDown": "If set to true, we will attempt to fetch security advisory information of packages detected in the SBOM from the GitHub Advisory Database.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "gitHubAccessToken",
+      "type": "string",
+      "label": "GitHub Access Token",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The GitHub access token to be used for fetching security advisories.",
+      "visibleRule": "fetchSecurityAdvisories=true"
+    },
+    {
+      "name": "generateGraphDiagram",
+      "type": "boolean",
+      "label": "Generate Graph Diagram",
+      "defaultValue": false,
+      "required": false,
+      "helpMarkDown": "If set to true, we will generate a graph diagram of the SBOM document, in SVG format.",
       "visibleRule": "command=generate"
     }
   ],

@@ -1,7 +1,9 @@
-import { debug, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
+import { getVariable, tool, which } from 'azure-pipelines-task-lib/task';
+import { existsSync as fileExistsSync } from 'fs';
 import * as path from 'path';
-import { section } from './azureDevOps/formattingCommands';
-import { spdxToSvg } from './spdxGraph';
+import { section } from '../azureDevOps/formattingCommands';
+import { spdxGraphToSvg } from './spdxGraphToSvg';
+import { spdxAddPackageSecurityAdvisoryExternalRefs } from './spdxPackageSecurityAdvisories';
 
 const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases';
 
@@ -18,8 +20,11 @@ export interface SbomGenerateArgs {
   externalDocumentReferenceListFile?: string;
   namespaceUriUniquePart?: string;
   namespaceUriBase?: string;
-  fetchLicenseInformation?: boolean;
   enablePackageMetadataParsing?: boolean;
+  fetchLicenseInformation?: boolean;
+  fetchSecurityAdvisories?: boolean;
+  gitHubAccessToken?: string;
+  generateGraphDiagram?: boolean;
 }
 
 export class SbomTool {
@@ -99,12 +104,27 @@ export class SbomTool {
     if (sbomToolResultCode != 0) {
       throw new Error(`SBOM Tool failed with exit code ${sbomToolResultCode}`);
     }
-
-    // Generate SBOM graph
-    section(`Generating SPDX graph`);
-    spdxToSvg(
-      path.join(args.manifestDirPath || args.buildDropPath || './', '_manifest', 'spdx_2.2', 'manifest.spdx.json'),
+    const sbomPath = path.join(
+      args.manifestDirPath || args.buildDropPath || __dirname,
+      '_manifest',
+      'spdx_2.2',
+      'manifest.spdx.json',
     );
+    if (!fileExistsSync(sbomPath)) {
+      throw new Error(`SBOM Tool did not generate SPDX file: '${sbomPath}'`);
+    }
+
+    // Check packages for security advisories
+    if (args.fetchSecurityAdvisories && args.gitHubAccessToken) {
+      section('Checking package security advisories');
+      await spdxAddPackageSecurityAdvisoryExternalRefs(sbomPath, args.gitHubAccessToken);
+    }
+
+    // Generate a user-friendly graph diagram of the SPDX file
+    if (args.generateGraphDiagram) {
+      section(`Generating graph diagram`);
+      await spdxGraphToSvg(sbomPath);
+    }
   }
 
   // Get sbom-tool path, install if missing
@@ -117,8 +137,8 @@ export class SbomTool {
       throw new Error('SBOM Tool install not found');
     }
 
-    debug('SBOM Tool install was not found, attempting to install now...');
-    const agentOperatingSystem = getVariable('Agent.OS');
+    console.info('SBOM Tool install was not found, attempting to install now...');
+    section("Installing 'sbom-tool'");
     switch (getVariable('Agent.OS')) {
       case 'Darwin':
       case 'Linux':

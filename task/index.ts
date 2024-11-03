@@ -1,5 +1,5 @@
 import { getBoolInput, getInput, setResult, TaskResult } from 'azure-pipelines-task-lib/task';
-import { SbomTool } from './utils/sbomTool';
+import { SbomTool } from './utils/spdx/sbomTool';
 
 async function run() {
   try {
@@ -20,8 +20,12 @@ async function run() {
           externalDocumentReferenceListFile: getInput('externalDocumentReferenceListFile', false),
           namespaceUriUniquePart: getInput('namespaceUriUniquePart', false),
           namespaceUriBase: getInput('namespaceUriBase', true),
-          fetchLicenseInformation: getBoolInput('fetchLicenseInformation', false),
           enablePackageMetadataParsing: getBoolInput('enablePackageMetadataParsing', false),
+          fetchLicenseInformation: getBoolInput('fetchLicenseInformation', false),
+          fetchSecurityAdvisories: getBoolInput('fetchSecurityAdvisories', false),
+          // TODO: Add service connection support
+          gitHubAccessToken: getInput('gitHubAccessToken', false),
+          generateGraphDiagram: getBoolInput('generateGraphDiagram', false),
         });
         break;
       default:
