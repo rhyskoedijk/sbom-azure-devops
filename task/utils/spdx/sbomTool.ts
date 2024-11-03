@@ -1,30 +1,32 @@
 import { getVariable, tool, which } from 'azure-pipelines-task-lib/task';
 import { existsSync as fileExistsSync } from 'fs';
+import * as fs from 'fs/promises';
+import { tmpdir } from 'node:os';
 import * as path from 'path';
 import { section } from '../azureDevOps/formattingCommands';
-import { spdxGraphToSvg } from './spdxGraphToSvg';
-import { spdxAddPackageSecurityAdvisoryExternalRefs } from './spdxPackageSecurityAdvisories';
+import { spdxGraphToSvgAsync } from './spdxGraphToSvg';
+import { spdxAddPackageSecurityAdvisoryExternalRefsAsync } from './spdxPackageSecurityAdvisories';
 
 const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases';
 
 export interface SbomGenerateArgs {
-  buildDropPath?: string;
-  buildComponentPath?: string;
-  buildListFile?: string;
-  manifestDirPath?: string;
-  packageName?: string;
-  packageVersion?: string;
-  packageSupplier?: string;
-  dockerImagesToScan?: string;
-  additionalComponentDetectorArgs?: string;
-  externalDocumentReferenceListFile?: string;
-  namespaceUriUniquePart?: string;
-  namespaceUriBase?: string;
+  buildSourcePath: string;
+  buildArtifactPath: string;
+  buildFileList?: string;
+  manifestOutputPath?: string;
+  enableManifestGraphGeneration?: boolean;
   enablePackageMetadataParsing?: boolean;
   fetchLicenseInformation?: boolean;
   fetchSecurityAdvisories?: boolean;
   gitHubAccessToken?: string;
-  generateGraphDiagram?: boolean;
+  packageName: string;
+  packageVersion: string;
+  packageSupplier: string;
+  packageNamespaceUriBase?: string;
+  packageNamespaceUriUniquePart?: string;
+  dockerImagesToScan?: string;
+  additionalComponentDetectorArgs?: string;
+  externalDocumentReferenceListFile?: string;
 }
 
 export class SbomTool {
@@ -42,33 +44,38 @@ export class SbomTool {
 
   // Run `sbom-tool generate` command
   // https://github.com/microsoft/sbom-tool?tab=readme-ov-file#sbom-generation
-  public async generate(args: SbomGenerateArgs): Promise<void> {
+  public async generateAsync(args: SbomGenerateArgs): Promise<void> {
     // Find the sbom-tool path, or install it if missing
-    const sbomToolPath = await this.getToolPath();
+    const sbomToolPath = await this.getToolPathAsync();
 
     // Build sbom-tool arguments
     // See: https://github.com/microsoft/sbom-tool/blob/main/docs/sbom-tool-arguments.md
     let sbomToolArguments = ['generate'];
-    if (args.buildDropPath) {
-      sbomToolArguments.push('-b', args.buildDropPath);
+    sbomToolArguments.push('-bc', args.buildSourcePath);
+    sbomToolArguments.push('-b', args.buildArtifactPath);
+    if (args.buildFileList) {
+      sbomToolArguments.push('-bl', await createTemporaryFileAsync('build-file-list', args.buildFileList));
     }
-    if (args.buildComponentPath) {
-      sbomToolArguments.push('-bc', args.buildComponentPath);
+    if (args.manifestOutputPath) {
+      sbomToolArguments.push('-m', args.manifestOutputPath);
     }
-    if (args.buildListFile) {
-      sbomToolArguments.push('-bl', args.buildListFile);
+    sbomToolArguments.push('-D', 'true');
+    if (args.enablePackageMetadataParsing) {
+      sbomToolArguments.push('-pm', 'true');
     }
-    if (args.manifestDirPath) {
-      sbomToolArguments.push('-m', args.manifestDirPath);
+    if (args.fetchLicenseInformation) {
+      sbomToolArguments.push('-li', 'true');
     }
-    if (args.packageName) {
-      sbomToolArguments.push('-pn', args.packageName);
+    sbomToolArguments.push('-pn', args.packageName);
+    sbomToolArguments.push('-pv', args.packageVersion);
+    sbomToolArguments.push('-ps', args.packageSupplier);
+    if (args.packageNamespaceUriBase) {
+      sbomToolArguments.push('-nsb', args.packageNamespaceUriBase);
+    } else {
+      sbomToolArguments.push('-nsb', `https://${args.packageSupplier}.com`);
     }
-    if (args.packageVersion) {
-      sbomToolArguments.push('-pv', args.packageVersion);
-    }
-    if (args.packageSupplier) {
-      sbomToolArguments.push('-ps', args.packageSupplier);
+    if (args.packageNamespaceUriUniquePart) {
+      sbomToolArguments.push('-nsu', args.packageNamespaceUriUniquePart);
     }
     if (args.dockerImagesToScan) {
       sbomToolArguments.push('-di', args.dockerImagesToScan);
@@ -77,21 +84,11 @@ export class SbomTool {
       sbomToolArguments.push('-cd', args.additionalComponentDetectorArgs);
     }
     if (args.externalDocumentReferenceListFile) {
-      sbomToolArguments.push('-er', args.externalDocumentReferenceListFile);
+      sbomToolArguments.push(
+        '-er',
+        await createTemporaryFileAsync('external-doc-refs-list', args.externalDocumentReferenceListFile),
+      );
     }
-    if (args.namespaceUriUniquePart) {
-      sbomToolArguments.push('-nsu', args.namespaceUriUniquePart);
-    }
-    if (args.namespaceUriBase) {
-      sbomToolArguments.push('-nsb', args.namespaceUriBase);
-    }
-    if (args.fetchLicenseInformation) {
-      sbomToolArguments.push('-li', 'true');
-    }
-    if (args.enablePackageMetadataParsing) {
-      sbomToolArguments.push('-pm', 'true');
-    }
-    sbomToolArguments.push('-D', 'true');
     sbomToolArguments.push('-V', this.debug ? 'Debug' : 'Information');
 
     // Run sbom-tool
@@ -105,7 +102,7 @@ export class SbomTool {
       throw new Error(`SBOM Tool failed with exit code ${sbomToolResultCode}`);
     }
     const sbomPath = path.join(
-      args.manifestDirPath || args.buildDropPath || __dirname,
+      args.manifestOutputPath || args.buildArtifactPath || __dirname,
       '_manifest',
       'spdx_2.2',
       'manifest.spdx.json',
@@ -117,18 +114,18 @@ export class SbomTool {
     // Check packages for security advisories
     if (args.fetchSecurityAdvisories && args.gitHubAccessToken) {
       section('Checking package security advisories');
-      await spdxAddPackageSecurityAdvisoryExternalRefs(sbomPath, args.gitHubAccessToken);
+      await spdxAddPackageSecurityAdvisoryExternalRefsAsync(sbomPath, args.gitHubAccessToken);
     }
 
     // Generate a user-friendly graph diagram of the SPDX file
-    if (args.generateGraphDiagram) {
+    if (args.enableManifestGraphGeneration) {
       section(`Generating graph diagram`);
-      await spdxGraphToSvg(sbomPath);
+      await spdxGraphToSvgAsync(sbomPath);
     }
   }
 
   // Get sbom-tool path, install if missing
-  private async getToolPath(installIfMissing: boolean = true): Promise<string> {
+  private async getToolPathAsync(installIfMissing: boolean = true): Promise<string> {
     let toolPath: string | undefined = which('sbom-tool', false);
     if (toolPath) {
       return toolPath;
@@ -142,10 +139,10 @@ export class SbomTool {
     switch (getVariable('Agent.OS')) {
       case 'Darwin':
       case 'Linux':
-        toolPath = await installToolLinux(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
+        toolPath = await installToolLinuxAsync(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
         break;
       case 'Windows_NT':
-        toolPath = await installToolWindows(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
+        toolPath = await installToolWindowsAsync(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
         break;
       default:
         throw new Error(`Unable to install SBOM Tool, unsupported agent OS '${getVariable('Agent.OS')}'`);
@@ -158,7 +155,7 @@ export class SbomTool {
 /**
  * Install sbom-tool using Brew (if available), or manual download via Bash
  */
-async function installToolLinux(
+async function installToolLinuxAsync(
   directory: string,
   architecture?: string,
   version?: string,
@@ -183,7 +180,7 @@ async function installToolLinux(
 /**
  * Install sbom-tool using WinGet (if available), or manual download via PowerShell
  */
-async function installToolWindows(
+async function installToolWindowsAsync(
   directory: string,
   architecture?: string,
   version?: string,
@@ -203,4 +200,16 @@ async function installToolWindows(
       .execAsync();
     return toolPath;
   }
+}
+
+/**
+ * Create a unique file within the OS temp directory
+ * @param fileName The name of the file
+ * @param content The content of the file
+ * @returns The path to the temporary file
+ */
+async function createTemporaryFileAsync(fileName: string, content: string): Promise<string> {
+  const tmpFilePath = path.join(await fs.mkdtemp(path.join(tmpdir(), 'sbom-tool-')), fileName);
+  await fs.writeFile(tmpFilePath, content);
+  return tmpFilePath;
 }

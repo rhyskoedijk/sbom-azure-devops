@@ -34,7 +34,7 @@ export interface ISecurityAdvisory {
  * @param packageEcosystem
  * @param packages
  */
-export async function getSecurityAdvisories(
+export async function getSecurityAdvisoriesAsync(
   accessToken: string,
   packageEcosystem: string,
   packages: IPackage[],
@@ -66,7 +66,7 @@ export async function getSecurityAdvisories(
   // To speed up the process, we can make the requests in parallel, 100 at a time. We batch the requests to avoid hitting the rate limit too quickly.
   // https://docs.github.com/en/graphql/overview/rate-limits-and-node-limits-for-the-graphql-api
   console.info(`Checking security advisories for ${packages.length} ${packageEcosystem} packages`);
-  const securityAdvisories = await batchSecurityAdvisoryQuery(100, packages, async (pkg) => {
+  const securityAdvisories = await batchSecurityAdvisoryQueryAsync(100, packages, async (pkg) => {
     const variables = {
       ecosystem: packageEcosystem,
       package: pkg.name,
@@ -123,7 +123,7 @@ export async function getSecurityAdvisories(
   return affectedAdvisories;
 }
 
-async function batchSecurityAdvisoryQuery(
+async function batchSecurityAdvisoryQueryAsync(
   batchSize: number,
   packages: IPackage[],
   action: (pkg: IPackage) => Promise<ISecurityAdvisory[]>,

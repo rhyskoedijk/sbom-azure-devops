@@ -19,6 +19,11 @@
   "instanceNameFormat": "SBOM Tool",
   "groups": [
     {
+      "name": "package",
+      "displayName": "Package Information",
+      "isExpanded": true
+    },
+    {
       "name": "advanced",
       "displayName": "Advanced",
       "isExpanded": false
@@ -39,111 +44,48 @@
       }
     },
     {
-      "name": "buildDropPath",
+      "name": "buildSourcePath",
       "type": "string",
-      "label": "Build Drop Path",
-      "defaultValue": "$(Build.ArtifactStagingDirectory)",
-      "required": true,
-      "helpMarkDown": "The root folder of the drop directory for which the SBOM file will be generated.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "buildComponentPath",
-      "type": "string",
-      "label": "Build Component Path",
+      "label": "Build Source Path",
       "defaultValue": "$(Build.SourcesDirectory)",
       "required": true,
-      "helpMarkDown": "The folder containing the build components and packages.",
+      "helpMarkDown": "The directory containing build source files to be scanned for package dependencies. Defaults to the source repository root.",
       "visibleRule": "command=generate"
     },
     {
-      "name": "buildListFile",
+      "name": "buildArtifactPath",
       "type": "string",
-      "label": "Build List File",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "The file path to a file containing a list of files one file per line for which the SBOM file will be generated. Only files listed in the file will be included in the generated SBOM.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "manifestDirPath",
-      "type": "string",
-      "label": "Manifest Directory Path",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "The path of the directory where the generated SBOM files will be placed. A folder named '_manifest' will be created at this location, where all generated SBOMs will be placed. If this parameter is not specified, the files will be placed in {BuildDropPath}/_manifest directory.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "packageName",
-      "type": "string",
-      "label": "Package Name",
-      "defaultValue": "$(System.TeamProject)",
+      "label": "Build Artifact Path",
+      "defaultValue": "$(Build.ArtifactStagingDirectory)",
       "required": true,
-      "helpMarkDown": "The name of the package this SBOM represents. If this is not provided, we will try to infer this name from the build that generated this package, if that also fails, the SBOM generation fails.",
+      "helpMarkDown": "The directory containing (published) build artifact files for which the SBOM file will describe. Defaults to the build artifact staging directory.",
       "visibleRule": "command=generate"
     },
     {
-      "name": "packageVersion",
-      "type": "string",
-      "label": "Package Version",
-      "defaultValue": "$(Build.BuildNumber)",
-      "required": true,
-      "helpMarkDown": "The version of the package this SBOM represents. If this is not provided, we will try to infer the version from the build that generated this package, if that also fails, the SBOM generation fails.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "packageSupplier",
-      "type": "string",
-      "label": "Package Supplier",
-      "defaultValue": "$(System.CollectionId)",
-      "required": true,
-      "helpMarkDown": "Supplier of the package that this SBOM represents.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "dockerImagesToScan",
-      "type": "string",
-      "label": "Docker Images To Scan",
+      "name": "buildFileList",
+      "type": "multiLine",
+      "label": "Build File List",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for packages, ex: ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab.",
+      "helpMarkDown": "The list of file paths (one per line) for which the SBOM file will describe. If specified, this overrides `buildArtifactPath`, only files listed here will be included in the generated SBOM.",
       "visibleRule": "command=generate"
     },
     {
-      "name": "additionalComponentDetectorArgs",
+      "name": "manifestOutputPath",
       "type": "string",
-      "label": "Additional Component Detector Args",
+      "label": "Manifest Output Path",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Additional set of arguments for Component Detector. An appropriate usage of this would be a space-delimited list of `--key value` pairs, representing command-line arguments.",
+      "helpMarkDown": "The directory where the generated SBOM files will be placed. A subdirectory named '_manifest' will be created at this location, where all generated SBOMs will be placed. Defaults to `buildArtifactPath`.",
       "visibleRule": "command=generate"
     },
     {
-      "name": "externalDocumentReferenceListFile",
-      "type": "string",
-      "label": "External Document Reference List File",
-      "defaultValue": "",
+      "name": "enableManifestGraphGeneration",
+      "type": "boolean",
+      "label": "Enable Manifest Graph Diagram Generation",
+      "defaultValue": false,
       "required": false,
-      "helpMarkDown": "The path to a file containing a list of external SBOMs that will be included as external document reference in the output SBOM. SPDX 2.2 is the only supported format for now.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "namespaceUriUniquePart",
-      "type": "string",
-      "label": "Namespace URI Unique Part",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "A unique valid URI part that will be appended to the SPDX SBOM namespace URI. This value should be globally unique.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "namespaceUriBase",
-      "type": "string",
-      "label": "Namespace URI Base",
-      "defaultValue": "https://$(System.CollectionId).com/",
-      "required": true,
-      "helpMarkDown": "The base path of the SBOM namespace URI.",
+      "helpMarkDown": "If set to `true`, a SBOM network graph (in SVG format) will be generated in the manifest directory.",
       "visibleRule": "command=generate"
     },
     {
@@ -152,7 +94,7 @@
       "label": "Enable Package Metadata Parsing",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to true, we will attempt to parse license and supplier info from the packages metadata file (RubyGems, NuGet, Maven, Npm).",
+      "helpMarkDown": "If set to `true`, we will attempt to parse license and supplier info from the packages metadata file (RubyGems, NuGet, Maven, Npm).",
       "visibleRule": "command=generate"
     },
     {
@@ -161,7 +103,7 @@
       "label": "Fetch License Information",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to true, we will attempt to fetch license information of packages detected in the SBOM from the ClearlyDefinedApi.",
+      "helpMarkDown": "If set to true, we will attempt to fetch license information of packages detected in the SBOM from [ClearlyDefined](https://clearlydefined.io/).",
       "visibleRule": "command=generate"
     },
     {
@@ -170,25 +112,104 @@
       "label": "Fetch Security Advisory Information",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to true, we will attempt to fetch security advisory information of packages detected in the SBOM from the GitHub Advisory Database.",
+      "helpMarkDown": "If set to true, we will attempt to fetch security advisory information of packages detected in the SBOM from the [GitHub Advisory Database](https://github.com/advisories). If `true`, one of `gitHubAccessToken` or `gitHubServiceConnection` must be configured.",
       "visibleRule": "command=generate"
+    },
+    {
+      "name": "gitHubConnection",
+      "type": "connectedService:github:OAuth,PersonalAccessToken,InstallationToken,Token",
+      "label": "GitHub Connection (OAuth or PAT)",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The GitHub service connection to be used for fetching security advisories. The connection must be based on a GitHub user's OAuth or a GitHub personal access token. Learn more about service connections [here](https://aka.ms/AA3am5s).",
+      "visibleRule": "fetchSecurityAdvisories=true"
     },
     {
       "name": "gitHubAccessToken",
       "type": "string",
-      "label": "GitHub Access Token",
+      "label": "GitHub Access Token (PAT)",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The GitHub access token to be used for fetching security advisories.",
+      "helpMarkDown": "The GitHub access token to be used for fetching security advisories. Use this in place of `gitHubConnection` such as when it is not possible to create a service connection.",
       "visibleRule": "fetchSecurityAdvisories=true"
     },
     {
-      "name": "generateGraphDiagram",
-      "type": "boolean",
-      "label": "Generate Graph Diagram",
-      "defaultValue": false,
+      "groupName": "package",
+      "name": "packageName",
+      "type": "string",
+      "label": "Package Name",
+      "defaultValue": "$(System.TeamProject)",
+      "required": true,
+      "helpMarkDown": "The name of the package this SBOM represents. Defaults to the parent project name. If this is empty, we will try to infer this name from the build that generated this package.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "groupName": "package",
+      "name": "packageVersion",
+      "type": "string",
+      "label": "Package Version",
+      "defaultValue": "$(Build.BuildNumber)",
+      "required": true,
+      "helpMarkDown": "The version of the package this SBOM represents. Default to the pipeline build number. If this is empty, we will try to infer the version from the build that generated this package.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "groupName": "package",
+      "name": "packageSupplier",
+      "type": "string",
+      "label": "Package Supplier",
+      "defaultValue": "$(System.CollectionId)",
+      "required": true,
+      "helpMarkDown": "The supplier of the package that this SBOM represents. Defaults to the parent collection name.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "groupName": "package",
+      "name": "packageNamespaceUriBase",
+      "type": "string",
+      "label": "Package Namespace URI Base",
+      "defaultValue": "https://$(System.CollectionId).com/",
       "required": false,
-      "helpMarkDown": "If set to true, we will generate a graph diagram of the SBOM document, in SVG format.",
+      "helpMarkDown": "The base path of the SBOM namespace URI. If empty, the value `https://{packageSupplier}.com` is used. For example, the namespace base URI value of `https://companyName.com/teamName` will create the (unique) namespace `https://companyName.com/teamName/{packageName}/{packageVersion}/{newGuid}`.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "groupName": "package",
+      "name": "packageNamespaceUriUniquePart",
+      "type": "string",
+      "label": "Package Namespace URI Unique Part",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "A unique valid URI part that will be appended to the SBOM namespace URI. If specified, this value should be globally unique.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "groupName": "advanced",
+      "name": "dockerImagesToScan",
+      "type": "string",
+      "label": "Docker Images To Scan",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for packages. For example, `ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab`.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "groupName": "advanced",
+      "name": "additionalComponentDetectorArgs",
+      "type": "string",
+      "label": "Additional Component Detector Arguments",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Additional arguments for [Component Detector](https://github.com/microsoft/component-detection). Arguments must be space-delimited list of `--key value` pairs. See: https://github.com/microsoft/component-detection/blob/main/docs/detector-arguments.md",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "externalDocumentReferenceList",
+      "type": "string",
+      "label": "External Document Reference List",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "A list of external SBOMs (one per line) that will be included as external document references in the SBOM. Referenced files must be in SPDX 2.2 format.",
       "visibleRule": "command=generate"
     }
   ],

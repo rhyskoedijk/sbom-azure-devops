@@ -1,13 +1,13 @@
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
-import { getSecurityAdvisories, IPackage, ISecurityAdvisory } from '../github/securityAdvisories';
+import { getSecurityAdvisoriesAsync, IPackage, ISecurityAdvisory } from '../github/securityAdvisories';
 
 /**
  * Check SPDX packages for security advisories; adds external references for all applicable advisories
  * @param spdxFilePath The path to the SPDX file
  * @param gitHubAccessToken The GitHub access token
  */
-export async function spdxAddPackageSecurityAdvisoryExternalRefs(
+export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
   spdxFilePath: string,
   gitHubAccessToken: string,
 ): Promise<void> {
@@ -40,7 +40,7 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefs(
   // Fetch security advisories for each package manager
   const securityAdvisories: ISecurityAdvisory[] = [];
   for (const [packageManager, packages] of Object.entries(packageManagers)) {
-    securityAdvisories.push(...(await getSecurityAdvisories(gitHubAccessToken, packageManager, packages)));
+    securityAdvisories.push(...(await getSecurityAdvisoriesAsync(gitHubAccessToken, packageManager, packages)));
   }
 
   // Exit early if no security advisories found

@@ -1,4 +1,5 @@
-import { getBoolInput, getInput, setResult, TaskResult } from 'azure-pipelines-task-lib/task';
+import { getBoolInput, getInput, getInputRequired, setResult, TaskResult } from 'azure-pipelines-task-lib/task';
+import getGithubAccessToken from './utils/github/accessToken';
 import { SbomTool } from './utils/spdx/sbomTool';
 
 async function run() {
@@ -7,27 +8,30 @@ async function run() {
     const sbomCommand = getInput('command', true);
     switch (sbomCommand) {
       case 'generate':
-        await sbomTool.generate({
-          buildDropPath: getInput('buildDropPath', true),
-          buildComponentPath: getInput('buildComponentPath', true),
-          buildListFile: getInput('buildListFile', false),
-          manifestDirPath: getInput('manifestDirPath', false),
-          packageName: getInput('packageName', true),
-          packageVersion: getInput('packageVersion', true),
-          packageSupplier: getInput('packageSupplier', true),
-          dockerImagesToScan: getInput('dockerImagesToScan', false),
-          additionalComponentDetectorArgs: getInput('additionalComponentDetectorArgs', false),
-          externalDocumentReferenceListFile: getInput('externalDocumentReferenceListFile', false),
-          namespaceUriUniquePart: getInput('namespaceUriUniquePart', false),
-          namespaceUriBase: getInput('namespaceUriBase', true),
+        await sbomTool.generateAsync({
+          buildSourcePath: getInputRequired('buildSourcePath'),
+          buildArtifactPath: getInputRequired('buildArtifactPath'),
+          buildFileList: getInput('buildFileList', false),
+          manifestOutputPath: getInput('manifestOutputPath', false),
+          enableManifestGraphGeneration: getBoolInput('enableManifestGraphGeneration', false),
           enablePackageMetadataParsing: getBoolInput('enablePackageMetadataParsing', false),
           fetchLicenseInformation: getBoolInput('fetchLicenseInformation', false),
           fetchSecurityAdvisories: getBoolInput('fetchSecurityAdvisories', false),
-          // TODO: Add service connection support
-          gitHubAccessToken: getInput('gitHubAccessToken', false),
-          generateGraphDiagram: getBoolInput('generateGraphDiagram', false),
+          gitHubAccessToken: getGithubAccessToken(),
+          packageName: getInputRequired('packageName'),
+          packageVersion: getInputRequired('packageVersion'),
+          packageSupplier: getInputRequired('packageSupplier'),
+          packageNamespaceUriBase: getInput('packageNamespaceUriBase', false),
+          packageNamespaceUriUniquePart: getInput('packageNamespaceUriUniquePart', false),
+          dockerImagesToScan: getInput('dockerImagesToScan', false),
+          additionalComponentDetectorArgs: getInput('additionalComponentDetectorArgs', false),
+          externalDocumentReferenceListFile: getInput('externalDocumentReferenceListFile', false),
         });
         break;
+      case 'validate':
+        throw new Error('Not implemented');
+      case 'redact':
+        throw new Error('Not implemented');
       default:
         throw new Error(`Invalid command: ${sbomCommand}`);
     }

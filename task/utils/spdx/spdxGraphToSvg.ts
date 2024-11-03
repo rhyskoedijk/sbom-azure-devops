@@ -13,7 +13,7 @@ const VERTEX_FILE_FILL_COLOR = '#E0E0E0';
  * Graph SPDX file to an SVG file
  * @param spdxFilePath The path to the SPDX file
  */
-export async function spdxGraphToSvg(spdxFilePath: string): Promise<string> {
+export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string> {
   if (!fileExistsSync(spdxFilePath)) {
     throw new Error(`SPDX file not found: ${spdxFilePath}`);
   }
