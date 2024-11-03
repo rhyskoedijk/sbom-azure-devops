@@ -14,9 +14,9 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 11
+    "Patch": 12
   },
-  "instanceNameFormat": "SBOM Tool",
+  "instanceNameFormat": "Generate SBOM manifest",
   "groups": [
     {
       "name": "package",
