@@ -65,15 +65,7 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
         referenceCategory: 'SECURITY',
         referenceType: 'advisory',
         referenceLocator: advisory.permalink,
-        advisory: {
-          identifiers: advisory.identifiers.map((id) => ({
-            type: id.type,
-            value: id.value,
-          })),
-          severity: advisory.severity,
-          summary: advisory.summary,
-          description: advisory.description,
-        },
+        comment: `[${advisory.severity}] ${advisory.summary}`,
       });
     }
   }

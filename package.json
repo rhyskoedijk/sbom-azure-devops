@@ -1,6 +1,6 @@
 {
   "name": "sbom-azure-devops",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "SBOM Tool Azure DevOps Extension",
   "main": "task/index.js",
   "scripts": {

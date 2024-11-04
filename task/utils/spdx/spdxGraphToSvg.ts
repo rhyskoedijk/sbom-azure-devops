@@ -82,18 +82,17 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
             case 'PACKAGE-MANAGER':
               continue;
             case 'SECURITY':
-              const identifiers = (externalRef.advisory?.identifiers as any[]) || [];
-              referenceId =
-                (identifiers.find((i) => i.type === 'CVE') || identifiers[0])?.value || externalRef.referenceLocator;
-              referenceProperties = identifiers
-                .map((i) => `${i.type}: ${i.value}`)
-                .concat([
-                  `Summary: ${externalRef.advisory?.summary || NO_ASSERTION}`,
-                  `Severity: ${externalRef.advisory?.severity || NO_ASSERTION}`,
-                ]);
+              const advisory = parseSecurityAdvisory(externalRef);
+              referenceId = `${(advisory.cveId || advisory.ghsaId || externalRef.referenceLocator)} [${advisory.severity}]`;
+              referenceProperties = [
+                `CVE: ${advisory.cveId || NO_ASSERTION}`,
+                `GHSA: ${advisory.ghsaId || NO_ASSERTION}`,
+                `Severity: ${advisory.severity || NO_ASSERTION}`,
+                `Summary: ${advisory.summary || NO_ASSERTION}`,
+              ];
               referenceUrl = externalRef.referenceLocator;
               referenceShape = Shape.Diamond;
-              switch (externalRef.advisory?.severity) {
+              switch (advisory.severity) {
                 case 'CRITICAL':
                   referenceFillColour = '#E57373';
                   break;
@@ -209,6 +208,15 @@ function graphFileAndParentDirectoriesRecursive(
       },
     });
   }
+}
+
+function parseSecurityAdvisory(externalRef: any): any {
+  return {
+    ghsaId: externalRef.referenceLocator?.match(/GHSA-[0-9a-z-]+/i)?.[0],
+    cveId: externalRef.comment?.match(/CVE-[0-9-]+/i)?.[0],
+    severity: externalRef.comment?.match(/^\[(\w+)\]/)?.[1]?.toUpperCase(),
+    summary: externalRef.comment?.match(/^\[(\w+)\](.*)$/)?.[2]?.trim(),
+  };
 }
 
 function normaliseEdgeLabel(label: string): string {
