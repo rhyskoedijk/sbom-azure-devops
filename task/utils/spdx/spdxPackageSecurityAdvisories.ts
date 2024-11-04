@@ -65,7 +65,7 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
         referenceCategory: 'SECURITY',
         referenceType: 'advisory',
         referenceLocator: advisory.permalink,
-        comment: `[${advisory.severity}] ${advisory.summary}`,
+        comment: `[${advisory.severity}] ${advisory.summary}; Affects ${advisory.package.name} v${advisory.package.version}`,
       });
     }
   }
