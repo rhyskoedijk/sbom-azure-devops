@@ -75,7 +75,7 @@ export class SbomTool {
     if (args.packageNamespaceUriBase) {
       sbomToolArguments.push('-nsb', args.packageNamespaceUriBase);
     } else {
-      sbomToolArguments.push('-nsb', `https://${args.packageSupplier}.com`);
+      sbomToolArguments.push('-nsb', `https://${args.packageSupplier.toLowerCase()}.com`);
     }
     if (args.packageNamespaceUriUniquePart) {
       sbomToolArguments.push('-nsu', args.packageNamespaceUriUniquePart);
