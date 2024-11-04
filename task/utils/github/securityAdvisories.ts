@@ -130,8 +130,12 @@ async function batchSecurityAdvisoryQueryAsync(
   const results: ISecurityAdvisory[] = [];
   for (let i = 0; i < packages.length; i += batchSize) {
     const batch = packages.slice(i, i + batchSize);
-    const batchResults = await Promise.all(batch.map(action));
-    results.push(...batchResults.flat());
+    if (batch?.length) {
+      const batchResults = await Promise.all(batch.map(action));
+      if (batchResults?.length) {
+        results.push(...batchResults.flat());
+      }
+    }
   }
   return results;
 }
