@@ -83,7 +83,7 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
               continue;
             case 'SECURITY':
               const advisory = parseSecurityAdvisory(externalRef);
-              referenceId = `${(advisory.cveId || advisory.ghsaId || externalRef.referenceLocator)} [${advisory.severity}]`;
+              referenceId = `${advisory.cveId || advisory.ghsaId || externalRef.referenceLocator} [${advisory.severity}]`;
               referenceProperties = [
                 `CVE: ${advisory.cveId || NO_ASSERTION}`,
                 `GHSA: ${advisory.ghsaId || NO_ASSERTION}`,
@@ -181,7 +181,7 @@ function graphFileAndParentDirectoriesRecursive(
         render: {
           label: path.basename(nodePath),
           tooltip: 'Directory',
-          shape: Shape.Underline,
+          fill_color: VERTEX_FILE_FILL_COLOR,
         },
       });
 
