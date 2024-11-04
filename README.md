@@ -7,7 +7,7 @@ Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/m
 - Check package dependencies for known vulnerabilities against the [GitHub Advisory Database](https://github.com/advisories).
 
 
-![example.manifest.spdx.svg](images/example.manifest.spdx.svg)
+![example.manifest.spdx.png](images/example.manifest.spdx.png)
 _SBOM manifest graph example_
 
 ## Install
