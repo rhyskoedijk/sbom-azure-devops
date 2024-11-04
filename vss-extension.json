@@ -3,7 +3,7 @@
   "id": "sbom-tool",
   "name": "SBOM Tool",
   "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "publisher": "rhyskoedijk",
   "public": false,
   "categories": ["Azure Pipelines"],
