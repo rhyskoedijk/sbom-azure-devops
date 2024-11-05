@@ -1,9 +1,0 @@
-tsconfig.json
-package-lock.json
-node_modules
-bin
-obj
-dist
-out
-README.md
-LICENSE

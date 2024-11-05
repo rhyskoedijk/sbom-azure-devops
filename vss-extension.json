@@ -6,19 +6,63 @@
   "version": "1.0.15",
   "publisher": "rhyskoedijk",
   "public": true,
-  "categories": ["Azure Pipelines"],
+  "scopes": ["vso.build"],
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
+  "categories": ["Azure Pipelines"],
+  "tags": [
+    "sbom",
+    "sbom-tool",
+    "spdx",
+    "software bill of materials",
+    "supply chain",
+    "inventory",
+    "component",
+    "package",
+    "security",
+    "advisory",
+    "vulnerability",
+    "license",
+    "compliance",
+    "risk",
+    "report",
+    "graph"
+  ],
+  "branding": {
+    "color": "rgb(0, 120, 212)",
+    "theme": "light"
+  },
   "icons": {
     "default": "images/icon.png"
   },
+  "screenshots": [
+    {
+      "path": "images/example.manifest.spdx.png"
+    }
+  ],
   "links": {
+    "home": {
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops"
+    },
+    "getstarted": {
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops?tab=readme-ov-file#usage"
+    },
+    "issues": {
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
+    },
     "support": {
       "uri": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
+    },
+    "license": {
+      "uri": "ttps://github.com/rhyskoedijk/sbom-azure-devops/LICENSE"
     }
+  },
+  "customerQnASupport": {
+    "enablemarketplaceqna": true,
+    "url": "https://github.com/rhyskoedijk/sbom-azure-devops/discussions"
   },
   "repository": {
     "type": "git",
@@ -44,7 +88,19 @@
       "type": "ms.vss-distributed-task.task",
       "targets": ["ms.vss-distributed-task.tasks"],
       "properties": {
-        "name": "task"
+        "name": "SBOM Tool Task"
+      }
+    },
+    {
+      "id": "sbom-tool-build-results-tab",
+      "type": "ms.vss-build-web.build-results-tab",
+      "description": "SBOM Report",
+      "targets": ["ms.vss-build-web.build-results-view"],
+      "properties": {
+        "name": "SBOM Report",
+        "uri": "ui/sbom-report-tab.html",
+        "supportsTasks": ["79d7e0df-bd9a-4658-9897-ae059fc992c5"],
+        "dynamic": true
       }
     }
   ]

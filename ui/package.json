@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "dependencies": {
+    "azure-devops-extension-api": "^4.234.0",
+    "azure-devops-extension-sdk": "^3.1.2",
+    "azure-devops-ui": "^2.167.63",
+    "react": "~16.13.1",
+    "react-dom": "~16.13.1"
+  },
+  "devDependencies": {
+    "@types/react": "~16.8.2",
+    "@types/react-dom": "~16.8.0"
+  }
+}

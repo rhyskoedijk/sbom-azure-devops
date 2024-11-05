@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "dependencies": {
+    "@vizdom/vizdom-ts-node": "^0.1.17",
+    "axios": "^1.7.7",
+    "azure-pipelines-task-lib": "^4.17.3",
+    "semver": "^7.6.3"
+  },
+  "devDependencies": {
+    "@types/semver": "^7.5.8"
+  }
+}

@@ -2,21 +2,35 @@
   "name": "sbom-azure-devops",
   "version": "1.0.15",
   "description": "SBOM Tool Azure DevOps Extension",
-  "main": "task/index.js",
   "scripts": {
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "build": "cp -r node_modules task/node_modules && tsc",
-    "package": "npx tfx-cli extension create --manifest-globs vss-extension.json --output-path dist"
+    "postinstall": "npm --prefix task install && npm --prefix ui install",
+    "format": "prettier --write '**/*.{ts,tsx,scss,json,yaml,yml,md,html}'",
+    "format:check": "prettier --check '**/*.{ts,tsx,scss,json,yaml,yml,md,html}'",
+    "build": "npm run build:task && npm run build:ui",
+    "build:task": "tsc -p task",
+    "build:ui": "tsc -p ui",
+    "package": "npx tfx-cli extension create --manifests vss-extension.json --output-path dist",
+    "publish": "npx tfx-cli extension publish --manifests vss-extension.json --vsix dist/*.vsix"
   },
   "keywords": [
-    "sbom",
-    "sbom-tool",
     "azure",
     "devops",
+    "sbom",
+    "sbom-tool",
     "spdx",
-    "dependency",
-    "dependencies"
+    "software bill of materials",
+    "supply chain",
+    "inventory",
+    "component",
+    "package",
+    "security",
+    "advisory",
+    "vulnerability",
+    "license",
+    "compliance",
+    "risk",
+    "report",
+    "graph"
   ],
   "author": "Rhys Koedijk",
   "license": "MIT",
@@ -24,19 +38,18 @@
   "bugs": {
     "url": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
   },
-  "dependencies": {
-    "@types/axios": "^0.14.4",
-    "@types/semver": "^7.5.8",
-    "@vizdom/vizdom-ts-node": "^0.1.17",
-    "axios": "^1.7.7",
-    "azure-pipelines-task-lib": "^4.17.3",
-    "semver": "^7.6.3"
-  },
   "devDependencies": {
     "@types/mocha": "^10.0.9",
     "@types/node": "^22.8.7",
     "@types/q": "^1.5.8",
+    "husky": "^9.1.6",
     "prettier": "3.3.3",
-    "prettier-plugin-organize-imports": "4.1.0"
+    "prettier-plugin-organize-imports": "4.1.0",
+    "pretty-quick": "^4.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && codespell"
+    }
   }
 }
