@@ -1,7 +1,11 @@
+import * as React from 'react';
+
 import { ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { ISimpleTableCell, renderSimpleCell, Table, TableColumnLayout } from 'azure-devops-ui/Table';
 import { ArrayItemProvider } from 'azure-devops-ui/Utilities/Provider';
-import * as React from 'react';
+import { ZeroData } from 'azure-devops-ui/ZeroData';
+
+import { IPackage } from '../models/Spdx22';
 
 interface ITableItem extends ISimpleTableCell {
   name: string;
@@ -52,134 +56,51 @@ const packageTableColumns = [
   },
 ];
 
-const packageList = {
-  packages: [
-    {
-      'name': 'Microsoft.Extensions.Configuration.Binder',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Microsoft.Extensions.DependencyModel',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Microsoft.Extensions.Logging.Abstractions',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Microsoft.Extensions.Options',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog',
-      'requirements': [],
-      'version': '3.1.1',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.AspNetCore',
-      'requirements': [
-        {
-          file: '/WebApplicationNetCore/WebApplicationNetCore.csproj',
-          groups: ['dependencies'],
-          requirement: '8.0.1',
-          source: null,
-        },
-      ],
-      'version': '8.0.1',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.Extensions.Hosting',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.Extensions.Logging',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.Formatting.Compact',
-      'requirements': [],
-      'version': '2.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.Settings.Configuration',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.Sinks.Console',
-      'requirements': [],
-      'version': '5.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.Sinks.Debug',
-      'requirements': [],
-      'version': '2.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'Serilog.Sinks.File',
-      'requirements': [],
-      'version': '5.0.0',
-      'security-advisories': [],
-    },
-    {
-      'name': 'System.Text.Json',
-      'requirements': [],
-      'version': '8.0.0',
-      'security-advisories': [
-        {
-          id: 'CVE-2021-40444',
-          description:
-            'System.Text.Json could allow a remote attacker to execute arbitrary code on the system, caused by improper handling of objects in memory. By persuading a victim to open a specially-crafted file, an attacker could exploit this vulnerability to execute arbitrary code on the system.',
-        },
-      ],
-    },
-  ],
-  files: ['/WebApplicationNetCore/WebApplicationNetCore.csproj', '/WebApplicationNetCore/nuget.config'],
-};
+interface ISbomPackageTableProps {
+  packages: IPackage[];
+}
 
-const packageTableItems = new ArrayItemProvider<ITableItem>(
-  packageList.packages.map((x) => {
-    return {
-      name: x.name,
-      version: x.version,
-      type: x.requirements.length > 0 ? 'Top-Level' : 'Transitive',
-      securityAdvisories: x['security-advisories'] ? x['security-advisories'].map((a) => a.id).join(', ') : '-',
-      referencedBy: x.requirements?.map((r) => r?.file).join(', '),
-    };
-  }),
-);
-
-export class SbomPackageTable extends React.Component<{}, {}> {
-  constructor(props: {}) {
+export class SbomPackageTable extends React.Component<ISbomPackageTableProps, ISbomPackageTableProps> {
+  constructor(props: ISbomPackageTableProps) {
     super(props);
+    this.state = props;
+  }
+
+  private getPackageTableItems(): ArrayItemProvider<ITableItem> {
+    return new ArrayItemProvider<ITableItem>(
+      this.state.packages.map((x) => {
+        return {
+          name: x.name,
+          version: x.versionInfo,
+          type: 'Unknown',
+          securityAdvisories: x.externalRefs
+            .filter((a) => a.referenceCategory == 'SECURITY' && a.referenceType == 'advisory')
+            .map((a) => a.comment)
+            .join(', '),
+          referencedBy: '',
+        };
+      }),
+    );
   }
 
   public render(): JSX.Element {
+    if (!this.state?.packages) {
+      return (
+        <ZeroData
+          iconProps={{ iconName: 'Cancel' }}
+          primaryText="No Packages Found"
+          secondaryText="No packages were found in the SPDX document."
+          imageAltText=""
+        />
+      );
+    }
     return (
       <Table
         role="table"
         className="table-example"
         containerClassName="h-scroll-auto"
         columns={packageTableColumns}
-        itemProvider={packageTableItems}
+        itemProvider={this.getPackageTableItems()}
       />
     );
   }

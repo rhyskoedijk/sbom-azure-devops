@@ -1,4 +1,4 @@
-import { getVariable, tool, which } from 'azure-pipelines-task-lib/task';
+import { addAttachment, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { tmpdir } from 'node:os';
@@ -75,7 +75,13 @@ export class SbomTool {
     if (args.packageNamespaceUriBase) {
       sbomToolArguments.push('-nsb', args.packageNamespaceUriBase);
     } else {
-      sbomToolArguments.push('-nsb', `https://${args.packageSupplier.toLowerCase()}.com`);
+      // No base namespace provided, so generate one from the supplier name
+      // To get a valid URI hostname, replace spaces with dashes, strip all other special characters, convert to lowercase
+      const supplierHostname = args.packageSupplier
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9 ]/g, '')
+        .toLowerCase();
+      sbomToolArguments.push('-nsb', `https://${supplierHostname}.com`);
     }
     if (args.packageNamespaceUriUniquePart) {
       sbomToolArguments.push('-nsu', args.packageNamespaceUriUniquePart);
@@ -110,7 +116,11 @@ export class SbomTool {
       `${MANIFEST_FORMAT}_${MANIFEST_VERSION}`,
       `manifest.${MANIFEST_FORMAT}.json`,
     );
-    if (!fileExistsSync(sbomPath)) {
+
+    // Attach the SPDX file to the build; This is used by the SBOM report tab.
+    if (fileExistsSync(sbomPath)) {
+      addAttachment(MANIFEST_FORMAT, `${args.packageName} v${args.packageVersion}`, sbomPath);
+    } else {
       throw new Error(`SBOM Tool did not generate SPDX file: '${sbomPath}'`);
     }
 

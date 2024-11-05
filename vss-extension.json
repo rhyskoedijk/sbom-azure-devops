@@ -82,6 +82,9 @@
       "path": "task/icon.png"
     },
     {
+      "path": "task/utils"
+    },
+    {
       "path": "task/node_modules"
     },
     {
