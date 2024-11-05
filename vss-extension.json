@@ -73,6 +73,9 @@
   },
   "files": [
     {
+      "path": "task/task.json"
+    },
+    {
       "path": "task/index.js"
     },
     {

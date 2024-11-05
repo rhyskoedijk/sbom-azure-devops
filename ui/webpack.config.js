@@ -36,6 +36,7 @@ module.exports = (env, argv) => ({
   },
   output: {
     path: path.resolve(__dirname, 'dist', 'ui'),
+    publicPath: '/ui/',
   },
   optimization: {
     minimize: true,
@@ -64,9 +65,6 @@ module.exports = (env, argv) => ({
         devServer: {
           server: 'https',
           port: 3000,
-          static: {
-            directory: path.join(__dirname, 'dist'),
-          },
           open: ['/ui/sbom-report-tab.html'],
         },
       }
