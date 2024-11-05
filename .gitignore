@@ -1,6 +1,5 @@
 dist
-test
-**/node_modules
-**/*.js
-**/*.vsix
-**/.taskkey
+node_modules
+task/**/*.js
+*.overrides.dev.json
+*.taskkey
