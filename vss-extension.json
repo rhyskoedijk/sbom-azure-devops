@@ -3,7 +3,6 @@
   "id": "sbom-tool",
   "name": "SBOM Tool",
   "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
-  "version": "1.0.19",
   "publisher": "rhyskoedijk",
   "public": true,
   "galleryFlags": ["Preview"],
@@ -58,7 +57,7 @@
       "uri": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
     },
     "license": {
-      "uri": "ttps://github.com/rhyskoedijk/sbom-azure-devops/LICENSE"
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops/LICENSE"
     }
   },
   "customerQnASupport": {
@@ -76,7 +75,13 @@
   },
   "files": [
     {
-      "path": "task"
+      "path": "task/index.js"
+    },
+    {
+      "path": "task/icon.png"
+    },
+    {
+      "path": "task/node_modules"
     },
     {
       "path": "images",
@@ -84,7 +89,7 @@
     },
     {
       "path": "ui/dist",
-      "packagePath": "ui",
+      "packagePath": "/",
       "addressable": true
     }
   ],
