@@ -3,9 +3,10 @@
   "id": "sbom-tool",
   "name": "SBOM Tool",
   "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
-  "version": "1.0.17",
+  "version": "1.0.19",
   "publisher": "rhyskoedijk",
   "public": true,
+  "galleryFlags": ["Preview"],
   "scopes": ["vso.build"],
   "targets": [
     {
@@ -80,24 +81,30 @@
     {
       "path": "images",
       "addressable": true
+    },
+    {
+      "path": "ui/dist",
+      "packagePath": "ui",
+      "addressable": true
     }
   ],
   "contributions": [
     {
       "id": "sbom-tool-task",
       "type": "ms.vss-distributed-task.task",
+      "description": "SBOM Tool Task",
       "targets": ["ms.vss-distributed-task.tasks"],
       "properties": {
-        "name": "SBOM Tool Task"
+        "name": "task"
       }
     },
     {
       "id": "sbom-tool-build-results-tab",
       "type": "ms.vss-build-web.build-results-tab",
-      "description": "SBOM Report",
+      "description": "SBOM Tool Report",
       "targets": ["ms.vss-build-web.build-results-view"],
       "properties": {
-        "name": "SBOM Report",
+        "name": "SBOM",
         "uri": "ui/sbom-report-tab.html",
         "supportsTasks": ["79d7e0df-bd9a-4658-9897-ae059fc992c5"],
         "dynamic": true

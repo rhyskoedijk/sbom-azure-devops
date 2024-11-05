@@ -1,6 +1,6 @@
 {
   "name": "sbom-azure-devops",
-  "version": "1.0.17",
+  "version": "1.0.19",
   "description": "SBOM Tool Azure DevOps Extension",
   "scripts": {
     "prepare": "husky",
@@ -10,6 +10,7 @@
     "build": "npm run build:task && npm run build:ui",
     "build:task": "tsc -p task",
     "build:ui": "cd ui && webpack --mode production",
+    "start:ui": "cd ui && webpack serve --mode development",
     "package": "npx tfx-cli extension create --manifests vss-extension.json --output-path dist",
     "publish": "npx tfx-cli extension publish --manifests vss-extension.json --vsix dist/*.vsix"
   },
@@ -41,7 +42,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.9",
-    "@types/node": "^22.8.7",
+    "@types/node": "^22.9.0",
     "@types/q": "^1.5.8",
     "husky": "^9.1.6",
     "prettier": "3.3.3",
