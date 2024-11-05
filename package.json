@@ -3,6 +3,7 @@
   "version": "1.0.15",
   "description": "SBOM Tool Azure DevOps Extension",
   "scripts": {
+    "prepare": "husky",
     "postinstall": "npm --prefix task install && npm --prefix ui install",
     "format": "prettier --write '**/*.{ts,tsx,scss,json,yaml,yml,md,html}'",
     "format:check": "prettier --check '**/*.{ts,tsx,scss,json,yaml,yml,md,html}'",

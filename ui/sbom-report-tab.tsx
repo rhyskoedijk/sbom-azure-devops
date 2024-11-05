@@ -67,7 +67,8 @@ class ProductBacklogTab extends React.Component<{}, IProductBacklogTab> {
 }
 
 function showRootComponent(component: React.ReactElement<any>) {
-    ReactDOM.render(component, document.getElementById('root'));
-  }
-  
+  ReactDOM.render(component, document.getElementById('root'));
+}
+
+// something is missspelled here
 showRootComponent(<ProductBacklogTab />);
