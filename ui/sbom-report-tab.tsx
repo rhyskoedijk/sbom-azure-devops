@@ -1,73 +1,30 @@
 import * as SDK from 'azure-devops-extension-sdk';
-import 'azure-devops-ui/Core/override.css';
-import { Header } from 'azure-devops-ui/Header';
-import { Page } from 'azure-devops-ui/Page';
-import 'es6-promise/auto';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import './Common.scss';
+
+import { SbomInventoryPage } from './components/SbomInventoryPage';
 import './sbom-report-tab.scss';
 
-import { CommonServiceIds, IProjectPageService } from 'azure-devops-extension-api';
-
-interface IProductBacklogTab {
-  projectContext: any;
-}
-
-class ProductBacklogTab extends React.Component<{}, IProductBacklogTab> {
-  constructor(props: {}) {
-    super(props);
-    this.state = { projectContext: undefined };
-  }
-
+export class Root extends React.Component<{}, {}> {
   public componentDidMount() {
     try {
-      console.log('Component did mount, initializing SDK...');
+      console.info('Initializing SDK...');
       SDK.init();
-
       SDK.ready()
         .then(() => {
-          console.log('SDK is ready, loading project context...');
-          this.loadProjectContext();
+          console.info('SDK is ready');
         })
         .catch((error) => {
-          console.error('SDK ready failed: ', error);
+          console.error('SDK ready failed', error);
         });
     } catch (error) {
-      console.error('Error during SDK initialization or project context loading: ', error);
+      console.error('Error during SDK initialization', error);
     }
   }
 
   public render(): JSX.Element {
-    return (
-      <Page className="sample-hub flex-grow">
-        <Header title="Custom Backlog Tab" />
-        <div className="page-content">
-          <div className="webcontext-section">
-            <h2>Project Context:</h2>
-            <pre>{JSON.stringify(this.state.projectContext, null, 2)}</pre>
-          </div>
-        </div>
-      </Page>
-    );
-  }
-
-  private async loadProjectContext(): Promise<void> {
-    try {
-      const client = await SDK.getService<IProjectPageService>(CommonServiceIds.ProjectPageService);
-      const context = await client.getProject();
-
-      this.setState({ projectContext: context });
-
-      SDK.notifyLoadSucceeded();
-    } catch (error) {
-      console.error('Failed to load project context: ', error);
-    }
+    return <SbomInventoryPage />;
   }
 }
 
-function showRootComponent(component: React.ReactElement<any>) {
-  ReactDOM.render(component, document.getElementById('root'));
-}
-
-showRootComponent(<ProductBacklogTab />);
+ReactDOM.render(<Root />, document.getElementById('root'));

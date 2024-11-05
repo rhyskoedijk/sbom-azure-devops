@@ -1,15 +1,15 @@
 {
   "name": "sbom-azure-devops",
-  "version": "1.0.15",
+  "version": "1.0.17",
   "description": "SBOM Tool Azure DevOps Extension",
   "scripts": {
     "prepare": "husky",
     "postinstall": "npm --prefix task install && npm --prefix ui install",
-    "format": "prettier --write '**/*.{ts,tsx,scss,json,yaml,yml,md,html}'",
-    "format:check": "prettier --check '**/*.{ts,tsx,scss,json,yaml,yml,md,html}'",
+    "format": "prettier --write '**/*.{js,ts,tsx,scss,json,yaml,yml,md,html}'",
+    "format:check": "prettier --check '**/*.{js,ts,tsx,scss,json,yaml,yml,md,html}'",
     "build": "npm run build:task && npm run build:ui",
     "build:task": "tsc -p task",
-    "build:ui": "tsc -p ui",
+    "build:ui": "cd ui && webpack --mode production",
     "package": "npx tfx-cli extension create --manifests vss-extension.json --output-path dist",
     "publish": "npx tfx-cli extension publish --manifests vss-extension.json --vsix dist/*.vsix"
   },
@@ -47,10 +47,5 @@
     "prettier": "3.3.3",
     "prettier-plugin-organize-imports": "4.1.0",
     "pretty-quick": "^4.0.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged && codespell"
-    }
   }
 }
