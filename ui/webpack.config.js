@@ -9,6 +9,7 @@ module.exports = (env, argv) => ({
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    fallback: { path: require.resolve('path-browserify') },
   },
   module: {
     rules: [

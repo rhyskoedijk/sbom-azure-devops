@@ -4,21 +4,27 @@ import * as ReactDOM from 'react-dom';
 
 import { CommonServiceIds, getClient, IProjectPageService } from 'azure-devops-extension-api';
 import { BuildRestClient, BuildServiceIds, IBuildPageDataService } from 'azure-devops-extension-api/Build';
-
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { SbomInventoryPage } from './components/SbomInventoryPage';
+import { SpdxDocument } from './components/SpdxDocument';
 import { ISpdx22Document } from './models/Spdx22';
+
+import './utils/StringExtensions';
 
 import './sbom-report-tab.scss';
 
 const SPDX_ATTACHMENT_TYPE = 'spdx';
 
-interface IRootState {
+interface State {
   documents: ISpdx22Document[];
 }
 
-export class Root extends React.Component<{}, IRootState> {
+export class Root extends React.Component<{}, State> {
+  constructor(props: {}) {
+    super(props);
+    this.state = { documents: [] };
+  }
+
   public componentDidMount() {
     try {
       console.info('Initializing SDK...');
@@ -114,20 +120,21 @@ export class Root extends React.Component<{}, IRootState> {
   }
 
   public render(): JSX.Element {
-    if (this.state?.documents) {
-      return <SbomInventoryPage document={this.state.documents[0]} />;
-    } else {
-      return (
-        <div className="flex-grow">
+    return (
+      <div className="flex-grow">
+        {!this.state?.documents?.length ? (
           <ZeroData
             iconProps={{ iconName: 'CloudDownload' }}
             primaryText="Loading SBOM..."
             secondaryText="Please wait while the build data is loaded and parsed."
             imageAltText=""
           />
-        </div>
-      );
-    }
+        ) : (
+          // TODO: Add support for viewing multiple documents in a single build?
+          <SpdxDocument document={this.state.documents[0]} />
+        )}
+      </div>
+    );
   }
 }
 

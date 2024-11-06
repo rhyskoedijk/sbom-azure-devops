@@ -3,7 +3,8 @@
   "dependencies": {
     "azure-devops-extension-api": "^4.245.1",
     "azure-devops-extension-sdk": "^4.0.2",
-    "azure-devops-ui": "^2.246.0"
+    "azure-devops-ui": "^2.246.0",
+    "path-browserify": "^1.0.1"
   },
   "devDependencies": {
     "@types/react": "~16.8.2",
