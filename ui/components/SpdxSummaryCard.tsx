@@ -88,7 +88,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         },
         important: false,
         onActivate: () => {
-          alert('TODO: Convert to XLSX');
+          alert('TODO: Implement XLSX generation');
         },
       },
       {
@@ -99,7 +99,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         },
         important: false,
         onActivate: () => {
-          alert('TODO: Convert to SVG');
+          alert('TODO: Implement SVG generation');
         },
       },
     ];
@@ -125,8 +125,8 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         <div className="flex-grow flex-row flex-center summary-view body-m">
           {this.state.documentProperties.map((items, index) => (
             <div className="flex-grow flex-column summary-column" key={index}>
-              <div className="flex-row secondary-text summary-line-non-link">{items.label}</div>
-              <div className="flex-row summary-info flex-center">{items.value}</div>
+              <div className="flex-row secondary-text summary-line-non-link word-break">{items.label}</div>
+              <div className="flex-row summary-info flex-center word-break">{items.value}</div>
             </div>
           ))}
         </div>

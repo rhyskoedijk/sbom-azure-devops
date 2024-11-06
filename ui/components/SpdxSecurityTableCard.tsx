@@ -1,62 +1,51 @@
 import * as React from 'react';
 
+import { IColor } from 'azure-devops-extension-api';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
-import { ISimpleTableCell, renderSimpleCell, Table } from 'azure-devops-ui/Table';
+import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
+import { ITableColumn, Table, TwoLineTableCell } from 'azure-devops-ui/Table';
 import { IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISpdx22Document } from '../models/Spdx22';
 
-interface ISecurityAdvisoryTableItem extends ISimpleTableCell {
+interface ISecurityAdvisoryTableItem {
   id: string;
   severity: string;
   summary: string;
-  permalink: string;
-  introducedThrough: string;
+  url: string;
+  package: { name: string; version: string };
 }
 
-const securityAdvisoryTableColumns = [
+const securityAdvisoryTableColumns: ITableColumn<ISecurityAdvisoryTableItem>[] = [
   {
-    id: 'id',
-    name: 'ID',
+    id: 'advisory',
+    name: 'Advisory',
     readonly: true,
-    renderCell: renderSimpleCell,
-    width: new ObservableValue(-10),
-  },
-  {
-    id: 'severity',
-    name: 'Severity',
-    readonly: true,
-    renderCell: renderSimpleCell,
-    width: new ObservableValue(-5),
-  },
-  {
-    id: 'summary',
-    name: 'Summary',
-    readonly: true,
-    renderCell: renderSimpleCell,
-    width: new ObservableValue(-55),
+    renderCell: renderAdvisorySummaryCell,
+    sortProps: {
+      ariaLabelAscending: 'Sorted low to high',
+      ariaLabelDescending: 'Sorted high to low',
+    },
+    width: new ObservableValue(-65),
   },
   {
     id: 'introducedThrough',
     name: 'Introduced Through',
     readonly: true,
-    renderCell: renderSimpleCell,
-    width: new ObservableValue(-20),
-  },
-  {
-    id: 'permalink',
-    name: 'Details',
-    readonly: true,
-    renderCell: renderSimpleCell,
-    width: new ObservableValue(-20),
+    renderCell: renderAdvisoryIntroducedThroughCell,
+    sortProps: {
+      ariaLabelAscending: 'Sorted A to Z',
+      ariaLabelDescending: 'Sorted Z to A',
+    },
+    width: new ObservableValue(-30),
   },
 ];
 
 interface Props {
   document: ISpdx22Document;
-  keywordFilter: IFilter;
+  filter: IFilter;
 }
 
 interface State {
@@ -91,13 +80,13 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           const cveId = x.comment?.match(/CVE-[0-9-]+/i)?.[0];
           const severity = x.comment?.match(/^\[(\w+)\]/)?.[1]?.toPascalCase();
           const summary = x.comment?.match(/^\[(\w+)\](.*);/)?.[2]?.trim();
-          const permalink = x.referenceLocator;
+          const url = x.referenceLocator;
           return {
             id: cveId || ghsaId || '',
             severity: severity || '',
             summary: summary || '',
-            introducedThrough: pkg ? `${pkg.name} v${pkg.versionInfo}` : '',
-            permalink: permalink,
+            url: url,
+            package: { name: pkg?.name || '', version: pkg?.versionInfo || '' },
           };
         }),
       ),
@@ -131,8 +120,71 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           containerClassName="h-scroll-auto"
           columns={securityAdvisoryTableColumns}
           itemProvider={this.state.tableItems}
+          singleClickActivation={true}
+          selectRowOnClick={true}
+          onActivate={(event, tableRow) => {
+            if (tableRow?.data?.url) {
+              window.open(tableRow.data.url, '_blank');
+            }
+          }}
         />
       </Card>
     );
+  }
+}
+
+function renderAdvisorySummaryCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItem: ISecurityAdvisoryTableItem,
+): JSX.Element {
+  return TwoLineTableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    line1: <div className="primary-text font-weight-heavy">{tableItem.summary}</div>,
+    line2: (
+      <div className="flex-row rhythm-horizontal-8">
+        <Pill
+          size={PillSize.compact}
+          variant={PillVariant.colored}
+          color={getAdvisorySeverityColour(tableItem.severity)}
+        >
+          {tableItem.severity}
+        </Pill>
+        <div className="secondary-text">{tableItem.id}</div>
+      </div>
+    ),
+  });
+}
+
+function renderAdvisoryIntroducedThroughCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItem: ISecurityAdvisoryTableItem,
+): JSX.Element {
+  return TwoLineTableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    line1: <div className="primary-text">{tableItem.package.name}</div>,
+    line2: <div className="secondary-text">{tableItem.package.version}</div>,
+  });
+}
+
+function getAdvisorySeverityColour(severity: string): IColor {
+  switch (severity) {
+    case 'Critical':
+      return { red: 205, green: 74, blue: 69 };
+    case 'High':
+      return { red: 205, green: 74, blue: 69 };
+    case 'Moderate':
+      return { red: 214, green: 127, blue: 60 };
+    case 'Low':
+      return { red: 0, green: 120, blue: 212 };
+    default:
+      return { red: 0, green: 120, blue: 212 };
   }
 }

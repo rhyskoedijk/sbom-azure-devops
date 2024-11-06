@@ -125,8 +125,8 @@ export class Root extends React.Component<{}, State> {
         {!this.state?.documents?.length ? (
           <ZeroData
             iconProps={{ iconName: 'CloudDownload' }}
-            primaryText="Loading SBOM..."
-            secondaryText="Please wait while the build data is loaded and parsed."
+            primaryText="Loading Document"
+            secondaryText="Please wait while the build data is downloaded and parsed..."
             imageAltText=""
           />
         ) : (

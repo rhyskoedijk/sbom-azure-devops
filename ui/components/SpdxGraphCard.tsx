@@ -10,19 +10,21 @@ interface Props {
 }
 
 interface State {
-  documentSvg: string;
+  documentSvg: string | undefined;
 }
 
 export class SpdxGraphCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = SpdxGraphCard.getDerivedStateFromProps(props);
+    this.state = {
+      documentSvg: undefined,
+    };
   }
 
   static getDerivedStateFromProps(props: Props): State {
+    alert('TODO: Implement SVG generation');
     return {
-      // TODO: Implement SVG generateion
-      documentSvg: '',
+      documentSvg: undefined,
     };
   }
 
@@ -37,8 +39,8 @@ export class SpdxGraphCard extends React.Component<Props, State> {
       return (
         <ZeroData
           iconProps={{ iconName: 'GitGraph' }}
-          primaryText="Generating..."
-          secondaryText="Please wait while the graph is generated."
+          primaryText="Generating Graph"
+          secondaryText="Please wait while the graph is generated..."
           imageAltText=""
         />
       );

@@ -4,7 +4,7 @@ import { ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Observer } from 'azure-devops-ui/Observer';
 import { Tab, TabBar, TabSize } from 'azure-devops-ui/Tabs';
 import { InlineKeywordFilterBarItem } from 'azure-devops-ui/TextFilterBarItem';
-import { Filter, IFilter } from 'azure-devops-ui/Utilities/Filter';
+import { Filter, FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 
 import { ISpdx22Document } from '../models/Spdx22';
 import { SpdxDependencyTableCard } from './SpdxDependencyTableCard';
@@ -32,6 +32,9 @@ export class SpdxDocument extends React.Component<Props, State> {
     this.state = SpdxDocument.getDerivedStateFromProps(props);
     this.selectedTabId = new ObservableValue('inventory');
     this.filter = new Filter();
+    this.filter.subscribe(() => {
+      alert('TODO: Implement keyword filter change event');
+    }, FILTER_CHANGE_EVENT);
   }
 
   static getDerivedStateFromProps(props: Props): State {
@@ -74,11 +77,11 @@ export class SpdxDocument extends React.Component<Props, State> {
           {(props: { selectedTabId: string }) => {
             switch (props.selectedTabId) {
               case 'inventory':
-                return <SpdxInventoryTableCard document={this.props.document} keywordFilter={this.filter} />;
+                return <SpdxInventoryTableCard document={this.props.document} filter={this.filter} />;
               case 'dependencies':
-                return <SpdxDependencyTableCard document={this.props.document} keywordFilter={this.filter} />;
+                return <SpdxDependencyTableCard document={this.props.document} filter={this.filter} />;
               case 'security':
-                return <SpdxSecurityTableCard document={this.props.document} keywordFilter={this.filter} />;
+                return <SpdxSecurityTableCard document={this.props.document} filter={this.filter} />;
               case 'graph':
                 return <SpdxGraphCard document={this.props.document} />;
             }

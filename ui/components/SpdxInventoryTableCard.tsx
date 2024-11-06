@@ -21,6 +21,10 @@ const inventoryTableColumns = [
     name: 'File',
     readonly: true,
     renderCell: renderSimpleCell,
+    sortProps: {
+      ariaLabelAscending: 'Sorted A to Z',
+      ariaLabelDescending: 'Sorted Z to A',
+    },
     width: new ObservableValue(-50),
   },
   {
@@ -34,7 +38,7 @@ const inventoryTableColumns = [
 
 interface Props {
   document: ISpdx22Document;
-  keywordFilter: IFilter;
+  filter: IFilter;
 }
 
 interface State {
