@@ -103,8 +103,8 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
-          iconProps={{ iconName: 'Cancel' }}
-          primaryText="Empty"
+          iconProps={{ iconName: 'CheckMark' }}
+          primaryText="No Security Advisories"
           secondaryText="Document contains no security advisories."
           imageAltText=""
         />

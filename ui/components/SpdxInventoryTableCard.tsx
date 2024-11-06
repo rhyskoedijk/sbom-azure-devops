@@ -79,8 +79,8 @@ export class SpdxInventoryTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
-          iconProps={{ iconName: 'Cancel' }}
-          primaryText="Empty"
+          iconProps={{ iconName: 'Package' }}
+          primaryText="No Files"
           secondaryText="Document contains no packages or files."
           imageAltText=""
         />

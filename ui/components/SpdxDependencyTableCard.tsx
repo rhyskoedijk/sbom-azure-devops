@@ -223,8 +223,8 @@ export class SpdxDependencyTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
-          iconProps={{ iconName: 'Cancel' }}
-          primaryText="Empty"
+          iconProps={{ iconName: 'Package' }}
+          primaryText="No Dependencies"
           secondaryText="Document contains no dependencies."
           imageAltText=""
         />
@@ -284,7 +284,7 @@ function getTransitiveDependencyChainSummary(
     currentId = relationship.spdxElementId;
   }
 
-  return ['System.Text.Json', 'Newtonsoft.Json', 'Microsoft.Extensions.Logging'];
+  return chain;
 }
 
 function renderSimpleValueCell(

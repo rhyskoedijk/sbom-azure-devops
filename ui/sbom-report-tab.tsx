@@ -123,6 +123,7 @@ export class Root extends React.Component<{}, State> {
     return (
       <div className="flex-grow">
         {!this.state?.documents?.length ? (
+          // TODO: Add conditional rendering for error state, no documents, etc.
           <ZeroData
             iconProps={{ iconName: 'CloudDownload' }}
             primaryText="Loading Document"
