@@ -136,7 +136,7 @@ export function downloadSpdxAsXlsx(doc: ISpdx22Document): void {
   const data: IJsonSheet[] = [documentSheet, filesSheet, packagesSheet, securityAdvisoriesSheet];
 
   const settings: ISettings = {
-    fileName: `${doc.name}.spdx.xlsx`,
+    fileName: `${doc.name}.spdx`,
     writeMode: 'writeFile',
     writeOptions: {
       // https://docs.sheetjs.com/docs/api/write-options

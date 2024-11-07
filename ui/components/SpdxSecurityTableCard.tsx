@@ -16,10 +16,10 @@ interface ISecurityAdvisorySeverity {
 }
 
 const securityAdvisorySeverities: ISecurityAdvisorySeverity[] = [
-  { name: 'Critical', color: { red: 205, green: 74, blue: 69 } },
-  { name: 'High', color: { red: 205, green: 74, blue: 69 } },
-  { name: 'Moderate', color: { red: 214, green: 127, blue: 60 } },
-  { name: 'Low', color: { red: 0, green: 120, blue: 212 } },
+  { name: 'Critical', color: { red: 229, green: 115, blue: 115 } },
+  { name: 'High', color: { red: 255, green: 138, blue: 101 } },
+  { name: 'Moderate', color: { red: 255, green: 183, blue: 77 } },
+  { name: 'Low', color: { red: 100, green: 181, blue: 246 } },
 ];
 
 interface ISecurityAdvisoryTableItem {

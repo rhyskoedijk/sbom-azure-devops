@@ -39,6 +39,7 @@ export class SpdxGraphCard extends React.Component<Props, State> {
       );
     }
     return (
+      // TODO Use SVG viewer, https://github.com/chrvadala/react-svg-pan-zoom/tree/main
       <div
         className="flex-grow"
         style={{ backgroundColor: 'white' }}
