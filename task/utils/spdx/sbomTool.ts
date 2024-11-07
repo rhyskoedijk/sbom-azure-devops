@@ -110,30 +110,33 @@ export class SbomTool {
     if (sbomToolResultCode != 0) {
       throw new Error(`SBOM Tool failed with exit code ${sbomToolResultCode}`);
     }
-    const sbomPath = path.join(
+    const spdxPath = path.join(
       args.manifestOutputPath || args.buildArtifactPath || __dirname,
       MANIFEST_DIR_NAME,
       `${MANIFEST_FORMAT}_${MANIFEST_VERSION}`,
       `manifest.${MANIFEST_FORMAT}.json`,
     );
-
-    // Attach the SPDX file to the build; This is used by the SBOM report tab.
-    if (fileExistsSync(sbomPath)) {
-      addAttachment(MANIFEST_FORMAT, `${args.packageName} v${args.packageVersion}`, sbomPath);
-    } else {
-      throw new Error(`SBOM Tool did not generate SPDX file: '${sbomPath}'`);
+    if (!fileExistsSync(spdxPath)) {
+      throw new Error(`SBOM Tool did not generate SPDX file: '${spdxPath}'`);
     }
 
     // Check packages for security advisories
     if (args.fetchSecurityAdvisories && args.gitHubAccessToken) {
       section('Checking package security advisories');
-      await spdxAddPackageSecurityAdvisoryExternalRefsAsync(sbomPath, args.gitHubAccessToken);
+      await spdxAddPackageSecurityAdvisoryExternalRefsAsync(spdxPath, args.gitHubAccessToken);
     }
+
+    // Attach the SPDX file to the build timeline; This is used by the SBOM report tab.
+    section(`Attaching SPDX file to build timeline`);
+    addAttachment(`${MANIFEST_FORMAT}.json`, path.basename(spdxPath), spdxPath);
 
     // Generate a user-friendly graph diagram of the SPDX file
     if (args.enableManifestGraphGeneration) {
       section(`Generating graph diagram`);
-      await spdxGraphToSvgAsync(sbomPath);
+      const svgPath = await spdxGraphToSvgAsync(spdxPath);
+      if (svgPath) {
+        addAttachment(`${MANIFEST_FORMAT}.svg`, path.basename(svgPath), svgPath);
+      }
     }
   }
 

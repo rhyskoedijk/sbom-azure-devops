@@ -1,10 +1,20 @@
 import * as React from 'react';
 
-import { Card } from 'azure-devops-ui/Card';
-import { IHeaderCommandBarItem } from 'azure-devops-ui/HeaderCommandBar';
-import { IconSize } from 'azure-devops-ui/Icon';
+import {
+  CustomHeader,
+  HeaderDescription,
+  HeaderIcon,
+  HeaderTitle,
+  HeaderTitleArea,
+  HeaderTitleRow,
+  TitleSize,
+} from 'azure-devops-ui/Header';
+import { HeaderCommandBar, IHeaderCommandBarItem } from 'azure-devops-ui/HeaderCommandBar';
 
 import { ISpdx22Document } from '../models/Spdx22';
+import { downloadSpdxAsJson } from '../utils/SpdxToJson';
+import { downloadSpdxAsSvg } from '../utils/SpdxToSvg';
+import { downloadSpdxAsXlsx } from '../utils/SpdxToXlsx';
 
 interface Props {
   document: ISpdx22Document;
@@ -21,15 +31,15 @@ interface State {
   documentProperties: { label: string; value: string | number }[];
 }
 
-export class SpdxSummaryCard extends React.Component<Props, State> {
+export class SpdxDocumentHeader extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = SpdxSummaryCard.getDerivedStateFromProps(props);
+    this.state = SpdxDocumentHeader.getDerivedStateFromProps(props);
   }
 
   static getDerivedStateFromProps(props: Props): State {
     const state: State = {
-      commandBarItems: SpdxSummaryCard.getCommandBarItems(props.document),
+      commandBarItems: SpdxDocumentHeader.getCommandBarItems(props.document),
       documentName: props.document.name,
       documentSpdxVersion: props.document.spdxVersion,
       documentDataLicense: props.document.dataLicense,
@@ -78,36 +88,32 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
           iconName: 'Download',
         },
         important: true,
-        onActivate: () => downloadFile(`${document.name}.spdx.json`, 'text/json', JSON.stringify(document, null, 2)),
+        onActivate: () => downloadSpdxAsJson(document),
       },
       {
-        id: 'convertXlsx',
-        text: 'Convert to XLSX',
+        id: 'exportXlsx',
+        text: 'Export to XLSX',
         iconProps: {
-          iconName: 'ExcelDocument',
+          iconName: 'Export',
         },
         important: false,
-        onActivate: () => {
-          alert('TODO: Implement XLSX generation');
-        },
+        onActivate: () => downloadSpdxAsXlsx(document),
       },
       {
-        id: 'convertSvg',
-        text: 'Convert to SVG',
+        id: 'exportSvg',
+        text: 'Export to SVG',
         iconProps: {
-          iconName: 'GitGraph',
+          iconName: 'Export',
         },
         important: false,
-        onActivate: () => {
-          alert('TODO: Implement SVG generation');
-        },
+        onActivate: () => downloadSpdxAsSvg(document),
       },
     ];
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
     if (prevProps.document !== this.props.document) {
-      this.setState(SpdxSummaryCard.getDerivedStateFromProps(this.props));
+      this.setState(SpdxDocumentHeader.getDerivedStateFromProps(this.props));
     }
   }
 
@@ -116,31 +122,21 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
       return <div />;
     }
     return (
-      <Card
-        className="flex-grow bolt-card bolt-card-white"
-        titleProps={{ text: this.props.document.name, className: 'margin-vertical-4', ariaLevel: 3 }}
-        headerIconProps={{ iconName: 'Certificate', size: IconSize.large }}
-        headerCommandBarItems={this.state.commandBarItems}
-      >
-        <div className="flex-grow flex-row flex-center summary-view body-m">
-          {this.state.documentProperties.map((items, index) => (
-            <div className="flex-grow flex-column summary-column" key={index}>
-              <div className="flex-row secondary-text summary-line-non-link word-break">{items.label}</div>
-              <div className="flex-row summary-info flex-center word-break">{items.value}</div>
-            </div>
-          ))}
-        </div>
-      </Card>
+      <CustomHeader className="bolt-header-with-commandbar">
+        <HeaderIcon iconProps={{ iconName: 'Certificate', className: 'font-size-xxl' }} />
+        <HeaderTitleArea>
+          <HeaderTitleRow>
+            <HeaderTitle ariaLevel={3} className="text-ellipsis" titleSize={TitleSize.Large}>
+              {this.state.documentName}
+            </HeaderTitle>
+          </HeaderTitleRow>
+          <HeaderDescription className="secondary-text">
+            Created by {this.state.documentCreatedByOrganisation} on {this.state.documentCreatedOn.toLocaleString()}{' '}
+            using {this.state.documentCreatedWithTool} ({this.state.documentSpdxVersion})
+          </HeaderDescription>
+        </HeaderTitleArea>
+        <HeaderCommandBar items={this.state.commandBarItems} />
+      </CustomHeader>
     );
   }
-}
-
-function downloadFile(name: string, type: string, data: string) {
-  const blob = new Blob([data], { type: type });
-  const elem = window.document.createElement('a');
-  elem.href = window.URL.createObjectURL(blob);
-  elem.download = name;
-  document.body.appendChild(elem);
-  elem.click();
-  document.body.removeChild(elem);
 }
