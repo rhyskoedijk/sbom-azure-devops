@@ -7,8 +7,11 @@ Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/m
 - Graph manifest files, packages, dependencies, and security vulnerabilities as SVG image;
 - Export manifest files, packages, dependencies, and security vulnerabilities as XLSX spreadsheet;
 
+![example.build.tab.securityadvisories.png](images/example.build.tab.securityadvisories.png)
+
+![example.build.tab.packages.png](images/example.build.tab.packages.png)
+
 ![example.manifest.spdx.png](images/example.manifest.spdx.png)
-_Example: SBOM manifest graph export_
 
 ## Install
 
@@ -55,11 +58,7 @@ The SBOM manifest files will be uploaded to the `_manifest` folder of the build 
 
 ![example.build.artifacts.png](images/example.build.artifacts.png)
 
-The "SBOM" tab on the build result page provides a summary of key information within the manifest, including support for exporting files, dependencies, and security advisories to an XLSX spreadsheet.
-
-![example.build.tab.packages.png](images/example.build.tab.packages.png)
-
-![images/example.build.tab.securityadvisories.png](images/example.build.tab.securityadvisories.png)
+The SBOM tab on the build result page provides a summary of key information within the manifest, including options to export files, dependencies, and security advisories to an SVG image or XLSX spreadsheet.
 
 ## Advanced
 
