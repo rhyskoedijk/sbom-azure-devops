@@ -3,22 +3,70 @@
   "id": "sbom-tool",
   "name": "SBOM Tool",
   "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
-  "version": "1.0.15",
-  "publisher": "rhyskoedijk",
-  "public": true,
-  "categories": ["Azure Pipelines"],
+  "galleryFlags": ["Preview"],
+  "scopes": ["vso.build"],
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
+  "categories": ["Azure Pipelines"],
+  "tags": [
+    "sbom",
+    "sbom-tool",
+    "spdx",
+    "software bill of materials",
+    "supply chain",
+    "inventory",
+    "component",
+    "package",
+    "security",
+    "advisory",
+    "vulnerability",
+    "license",
+    "compliance",
+    "risk",
+    "report",
+    "graph"
+  ],
+  "branding": {
+    "color": "rgb(0, 120, 212)",
+    "theme": "light"
+  },
   "icons": {
     "default": "images/icon.png"
   },
+  "screenshots": [
+    {
+      "path": "images/example.build.tab.packages.png"
+    },
+    {
+      "path": "images/example.build.tab.securityadvisories.png"
+    },
+    {
+      "path": "images/example.manifest.spdx.png"
+    }
+  ],
   "links": {
+    "home": {
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops"
+    },
+    "getstarted": {
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops?tab=readme-ov-file#usage"
+    },
+    "issues": {
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
+    },
     "support": {
       "uri": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
+    },
+    "license": {
+      "uri": "https://github.com/rhyskoedijk/sbom-azure-devops/LICENSE"
     }
+  },
+  "customerQnASupport": {
+    "enablemarketplaceqna": true,
+    "url": "https://github.com/rhyskoedijk/sbom-azure-devops/discussions"
   },
   "repository": {
     "type": "git",
@@ -31,10 +79,27 @@
   },
   "files": [
     {
-      "path": "task"
+      "path": "task/task.json"
+    },
+    {
+      "path": "task/index.js"
+    },
+    {
+      "path": "task/icon.png"
+    },
+    {
+      "path": "task/utils"
+    },
+    {
+      "path": "task/node_modules"
     },
     {
       "path": "images",
+      "addressable": true
+    },
+    {
+      "path": "ui/dist",
+      "packagePath": "/",
       "addressable": true
     }
   ],
@@ -42,9 +107,22 @@
     {
       "id": "sbom-tool-task",
       "type": "ms.vss-distributed-task.task",
+      "description": "SBOM Tool Task",
       "targets": ["ms.vss-distributed-task.tasks"],
       "properties": {
         "name": "task"
+      }
+    },
+    {
+      "id": "sbom-tool-build-results-tab",
+      "type": "ms.vss-build-web.build-results-tab",
+      "description": "SBOM Tool Report",
+      "targets": ["ms.vss-build-web.build-results-view"],
+      "properties": {
+        "name": "SBOM",
+        "uri": "ui/sbom-report-tab.html",
+        "supportsTasks": ["79d7e0df-bd9a-4658-9897-ae059fc992c5"],
+        "dynamic": true
       }
     }
   ]

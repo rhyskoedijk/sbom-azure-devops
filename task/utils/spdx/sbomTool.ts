@@ -1,4 +1,4 @@
-import { getVariable, tool, which } from 'azure-pipelines-task-lib/task';
+import { addAttachment, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { tmpdir } from 'node:os';
@@ -75,7 +75,13 @@ export class SbomTool {
     if (args.packageNamespaceUriBase) {
       sbomToolArguments.push('-nsb', args.packageNamespaceUriBase);
     } else {
-      sbomToolArguments.push('-nsb', `https://${args.packageSupplier.toLowerCase()}.com`);
+      // No base namespace provided, so generate one from the supplier name
+      // To get a valid URI hostname, replace spaces with dashes, strip all other special characters, convert to lowercase
+      const supplierHostname = args.packageSupplier
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9 ]/g, '')
+        .toLowerCase();
+      sbomToolArguments.push('-nsb', `https://${supplierHostname}.com`);
     }
     if (args.packageNamespaceUriUniquePart) {
       sbomToolArguments.push('-nsu', args.packageNamespaceUriUniquePart);
@@ -104,26 +110,33 @@ export class SbomTool {
     if (sbomToolResultCode != 0) {
       throw new Error(`SBOM Tool failed with exit code ${sbomToolResultCode}`);
     }
-    const sbomPath = path.join(
+    const spdxPath = path.join(
       args.manifestOutputPath || args.buildArtifactPath || __dirname,
       MANIFEST_DIR_NAME,
       `${MANIFEST_FORMAT}_${MANIFEST_VERSION}`,
       `manifest.${MANIFEST_FORMAT}.json`,
     );
-    if (!fileExistsSync(sbomPath)) {
-      throw new Error(`SBOM Tool did not generate SPDX file: '${sbomPath}'`);
+    if (!fileExistsSync(spdxPath)) {
+      throw new Error(`SBOM Tool did not generate SPDX file: '${spdxPath}'`);
     }
 
     // Check packages for security advisories
     if (args.fetchSecurityAdvisories && args.gitHubAccessToken) {
       section('Checking package security advisories');
-      await spdxAddPackageSecurityAdvisoryExternalRefsAsync(sbomPath, args.gitHubAccessToken);
+      await spdxAddPackageSecurityAdvisoryExternalRefsAsync(spdxPath, args.gitHubAccessToken);
     }
+
+    // Attach the SPDX file to the build timeline; This is used by the SBOM report tab.
+    section(`Attaching SPDX file to build timeline`);
+    addAttachment(`${MANIFEST_FORMAT}.json`, path.basename(spdxPath), spdxPath);
 
     // Generate a user-friendly graph diagram of the SPDX file
     if (args.enableManifestGraphGeneration) {
       section(`Generating graph diagram`);
-      await spdxGraphToSvgAsync(sbomPath);
+      const svgPath = await spdxGraphToSvgAsync(spdxPath);
+      if (svgPath) {
+        addAttachment(`${MANIFEST_FORMAT}.svg`, path.basename(svgPath), svgPath);
+      }
     }
   }
 
