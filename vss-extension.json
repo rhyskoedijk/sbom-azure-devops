@@ -30,7 +30,7 @@
   ],
   "branding": {
     "color": "rgb(0, 114, 198)",
-    "theme": "light"
+    "theme": "dark"
   },
   "icons": {
     "default": "images/icon.png"
