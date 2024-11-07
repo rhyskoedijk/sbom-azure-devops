@@ -1,13 +1,14 @@
 # SBOM Tool Azure DevOps Extension
 
-Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool); Features include:
+Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool). Use this task to:
 
-- Generate [SPDX 2.2](https://spdx.dev/) compatible SBOMs from Azure DevOps repository build artifacts.
-- Generate SBOM manifest graph, visualising files, packages, dependencies, and security advisories.
-- Check package dependencies for known vulnerabilities against the [GitHub Advisory Database](https://github.com/advisories).
+- Generate [SPDX 2.2](https://spdx.dev/) compatible SBOMs from Azure DevOps repository build artifacts;
+- Check package dependencies for known vulnerabilities against the [GitHub Advisory Database](https://github.com/advisories);
+- Graph manifest files, packages, dependencies, and security vulnerabilities as SVG image;
+- Export manifest files, packages, dependencies, and security vulnerabilities as XLSX spreadsheet;
 
 ![example.manifest.spdx.png](images/example.manifest.spdx.png)
-_SBOM manifest graph example_
+_Example: SBOM manifest graph export_
 
 ## Install
 
@@ -52,7 +53,13 @@ jobs:
 
 The SBOM manifest files will be uploaded to the `_manifest` folder of the build pipeline artifact container.
 
-![example.artifacts.png](images/example.artifacts.png)
+![example.build.artifacts.png](images/example.build.artifacts.png)
+
+The "SBOM" tab on the build result page provides a summary of key information within the manifest, including support for exporting files, dependencies, and security advisories to an XLSX spreadsheet.
+
+![example.build.tab.packages.png](images/example.build.tab.packages.png)
+
+![images/example.build.tab.securityadvisories.png](images/example.build.tab.securityadvisories.png)
 
 ## Advanced
 
