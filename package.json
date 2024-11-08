@@ -9,11 +9,11 @@
     "format:check": "prettier --check '**/*.{js,ts,tsx,scss,json,yaml,yml,md,html}'",
     "build": "npm run build:task && npm run build:ui",
     "build:task": "cd task && tsc",
-    "build:ui": "cd ui && webpack --mode production",
+    "build:ui": "cd ui && webpack --mode development",
     "start:ui": "cd ui && webpack serve --mode development",
-    "package": "npx tfx-cli extension create --manifests vss-extension.json --output-path dist --overrides-file vss-extension.overrides.prod.json",
-    "package:dev": "node task/scripts/increment-task-version.js && npx tfx-cli extension create --manifests vss-extension.json --output-path dist --overrides-file vss-extension.overrides.dev.json --rev-version",
-    "publish": "npx tfx-cli extension publish --manifests vss-extension.json --vsix dist/*.vsix"
+    "package": "node vss-extension.version.increment.js && npx tfx-cli extension create --manifests vss-extension.json --output-path dist",
+    "package:dev": "npx tfx-cli extension create --manifests vss-extension.json --output-path dist/dev --overrides-file vss-extension.overrides.dev.json",
+    "package:prod": "npx tfx-cli extension create --manifests vss-extension.json --output-path dist/prod --overrides-file vss-extension.overrides.prod.json"
   },
   "keywords": [
     "azure",

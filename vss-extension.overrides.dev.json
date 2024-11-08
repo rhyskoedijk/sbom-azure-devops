@@ -1,8 +1,7 @@
 {
-  "publisher": "rhyskoedijk",
   "id": "sbom-tool-dev",
   "name": "SBOM Tool [DEV]",
-  "version": "1.0.0",
-  "baseUri": "https://localhost:3000/",
-  "public": false
+  "version": "#{MAJOR_MINOR_PATCH}#.#{BUILD_NUMBER}#",
+  "public": false,
+  "baseUri": null
 }

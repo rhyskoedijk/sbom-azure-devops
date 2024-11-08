@@ -1,8 +1,11 @@
 {
   "manifestVersion": 1,
-  "id": "sbom-tool",
-  "name": "SBOM Tool",
+  "publisher": "rhyskoedijk",
+  "id": "sbom-tool-local",
+  "name": "SBOM Tool [LOCALHOST]",
   "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
+  "version": "1.0.0",
+  "public": false,
   "scopes": ["vso.build"],
   "targets": [
     {
@@ -76,6 +79,7 @@
       "path": "README.md"
     }
   },
+  "baseUri": "https://localhost:3000/",
   "files": [
     {
       "path": "task/task.json"

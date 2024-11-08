@@ -1,4 +1,4 @@
-name: Build
+name: Prettier
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Build extension
+  prettier:
+    name: Check for formatting issues
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,5 +22,5 @@ jobs:
       - name: NPM Install
         run: npm install
 
-      - name: Build extension
-        run: npm run build
+      - name: NPM Format Check
+        run: npm run format:check

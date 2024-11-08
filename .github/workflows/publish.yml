@@ -1,0 +1,104 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+    tags: ['*']
+
+jobs:
+  build:
+    name: Publish extension
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history so that GitVersion can calculate the version
+
+      - name: Use GitVersion 6.x
+        uses: gittools/actions/gitversion/setup@v3.0.0
+        with:
+          versionSpec: '6.x'
+
+      - name: Determine version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.0.0
+        with:
+          useConfigFile: true
+
+      - name: Update version numbers in vss-extension.overrides.json
+        uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["vss-extension.overrides.*.json"]'
+        env:
+          MAJOR_MINOR_PATCH: ${{ steps.gitversion.outputs.majorMinorPatch }}
+          BUILD_NUMBER: ${{ github.run_number }}
+
+      - name: Update version numbers in task.json
+        run: |
+          echo "`jq '.version.Major=${{ steps.gitversion.outputs.major }}' task/task.json`" > task/task.json
+          echo "`jq '.version.Minor=${{ steps.gitversion.outputs.minor }}' task/task.json`" > task/task.json
+          echo "`jq '.version.Patch=${{ github.run_number }}' task/task.json`" > task/task.json
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: NPM Install
+        run: npm install
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Package extension (dev)
+        run: npm run package:dev
+
+      - name: Package extension (prod)
+        run: npm run package:prod
+
+      - name: Upload artifact (drop)
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ github.workspace }}/dist/*
+          name: drop
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: drop
+
+      - name: Upload release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: '${{ github.workspace }}/prod/*.vsix,${{ github.workspace }}/dev/*.vsix'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+          allowUpdates: true
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Publish to marketplace (dev)
+        if: github.ref == 'refs/heads/main'
+        run: >
+          npx tfx-cli extension publish
+          --vsix ${{ github.workspace }}/dev/*.vsix
+          --auth-type pat
+          --token ${{ secrets.AZURE_DEVOPS_EXTENSION_TOKEN }}
+          --share-with rhyskoedijk
+
+      - name: Publish to marketplace (prod)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: >
+          tfx extension publish
+          --vsix ${{ github.workspace }}/prod/*.vsix
+          --auth-type pat
+          --token ${{ secrets.AZURE_DEVOPS_EXTENSION_TOKEN }}

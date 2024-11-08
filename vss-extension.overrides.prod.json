@@ -1,5 +1,7 @@
 {
-  "publisher": "rhyskoedijk",
-  "version": "1.0.0",
-  "public": true
+  "id": "sbom-tool",
+  "name": "SBOM Tool",
+  "version": "#{MAJOR_MINOR_PATCH}#.#{BUILD_NUMBER}#",
+  "public": true,
+  "baseUri": null
 }
