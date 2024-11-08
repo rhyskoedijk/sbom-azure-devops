@@ -12,6 +12,7 @@ async function run() {
           buildSourcePath: getInputRequired('buildSourcePath'),
           buildArtifactPath: getInputRequired('buildArtifactPath'),
           buildFileList: getInput('buildFileList', false),
+          buildDockerImagesToScan: getInput('buildDockerImagesToScan', false),
           manifestOutputPath: getInput('manifestOutputPath', false),
           enableManifestGraphGeneration: getBoolInput('enableManifestGraphGeneration', false),
           enablePackageMetadataParsing: getBoolInput('enablePackageMetadataParsing', false),
@@ -23,7 +24,6 @@ async function run() {
           packageSupplier: getInputRequired('packageSupplier'),
           packageNamespaceUriBase: getInput('packageNamespaceUriBase', false),
           packageNamespaceUriUniquePart: getInput('packageNamespaceUriUniquePart', false),
-          dockerImagesToScan: getInput('dockerImagesToScan', false),
           additionalComponentDetectorArgs: getInput('additionalComponentDetectorArgs', false),
           externalDocumentReferenceListFile: getInput('externalDocumentReferenceListFile', false),
         });

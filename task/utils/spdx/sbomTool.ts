@@ -16,6 +16,7 @@ export interface SbomGenerateArgs {
   buildSourcePath: string;
   buildArtifactPath: string;
   buildFileList?: string;
+  buildDockerImagesToScan?: string;
   manifestOutputPath?: string;
   enableManifestGraphGeneration?: boolean;
   enablePackageMetadataParsing?: boolean;
@@ -27,7 +28,6 @@ export interface SbomGenerateArgs {
   packageSupplier: string;
   packageNamespaceUriBase?: string;
   packageNamespaceUriUniquePart?: string;
-  dockerImagesToScan?: string;
   additionalComponentDetectorArgs?: string;
   externalDocumentReferenceListFile?: string;
 }
@@ -59,6 +59,9 @@ export class SbomTool {
     if (args.buildFileList) {
       sbomToolArguments.push('-bl', await createTemporaryFileAsync('build-file-list', args.buildFileList));
     }
+    if (args.buildDockerImagesToScan) {
+      sbomToolArguments.push('-di', args.buildDockerImagesToScan);
+    }
     if (args.manifestOutputPath) {
       sbomToolArguments.push('-m', args.manifestOutputPath);
     }
@@ -85,9 +88,6 @@ export class SbomTool {
     }
     if (args.packageNamespaceUriUniquePart) {
       sbomToolArguments.push('-nsu', args.packageNamespaceUriUniquePart);
-    }
-    if (args.dockerImagesToScan) {
-      sbomToolArguments.push('-di', args.dockerImagesToScan);
     }
     if (args.additionalComponentDetectorArgs) {
       sbomToolArguments.push('-cd', args.additionalComponentDetectorArgs);

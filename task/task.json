@@ -71,6 +71,15 @@
       "visibleRule": "command=generate"
     },
     {
+      "name": "buildDockerImagesToScan",
+      "type": "string",
+      "label": "Build Docker Images To Scan",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for package dependencies. For example, `ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab`.",
+      "visibleRule": "command=generate"
+    },
+    {
       "name": "manifestOutputPath",
       "type": "string",
       "label": "Manifest Output Path",
@@ -181,16 +190,6 @@
       "defaultValue": "",
       "required": false,
       "helpMarkDown": "A unique valid URI part that will be appended to the SBOM namespace URI. If specified, this value should be globally unique.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "groupName": "advanced",
-      "name": "dockerImagesToScan",
-      "type": "string",
-      "label": "Docker Images To Scan",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for package dependencies. For example, `ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab`.",
       "visibleRule": "command=generate"
     },
     {
