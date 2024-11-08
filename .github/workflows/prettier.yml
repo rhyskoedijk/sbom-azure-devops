@@ -22,5 +22,5 @@ jobs:
       - name: NPM Install
         run: npm install
 
-      - name: NPM Format Check
+      - name: Prettier check
         run: npm run format:check

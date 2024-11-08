@@ -1,0 +1,5 @@
+branches:
+  pull-request:
+    label: pr
+  main:
+    label: ci

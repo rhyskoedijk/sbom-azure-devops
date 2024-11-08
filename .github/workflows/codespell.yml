@@ -14,5 +14,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Codespell
+      - name: Codespell check
         uses: codespell-project/actions-codespell@v2
