@@ -1,5 +1,4 @@
 dist
 node_modules
 task/**/*.js
-*.overrides.dev.json
 *.taskkey
