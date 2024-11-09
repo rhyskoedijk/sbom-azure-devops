@@ -4,7 +4,7 @@
   "id": "sbom-tool-local",
   "name": "SBOM Tool [LOCALHOST]",
   "description": "SBOM Tool. Generate SPDX 2.2 compatible SBOMs from Azure DevOps repository artifacts.",
-  "version": "1.0.0",
+  "version": "0.0.0.0",
   "public": false,
   "scopes": ["vso.build"],
   "targets": [
