@@ -31,10 +31,6 @@
     "report",
     "graph"
   ],
-  "branding": {
-    "color": "rgb(0, 114, 198)",
-    "theme": "dark"
-  },
   "icons": {
     "default": "images/icon.png"
   },
