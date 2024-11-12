@@ -51,7 +51,7 @@ export class SpdxGraphCard extends React.Component<Props, State> {
       >
         <TransformComponent>
           <div
-            style={{ backgroundColor: 'white', width: '100vw' }}
+            style={{ backgroundColor: 'white', width: '100vw', minHeight: '80vh' }}
             dangerouslySetInnerHTML={{ __html: this.props.document.documentGraphSvg || '' }}
           />
         </TransformComponent>
