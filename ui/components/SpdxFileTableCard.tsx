@@ -148,11 +148,11 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
       return (
         <ZeroData
           iconProps={{ iconName: 'Package' }}
-          primaryText="Empty"
+          primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Files'}
           secondaryText={
             this.props.filter.getFilterItemValue('keyword')
               ? 'Filter does not match any files.'
-              : 'Document contains no files.'
+              : 'Document does not contain any files.'
           }
           imageAltText=""
           className="margin-vertical-20"

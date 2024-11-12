@@ -1,33 +1,26 @@
 import * as React from 'react';
 
-import { IColor } from 'azure-devops-extension-api';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
+import { Icon, IconSize } from 'azure-devops-ui/Icon';
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
-import { ColumnSorting, ITableColumn, sortItems, SortOrder, Table, TwoLineTableCell } from 'azure-devops-ui/Table';
+import {
+  ColumnSorting,
+  ITableColumn,
+  sortItems,
+  SortOrder,
+  Table,
+  TableCell,
+  TwoLineTableCell,
+} from 'azure-devops-ui/Table';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISpdx22Document } from '../models/Spdx22';
+import { ISecurityAdvisory, parseSecurityAdvisory } from '../models/SecurityAdvisory';
+import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22';
 
-interface ISecurityAdvisorySeverity {
-  name: string;
-  color: IColor;
-}
-
-const securityAdvisorySeverities: ISecurityAdvisorySeverity[] = [
-  { name: 'Critical', color: { red: 229, green: 115, blue: 115 } },
-  { name: 'High', color: { red: 255, green: 138, blue: 101 } },
-  { name: 'Moderate', color: { red: 255, green: 183, blue: 77 } },
-  { name: 'Low', color: { red: 100, green: 181, blue: 246 } },
-];
-
-interface ISecurityAdvisoryTableItem {
-  id: string;
-  severity: string;
-  summary: string;
-  url: string;
-  package: { name: string; version: string };
+interface ISecurityAdvisoryTableItem extends ISecurityAdvisory {
+  introducedThrough: string[];
 }
 
 interface Props {
@@ -61,27 +54,34 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props: Props): State {
-    const packages = props.document?.packages || [];
+    const dependsOnRelationships = (props.document?.relationships || []).filter(
+      (r) => r.relationshipType === 'DEPENDS_ON',
+    );
+    const rootPackageId = props.document.documentDescribes?.[0];
+    const packages = (props.document?.packages || []).filter((p) => {
+      return dependsOnRelationships?.some((r) => r.relatedSpdxElement === p.SPDXID);
+    });
     const securityAdvisories = packages.flatMap((p) => {
       return p.externalRefs.filter((r) => r.referenceCategory == 'SECURITY' && r.referenceType == 'advisory') || [];
     });
 
     const rawTableItems: ISecurityAdvisoryTableItem[] =
       securityAdvisories.map((x) => {
-        const pkg = packages.find((p) => p.externalRefs.includes(x));
-        const ghsaId = x.referenceLocator?.match(/GHSA-[0-9a-z-]+/i)?.[0];
-        const severity = x.comment?.match(/^\[(\w+)\]/)?.[1]?.toPascalCase();
-        const summary = x.comment?.match(/^\[(\w+)\]([^;]*)/)?.[2]?.trim();
-        const url = x.referenceLocator;
+        const securityAdvisory = parseSecurityAdvisory(x, packages);
+        const pkg = packages.find(
+          (p) => p.name === securityAdvisory.package?.name && p.versionInfo === securityAdvisory.package?.version,
+        );
+        const isTopLevel =
+          pkg?.SPDXID == rootPackageId ||
+          dependsOnRelationships.some(
+            (r) =>
+              r.spdxElementId == rootPackageId &&
+              r.relatedSpdxElement === pkg?.SPDXID &&
+              r.relationshipType === 'DEPENDS_ON',
+          );
         return {
-          id: ghsaId || '',
-          severity: severity || '',
-          summary: summary || '',
-          url: url,
-          package: {
-            name: pkg?.name || '',
-            version: pkg?.versionInfo || '',
-          },
+          ...securityAdvisory,
+          introducedThrough: getTransitivePackageChain(pkg?.SPDXID || '', packages, props.document.relationships),
         };
       }) || [];
 
@@ -104,7 +104,19 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-65),
+        width: new ObservableValue(-55),
+      },
+      {
+        id: 'package',
+        name: 'Package',
+        onSize: tableColumnResize,
+        readonly: true,
+        renderCell: renderAdvisoryPackageCell,
+        sortProps: {
+          ariaLabelAscending: 'Sorted A to Z',
+          ariaLabelDescending: 'Sorted Z to A',
+        },
+        width: new ObservableValue(-20),
       },
       {
         id: 'introducedThrough',
@@ -112,10 +124,10 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         readonly: true,
         renderCell: renderAdvisoryIntroducedThroughCell,
         sortProps: {
-          ariaLabelAscending: 'Sorted A to Z',
-          ariaLabelDescending: 'Sorted Z to A',
+          ariaLabelAscending: 'Sorted low to high',
+          ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-30),
+        width: new ObservableValue(-25),
       },
     ];
 
@@ -138,13 +150,16 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             [
               // Sort on severity
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
-                const item1Severity = securityAdvisorySeverities.findIndex((x) => x.name === item1.severity);
-                const item2Severity = securityAdvisorySeverities.findIndex((x) => x.name === item2.severity);
-                return item1Severity - item2Severity;
+                return item1.severity.id - item2.severity.id;
               },
               // Sort on package name
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
-                return item1.package.name!.localeCompare(item2.package.name!);
+                if (!item1.package || !item2.package) return 0;
+                return item1.package!.name!.localeCompare(item2.package!.name!);
+              },
+              // Sort on number of chained packages
+              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
+                return item1.introducedThrough.length - item2.introducedThrough.length;
               },
             ],
             tableColumns,
@@ -159,7 +174,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         (item) =>
           !keyword ||
           item.id?.toLowerCase()?.includes(keyword.toLowerCase()) ||
-          item.severity?.toLowerCase()?.includes(keyword.toLowerCase()) ||
+          item.severity?.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.summary?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.package?.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.url?.toLowerCase()?.includes(keyword.toLowerCase()),
@@ -185,12 +200,12 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
-          iconProps={{ iconName: 'CheckMark' }}
-          primaryText="No Security Advisories"
+          iconProps={{ iconName: 'Shield' }}
+          primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Security Advisories'}
           secondaryText={
             this.props.filter.getFilterItemValue('keyword')
               ? 'Filter does not match any security advisories.'
-              : 'Document contains no security advisories.'
+              : 'Document does not contain any security advisories.'
           }
           imageAltText=""
           className="margin-vertical-20"
@@ -221,6 +236,34 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
   }
 }
 
+/**
+ * Get a summary of the transitive dependency chain for a package.
+ * @param packageId The SPDX ID of the package.
+ * @param packages The list of packages in the document.
+ * @param dependsOnRelationships The list of DEPENDS_ON relationships in the document.
+ * @returns An array package names representing the transitive dependency chain.
+ */
+function getTransitivePackageChain(
+  packageId: string,
+  packages: IPackage[],
+  dependsOnRelationships: IRelationship[],
+): string[] {
+  const chain: string[] = [];
+  let currentId = packageId;
+  while (currentId) {
+    const relationship = dependsOnRelationships.find((r) => r.relatedSpdxElement === currentId);
+    if (!relationship) break;
+
+    const pkg = packages.find((p) => p.SPDXID === relationship.spdxElementId);
+    if (!pkg) break;
+
+    chain.unshift(pkg.name);
+    currentId = relationship.spdxElementId;
+  }
+
+  return chain;
+}
+
 function renderAdvisorySummaryCell(
   rowIndex: number,
   columnIndex: number,
@@ -231,15 +274,11 @@ function renderAdvisorySummaryCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    line1: <div className="primary-text font-weight-heavy">{tableItem.summary}</div>,
+    line1: <div className="primary-text">{tableItem.summary}</div>,
     line2: (
       <div className="flex-row rhythm-horizontal-8">
-        <Pill
-          size={PillSize.compact}
-          variant={PillVariant.colored}
-          color={securityAdvisorySeverities.find((x) => x.name === tableItem.severity)?.color}
-        >
-          {tableItem.severity}
+        <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
+          {tableItem.severity.name}
         </Pill>
         <div className="secondary-text">{tableItem.id}</div>
       </div>
@@ -247,7 +286,7 @@ function renderAdvisorySummaryCell(
   });
 }
 
-function renderAdvisoryIntroducedThroughCell(
+function renderAdvisoryPackageCell(
   rowIndex: number,
   columnIndex: number,
   tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
@@ -257,7 +296,30 @@ function renderAdvisoryIntroducedThroughCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    line1: <div className="primary-text">{tableItem.package.name}</div>,
-    line2: <div className="secondary-text">{tableItem.package.version}</div>,
+    line1: <div className="primary-text">{tableItem.package?.name}</div>,
+    line2: <div className="secondary-text">{tableItem.package?.version}</div>,
+  });
+}
+
+function renderAdvisoryIntroducedThroughCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItem: ISecurityAdvisoryTableItem,
+): JSX.Element {
+  return TableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    children: (
+      <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
+        {tableItem.introducedThrough.map((pkg, index) => (
+          <div key={index} className="rhythm-horizontal-4">
+            {index > 0 ? <Icon iconName="ChevronRightSmall" size={IconSize.small} /> : null}
+            <span>{pkg}</span>
+          </div>
+        ))}
+      </div>
+    ),
   });
 }

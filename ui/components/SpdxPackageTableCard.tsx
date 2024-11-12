@@ -4,6 +4,7 @@ import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Icon, IconSize } from 'azure-devops-ui/Icon';
 import { Link } from 'azure-devops-ui/Link';
+import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
   ITableColumn,
@@ -16,6 +17,7 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
+import { ISecurityAdvisorySeverity, parseSecurityAdvisory } from '../models/SecurityAdvisory';
 import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22';
 
 interface IPackageTableItem {
@@ -28,7 +30,7 @@ interface IPackageTableItem {
   introducedThrough: string[];
   packageManager: string;
   isVulnerable: string;
-  securityAdvisories: { id: string; uri: string }[];
+  securityAdvisories: { id: string; severity: ISecurityAdvisorySeverity; uri: string }[];
 }
 
 interface Props {
@@ -95,9 +97,11 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           packageManager: packageManager || '',
           isVulnerable: securityAdvisories?.length || false ? 'Yes' : 'No',
           securityAdvisories: securityAdvisories?.map((a) => {
+            const advisory = parseSecurityAdvisory(a);
             return {
-              id: a.comment?.match(/CVE-[0-9-]+/i)?.[0] || a.referenceLocator?.match(/GHSA-[0-9a-z-]+/i)?.[0] || '',
-              uri: a.referenceLocator,
+              id: advisory.id,
+              severity: advisory.severity,
+              uri: advisory.url,
             };
           }),
         };
@@ -291,11 +295,11 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
       return (
         <ZeroData
           iconProps={{ iconName: 'Package' }}
-          primaryText="Empty"
+          primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Packages'}
           secondaryText={
             this.props.filter.getFilterItemValue('keyword')
               ? 'Filter does not match any packages.'
-              : 'Document contains no packages.'
+              : 'Document does not contain any packages.'
           }
           imageAltText=""
           className="margin-vertical-20"
@@ -395,18 +399,24 @@ function renderPackageSecurityAdvisoriesCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     children: (
-      <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
-        {tableItem.securityAdvisories.map((advisory, index) => (
-          <Link
-            className="secondary-text bolt-table-link bolt-table-inline-link"
-            target="_blank"
-            href={advisory.uri}
-            key={index}
-            excludeTabStop
-          >
-            {advisory.id}
-          </Link>
-        ))}
+      <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-8 rhythm-vertical-8">
+        {tableItem.securityAdvisories
+          .sort((a, b) => b.severity.id - a.severity.id)
+          .map((advisory, index) => (
+            <div key={index} className="flex-column margin-vertical-8">
+              <Pill size={PillSize.compact} variant={PillVariant.colored} color={advisory.severity.color}>
+                {advisory.severity.name}
+              </Pill>
+              <Link
+                className="secondary-text bolt-table-link bolt-table-inline-link"
+                target="_blank"
+                href={advisory.uri}
+                excludeTabStop
+              >
+                {advisory.id}
+              </Link>
+            </div>
+          ))}
       </div>
     ),
   });
