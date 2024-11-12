@@ -73,22 +73,32 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
           {this.props.document.documentGraphSvg ? <Tab name="Graph View" id="graph" /> : null}
         </TabBar>
         <TabContent>
-          <div className="page-content">
-            <Observer selectedTabId={this.selectedTabId}>
-              {(props: { selectedTabId: string }) => {
-                switch (props.selectedTabId) {
-                  case 'files':
-                    return <SpdxFileTableCard document={this.props.document} filter={this.filter} />;
-                  case 'packages':
-                    return <SpdxPackageTableCard document={this.props.document} filter={this.filter} />;
-                  case 'securityAdvisories':
-                    return <SpdxSecurityTableCard document={this.props.document} filter={this.filter} />;
-                  case 'graph':
-                    return <SpdxGraphCard document={this.props.document} />;
-                }
-              }}
-            </Observer>
-          </div>
+          <Observer selectedTabId={this.selectedTabId}>
+            {(props: { selectedTabId: string }) => {
+              switch (props.selectedTabId) {
+                case 'files':
+                  return (
+                    <div className="page-content">
+                      <SpdxFileTableCard document={this.props.document} filter={this.filter} />
+                    </div>
+                  );
+                case 'packages':
+                  return (
+                    <div className="page-content">
+                      <SpdxPackageTableCard document={this.props.document} filter={this.filter} />
+                    </div>
+                  );
+                case 'securityAdvisories':
+                  return (
+                    <div className="page-content">
+                      <SpdxSecurityTableCard document={this.props.document} filter={this.filter} />
+                    </div>
+                  );
+                case 'graph':
+                  return <SpdxGraphCard document={this.props.document} />;
+              }
+            }}
+          </Observer>
         </TabContent>
       </Page>
     );

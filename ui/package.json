@@ -5,7 +5,8 @@
     "azure-devops-extension-sdk": "^4.0.2",
     "azure-devops-ui": "^2.246.0",
     "json-as-xlsx": "^2.5.6",
-    "path-browserify": "^1.0.1"
+    "path-browserify": "^1.0.1",
+    "react-zoom-pan-pinch": "^3.6.1"
   },
   "devDependencies": {
     "@types/react": "~16.8.2",

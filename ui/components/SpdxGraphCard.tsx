@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISpdx22Document } from '../models/Spdx22';
@@ -39,12 +41,21 @@ export class SpdxGraphCard extends React.Component<Props, State> {
       );
     }
     return (
-      // TODO Use SVG viewer, https://github.com/chrvadala/react-svg-pan-zoom/tree/main
-      <div
-        className="flex-grow"
-        style={{ backgroundColor: 'white' }}
-        dangerouslySetInnerHTML={{ __html: this.props.document.documentGraphSvg }}
-      />
+      <TransformWrapper
+        initialScale={1}
+        minScale={1}
+        maxScale={30}
+        centerOnInit={true}
+        centerZoomedOut={true}
+        wheel={{ activationKeys: ['Control', 'Shift'] }}
+      >
+        <TransformComponent>
+          <div
+            style={{ backgroundColor: 'white', width: '100vw' }}
+            dangerouslySetInnerHTML={{ __html: this.props.document.documentGraphSvg || '' }}
+          />
+        </TransformComponent>
+      </TransformWrapper>
     );
   }
 }
