@@ -36,11 +36,11 @@
       "label": "Command",
       "defaultValue": "generate",
       "required": true,
-      "helpMarkDown": "The merge strategy to use. Learn more [here](https://learn.microsoft.com/en-us/rest/api/azure/devops/git/pull-requests/update?view=azure-devops-rest-5.1&tabs=HTTP#gitpullrequestmergestrategy).",
+      "helpMarkDown": "The [sbom-tool command](https://github.com/microsoft/sbom-tool?tab=readme-ov-file#run-the-tool) to run",
       "options": {
         "generate": "Generate",
-        "validate": "Validate",
-        "redact": "Redact"
+        "validate": "Validate (not implemented)",
+        "redact": "Redact (not implemented)"
       }
     },
     {
