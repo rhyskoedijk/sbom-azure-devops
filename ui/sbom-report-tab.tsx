@@ -3,13 +3,14 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { CommonServiceIds, getClient, IProjectPageService } from 'azure-devops-extension-api';
-import { BuildRestClient, BuildServiceIds, IBuildPageDataService } from 'azure-devops-extension-api/Build';
+import { BuildServiceIds, IBuildPageDataService } from 'azure-devops-extension-api/Build';
 import { Spinner } from 'azure-devops-ui/Spinner';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { SpdxDocumentPage } from './components/SpdxDocumentPage';
 import { ISpdx22Document } from './models/Spdx22';
 
+import { BuildRestClient } from './utils/BuildRestClient';
 import './utils/StringExtensions';
 
 import './sbom-report-tab.scss';
