@@ -10,6 +10,7 @@
   "category": "Azure Pipelines",
   "visibility": ["Build"],
   "runsOn": ["Agent"],
+  "minimumAgentVersion": "3.232.1",
   "author": "Rhys Koedijk",
   "version": {
     "Major": 0,
