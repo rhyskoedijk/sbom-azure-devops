@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Icon, IconSize } from 'azure-devops-ui/Icon';
-import { Link } from 'azure-devops-ui/Link';
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
@@ -404,17 +403,14 @@ function renderPackageSecurityAdvisoriesCell(
           .sort((a, b) => b.severity.id - a.severity.id)
           .map((advisory, index) => (
             <div key={index} className="flex-column margin-vertical-8">
-              <Pill size={PillSize.compact} variant={PillVariant.colored} color={advisory.severity.color}>
-                {advisory.severity.name}
-              </Pill>
-              <Link
-                className="secondary-text bolt-table-link bolt-table-inline-link"
-                target="_blank"
-                href={advisory.uri}
-                excludeTabStop
+              <Pill
+                onClick={(x) => window.open(advisory.uri, '_blank')}
+                size={PillSize.compact}
+                variant={PillVariant.colored}
+                color={advisory.severity.color}
               >
-                {advisory.id}
-              </Link>
+                {advisory.severity.name}: {advisory.id}
+              </Pill>
             </div>
           ))}
       </div>
