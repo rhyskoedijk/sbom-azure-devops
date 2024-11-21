@@ -13,6 +13,7 @@
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
+  "demands": ["api-version/5.0"],
   "categories": ["Azure Pipelines"],
   "tags": [
     "sbom",
