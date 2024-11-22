@@ -42,7 +42,7 @@
     "url": "https://github.com/rhyskoedijk/sbom-azure-devops/issues"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.9",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.9.1",
     "@types/q": "^1.5.8",
     "husky": "^9.1.7",
