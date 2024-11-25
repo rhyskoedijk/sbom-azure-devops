@@ -179,7 +179,9 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
                       variant={PillVariant.colored}
                       color={securityAdvisoryGroup.severity.color}
                     >
-                      {securityAdvisoryGroup.severity.name} ({securityAdvisoryGroup.count})
+                      <span className="font-weight-heavy text-on-communication-background">
+                        {securityAdvisoryGroup.severity.name} ({securityAdvisoryGroup.count})
+                      </span>
                     </Pill>
                   ))}
               </PillGroup>

@@ -278,7 +278,7 @@ function renderAdvisorySummaryCell(
     line2: (
       <div className="flex-row rhythm-horizontal-8">
         <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
-          {tableItem.severity.name}
+          <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name}</span>
         </Pill>
         <div className="secondary-text">{tableItem.id}</div>
       </div>

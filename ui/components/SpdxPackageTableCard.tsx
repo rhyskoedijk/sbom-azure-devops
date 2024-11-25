@@ -13,6 +13,7 @@ import {
   Table,
   TableCell,
 } from 'azure-devops-ui/Table';
+import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
@@ -110,7 +111,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
     const tableColumns: ITableColumn<IPackageTableItem>[] = [
       {
         id: 'packageManager',
-        name: 'Package Manager',
+        name: 'Source',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
@@ -132,7 +133,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
         },
-        width: new ObservableValue(-15),
+        width: new ObservableValue(-20),
       },
       {
         id: 'version',
@@ -150,6 +151,10 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
           renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.type),
+        sortProps: {
+          ariaLabelAscending: 'Sorted low to high',
+          ariaLabelDescending: 'Sorted high to low',
+        },
         width: new ObservableValue(-5),
       },
       {
@@ -162,7 +167,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-25),
+        width: new ObservableValue(-35),
       },
       {
         id: 'securityAdvisories',
@@ -174,7 +179,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-25),
+        width: new ObservableValue(-10),
       },
       {
         id: 'license',
@@ -229,7 +234,10 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
                 return item1.name!.localeCompare(item2.name!);
               },
               null,
-              null,
+              // Sort on type
+              (item1: IPackageTableItem, item2: IPackageTableItem): number => {
+                return item1.type!.localeCompare(item2.type!);
+              },
               // Sort on number of chained packages
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
                 return item1.introducedThrough.length - item2.introducedThrough.length;
@@ -391,20 +399,20 @@ function renderPackageSecurityAdvisoriesCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     children: (
-      <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-8 rhythm-vertical-8">
+      <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
         {tableItem.securityAdvisories
           .sort((a, b) => b.severity.id - a.severity.id)
           .map((advisory, index) => (
-            <div key={index} className="flex-column margin-vertical-8">
+            <Tooltip key={index} text={`${advisory.severity.name}: ${advisory.summary} (${advisory.id})`}>
               <Pill
                 onClick={(x) => window.open(advisory.url, '_blank')}
                 size={PillSize.compact}
                 variant={PillVariant.colored}
                 color={advisory.severity.color}
               >
-                {advisory.severity.name}: {advisory.id}
+                <span className="font-weight-heavy text-on-communication-background">{advisory.severity.prefix}</span>
               </Pill>
-            </div>
+            </Tooltip>
           ))}
       </div>
     ),
