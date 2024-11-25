@@ -11,8 +11,10 @@ import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
 import { SbomDocumentHeader } from './SbomDocumentHeader';
 import { SpdxFileTableCard } from './SpdxFileTableCard';
 import { SpdxGraphCard } from './SpdxGraphCard';
+import { SpdxLicenseTableCard } from './SpdxLicenseTableCard';
 import { SpdxPackageTableCard } from './SpdxPackageTableCard';
 import { SpdxSecurityTableCard } from './SpdxSecurityTableCard';
+import { SpdxSupplierTableCard } from './SpdxSupplierTableCard';
 
 interface Props {
   artifact: ISbomBuildArtifact;
@@ -108,13 +110,13 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                 case 'suppliers':
                   return (
                     <div className="page-content">
-                      <p>TODO: Suppliers...</p>
+                      <SpdxSupplierTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
                     </div>
                   );
                 case 'licenses':
                   return (
                     <div className="page-content">
-                      <p>TODO: Licenses...</p>
+                      <SpdxLicenseTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
                     </div>
                   );
                 case 'graph':
