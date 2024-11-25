@@ -10,7 +10,6 @@ export interface ISpdx22Document {
   documentNamespace: string;
   creationInfo: ICreationInfo;
   documentDescribes: string[];
-  documentGraphSvg?: string;
 }
 
 export interface IFile {

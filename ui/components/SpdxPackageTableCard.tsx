@@ -16,8 +16,8 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISecurityAdvisorySeverity, parseSecurityAdvisory } from '../models/SecurityAdvisory';
-import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22';
+import { ISecurityAdvisory, parseSecurityAdvisory } from '../models/SecurityAdvisory';
+import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22Document';
 
 interface IPackageTableItem {
   id: string;
@@ -25,11 +25,11 @@ interface IPackageTableItem {
   version: string;
   supplier: string;
   license: string;
-  level: string;
+  type: string;
   introducedThrough: string[];
   packageManager: string;
   isVulnerable: string;
-  securityAdvisories: { id: string; severity: ISecurityAdvisorySeverity; uri: string }[];
+  securityAdvisories: ISecurityAdvisory[];
 }
 
 interface Props {
@@ -91,18 +91,11 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           version: x.versionInfo,
           supplier: x.supplier?.match(/^Organization\:(.*)$/i)?.[1]?.trim() || x.supplier || '',
           license: x.licenseConcluded || x.licenseDeclared || '',
-          level: isTopLevel ? 'Top-Level' : 'Transitive',
+          type: isTopLevel ? 'Top-Level' : 'Transitive',
           introducedThrough: getTransitivePackageChain(x.SPDXID, packages, dependsOnRelationships),
           packageManager: packageManager || '',
           isVulnerable: securityAdvisories?.length || false ? 'Yes' : 'No',
-          securityAdvisories: securityAdvisories?.map((a) => {
-            const advisory = parseSecurityAdvisory(a);
-            return {
-              id: advisory.id,
-              severity: advisory.severity,
-              uri: advisory.url,
-            };
-          }),
+          securityAdvisories: securityAdvisories?.map((a) => parseSecurityAdvisory(a)),
         };
       }) || [];
 
@@ -117,7 +110,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
     const tableColumns: ITableColumn<IPackageTableItem>[] = [
       {
         id: 'packageManager',
-        name: 'Type',
+        name: 'Package Manager',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
@@ -151,12 +144,12 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
         width: new ObservableValue(-5),
       },
       {
-        id: 'level',
-        name: 'Level',
+        id: 'type',
+        name: 'Type',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.level),
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.type),
         width: new ObservableValue(-5),
       },
       {
@@ -268,7 +261,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           item.packageManager?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.version?.toLowerCase()?.includes(keyword.toLowerCase()) ||
-          item.securityAdvisories?.some((a) => a.uri?.toLowerCase()?.includes(keyword.toLowerCase())) ||
+          item.securityAdvisories?.some((a) => a.url?.toLowerCase()?.includes(keyword.toLowerCase())) ||
           item.license?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.supplier?.toLowerCase()?.includes(keyword.toLowerCase()),
       );
@@ -404,7 +397,7 @@ function renderPackageSecurityAdvisoriesCell(
           .map((advisory, index) => (
             <div key={index} className="flex-column margin-vertical-8">
               <Pill
-                onClick={(x) => window.open(advisory.uri, '_blank')}
+                onClick={(x) => window.open(advisory.url, '_blank')}
                 size={PillSize.compact}
                 variant={PillVariant.colored}
                 color={advisory.severity.color}

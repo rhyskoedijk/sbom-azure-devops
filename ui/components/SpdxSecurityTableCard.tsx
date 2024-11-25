@@ -17,7 +17,7 @@ import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISecurityAdvisory, parseSecurityAdvisory } from '../models/SecurityAdvisory';
-import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22';
+import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22Document';
 
 interface ISecurityAdvisoryTableItem extends ISecurityAdvisory {
   introducedThrough: string[];

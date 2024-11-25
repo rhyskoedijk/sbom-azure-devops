@@ -1,5 +1,5 @@
 import { IColor } from 'azure-devops-extension-api';
-import { IExternalRef, IPackage } from './Spdx22';
+import { IExternalRef, IPackage } from './Spdx22Document';
 
 export interface ISecurityAdvisory {
   id: string;

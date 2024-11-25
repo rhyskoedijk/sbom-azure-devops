@@ -19,13 +19,13 @@ import {
   parseSecurityAdvisory,
   securityAdvisorySeverities,
 } from '../models/SecurityAdvisory';
-import { ISpdx22Document } from '../models/Spdx22';
+import { ISpdxBuildArtifact } from '../models/SpdxBuildArtifact';
 import { downloadSpdxAsJson } from '../utils/SpdxToJson';
 import { downloadSpdxAsSvg } from '../utils/SpdxToSvg';
 import { downloadSpdxAsXlsx } from '../utils/SpdxToXlsx';
 
 interface Props {
-  document: ISpdx22Document;
+  artifact: ISpdxBuildArtifact;
 }
 
 interface State {
@@ -48,7 +48,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     const securityAdvisoryCountsBySeverityName: Record<string, number> = {};
-    props.document.packages
+    props.artifact.spdxDocument.packages
       .flatMap((p) =>
         p.externalRefs.filter((r) => r.referenceCategory === 'SECURITY' && r.referenceType === 'advisory'),
       )
@@ -61,15 +61,15 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
       }, securityAdvisoryCountsBySeverityName);
 
     const state: State = {
-      commandBarItems: SpdxDocumentHeader.getCommandBarItems(props.document),
-      documentName: props.document.name,
-      documentSpdxVersion: props.document.spdxVersion,
-      documentDataLicense: props.document.dataLicense,
-      documentCreatedOn: new Date(props.document.creationInfo.created),
-      documentCreatedByOrganisation: props.document.creationInfo.creators
+      commandBarItems: SpdxDocumentHeader.getCommandBarItems(props.artifact),
+      documentName: props.artifact.spdxDocument.name,
+      documentSpdxVersion: props.artifact.spdxDocument.spdxVersion,
+      documentDataLicense: props.artifact.spdxDocument.dataLicense,
+      documentCreatedOn: new Date(props.artifact.spdxDocument.creationInfo.created),
+      documentCreatedByOrganisation: props.artifact.spdxDocument.creationInfo.creators
         .map((c) => c.match(/^Organization\:(.*)$/i)?.[1]?.trim())
         .filter((c) => c)?.[0],
-      documentCreatedWithTool: props.document.creationInfo.creators
+      documentCreatedWithTool: props.artifact.spdxDocument.creationInfo.creators
         .map((c) => c.match(/^Tool\:(.*)$/i)?.[1]?.trim())
         .filter((c) => c)?.[0],
       documentProperties: [],
@@ -110,7 +110,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
     return state;
   }
 
-  static getCommandBarItems(document: ISpdx22Document): IHeaderCommandBarItem[] {
+  static getCommandBarItems(artifact: ISpdxBuildArtifact): IHeaderCommandBarItem[] {
     return [
       {
         id: 'downloadSpdx',
@@ -119,7 +119,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
           iconName: 'Download',
         },
         important: true,
-        onActivate: () => downloadSpdxAsJson(document),
+        onActivate: () => downloadSpdxAsJson(artifact.spdxDocument),
       },
       {
         id: 'exportXlsx',
@@ -128,7 +128,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
           iconName: 'ExcelDocument',
         },
         important: false,
-        onActivate: () => downloadSpdxAsXlsx(document),
+        onActivate: () => downloadSpdxAsXlsx(artifact.spdxDocument),
       },
       {
         id: 'exportSvg',
@@ -137,20 +137,20 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
           iconName: 'BranchFork2',
         },
         important: false,
-        disabled: document.documentGraphSvg === undefined,
-        onActivate: () => downloadSpdxAsSvg(document),
+        disabled: artifact.svgDocument === undefined,
+        onActivate: () => downloadSpdxAsSvg(artifact.spdxDocument, artifact.svgDocument || new ArrayBuffer(0)),
       },
     ];
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document) {
+    if (prevProps.artifact !== this.props.artifact) {
       this.setState(SpdxDocumentHeader.getDerivedStateFromProps(this.props));
     }
   }
 
   public render(): JSX.Element {
-    if (!this.props?.document) {
+    if (!this.props?.artifact) {
       return <div />;
     }
     return (

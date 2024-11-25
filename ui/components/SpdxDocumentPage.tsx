@@ -7,7 +7,7 @@ import { Tab, TabBar, TabContent, TabSize } from 'azure-devops-ui/Tabs';
 import { InlineKeywordFilterBarItem } from 'azure-devops-ui/TextFilterBarItem';
 import { Filter, IFilter } from 'azure-devops-ui/Utilities/Filter';
 
-import { ISpdx22Document } from '../models/Spdx22';
+import { ISpdxBuildArtifact } from '../models/SpdxBuildArtifact';
 import { SpdxDocumentHeader } from './SpdxDocumentHeader';
 import { SpdxFileTableCard } from './SpdxFileTableCard';
 import { SpdxGraphCard } from './SpdxGraphCard';
@@ -15,7 +15,7 @@ import { SpdxPackageTableCard } from './SpdxPackageTableCard';
 import { SpdxSecurityTableCard } from './SpdxSecurityTableCard';
 
 interface Props {
-  document: ISpdx22Document;
+  artifact: ISpdxBuildArtifact;
 }
 
 interface State {
@@ -37,29 +37,30 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     return {
-      fileCount: props.document?.files?.length || 0,
-      packageCount: props.document?.relationships?.filter((r) => r.relationshipType == 'DEPENDS_ON')?.length || 0,
+      fileCount: props.artifact.spdxDocument?.files?.length || 0,
+      packageCount:
+        props.artifact.spdxDocument?.relationships?.filter((r) => r.relationshipType == 'DEPENDS_ON')?.length || 0,
       securityAdvisoryCount:
-        props.document?.packages?.flatMap((p) =>
+        props.artifact.spdxDocument?.packages?.flatMap((p) =>
           p.externalRefs.filter((r) => r.referenceCategory == 'SECURITY' && r.referenceType == 'advisory'),
         )?.length || 0,
     };
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document) {
+    if (prevProps.artifact !== this.props.artifact) {
       this.setState(SpdxDocumentPage.getDerivedStateFromProps(this.props));
     }
   }
 
   public render(): JSX.Element {
-    if (!this.props?.document || !this.state) {
+    if (!this.props?.artifact || !this.state) {
       return <div />;
     }
     // TODO: Use page providers; https://developer.microsoft.com/en-us/azure-devops/components/page#page-with-providers
     return (
       <Page orientation={Orientation.Vertical}>
-        <SpdxDocumentHeader document={this.props.document} />
+        <SpdxDocumentHeader artifact={this.props.artifact} />
         <TabBar
           onSelectedTabChanged={this.onSelectedTabChanged}
           selectedTabId={this.selectedTabId}
@@ -70,7 +71,7 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
           <Tab name="Files" id="files" badgeCount={this.state.fileCount} />
           <Tab name="Packages" id="packages" badgeCount={this.state.packageCount} />
           <Tab name="Security Advisories" id="securityAdvisories" badgeCount={this.state.securityAdvisoryCount} />
-          {this.props.document.documentGraphSvg ? <Tab name="Graph View" id="graph" /> : null}
+          {this.props.artifact.svgDocument ? <Tab name="Graph View" id="graph" /> : null}
         </TabBar>
         <TabContent>
           <Observer selectedTabId={this.selectedTabId}>
@@ -79,23 +80,28 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
                 case 'files':
                   return (
                     <div className="page-content">
-                      <SpdxFileTableCard document={this.props.document} filter={this.filter} />
+                      <SpdxFileTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
                     </div>
                   );
                 case 'packages':
                   return (
                     <div className="page-content">
-                      <SpdxPackageTableCard document={this.props.document} filter={this.filter} />
+                      <SpdxPackageTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
                     </div>
                   );
                 case 'securityAdvisories':
                   return (
                     <div className="page-content">
-                      <SpdxSecurityTableCard document={this.props.document} filter={this.filter} />
+                      <SpdxSecurityTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
                     </div>
                   );
                 case 'graph':
-                  return <SpdxGraphCard document={this.props.document} />;
+                  return (
+                    <SpdxGraphCard
+                      document={this.props.artifact.spdxDocument}
+                      documentGraphSvg={this.props.artifact.svgDocument}
+                    />
+                  );
               }
             }}
           </Observer>

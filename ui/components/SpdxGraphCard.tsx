@@ -4,14 +4,16 @@ import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISpdx22Document } from '../models/Spdx22';
+import { ISpdx22Document } from '../models/Spdx22Document';
 
 interface Props {
   document: ISpdx22Document;
+  documentGraphSvg: ArrayBuffer | undefined;
 }
 
 interface State {
   documentGraphSvgContainerRef?: React.Ref<HTMLDivElement>;
+  documentGraphSvg?: string;
 }
 
 export class SpdxGraphCard extends React.Component<Props, State> {
@@ -23,17 +25,19 @@ export class SpdxGraphCard extends React.Component<Props, State> {
   static getDerivedStateFromProps(props: Props): State {
     return {
       documentGraphSvgContainerRef: React.createRef<HTMLDivElement>(),
+      // TODO: Dynamically render the graph if documentGraphSvg is null?
+      documentGraphSvg: props.documentGraphSvg ? new TextDecoder().decode(props.documentGraphSvg) : undefined,
     };
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document) {
+    if (prevProps.document !== this.props.document || prevProps.documentGraphSvg !== this.props.documentGraphSvg) {
       this.setState(SpdxGraphCard.getDerivedStateFromProps(this.props));
     }
   }
 
   public render(): JSX.Element {
-    if (!this.props?.document?.documentGraphSvg) {
+    if (!this.state.documentGraphSvg) {
       return (
         <ZeroData
           iconProps={{ iconName: 'BranchFork2' }}
@@ -71,7 +75,7 @@ export class SpdxGraphCard extends React.Component<Props, State> {
             <div
               ref={this.state.documentGraphSvgContainerRef}
               style={{ backgroundColor: 'white', width: '100vw', minHeight: '80vh', cursor: 'grab' }}
-              dangerouslySetInnerHTML={{ __html: this.props.document.documentGraphSvg || '' }}
+              dangerouslySetInnerHTML={{ __html: this.state.documentGraphSvg || '' }}
             />
           </TransformComponent>
         )}

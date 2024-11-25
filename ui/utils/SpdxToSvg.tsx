@@ -1,11 +1,7 @@
-import { ISpdx22Document } from '../models/Spdx22';
+import { ISpdx22Document } from '../models/Spdx22Document';
 
-export function downloadSpdxAsSvg(doc: ISpdx22Document): void {
-  if (!doc.documentGraphSvg) {
-    alert('TODO: Implement SVG generation');
-  }
-
-  const blob = new Blob([doc.documentGraphSvg || ''], { type: 'image/svg+xml' });
+export function downloadSpdxAsSvg(doc: ISpdx22Document, svg: ArrayBuffer): void {
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
   const elem = window.document.createElement('a');
   try {
     elem.href = window.URL.createObjectURL(blob);

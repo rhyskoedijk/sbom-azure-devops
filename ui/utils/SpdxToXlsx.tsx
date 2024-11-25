@@ -1,7 +1,7 @@
 import * as Path from 'path';
 
 import { IJsonSheet, ISettings } from 'json-as-xlsx';
-import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22';
+import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22Document';
 
 export function downloadSpdxAsXlsx(doc: ISpdx22Document): void {
   const xlsx = require('json-as-xlsx');
