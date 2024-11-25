@@ -5,8 +5,10 @@ export interface ISecurityAdvisory {
   id: string;
   severity: ISecurityAdvisorySeverity;
   summary: string;
-  url: string;
   package: ISecurityAdvisoryPackage | undefined;
+  affectedVersions?: string;
+  patchedVersions?: string;
+  url: string;
 }
 
 export interface ISecurityAdvisorySeverity {

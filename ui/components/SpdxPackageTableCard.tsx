@@ -378,8 +378,8 @@ function renderPackageIntroducedThroughCell(
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
         {tableItem.introducedThrough.map((pkg, index) => (
-          <div key={index} className="rhythm-horizontal-4">
-            {index > 0 ? <Icon iconName="ChevronRightSmall" size={IconSize.small} /> : null}
+          <div key={index} className={'rhythm-horizontal-4' + (index > 0 ? ' secondary-text' : undefined)}>
+            {index > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
             <span>{pkg}</span>
           </div>
         ))}

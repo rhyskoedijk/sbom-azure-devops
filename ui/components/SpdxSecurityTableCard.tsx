@@ -7,6 +7,7 @@ import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
   ITableColumn,
+  SimpleTableCell,
   sortItems,
   SortOrder,
   Table,
@@ -104,11 +105,11 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-55),
+        width: new ObservableValue(-40),
       },
       {
         id: 'package',
-        name: 'Package',
+        name: 'Vulnerable Package',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: renderAdvisoryPackageCell,
@@ -119,15 +120,29 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         width: new ObservableValue(-20),
       },
       {
+        id: 'affectedVersions',
+        name: 'Affected Versions',
+        onSize: tableColumnResize,
+        readonly: true,
+        renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.affectedVersions || ''),
+        width: new ObservableValue(-10),
+      },
+      {
+        id: 'patchedVersions',
+        name: 'Patched Versions',
+        onSize: tableColumnResize,
+        readonly: true,
+        renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.patchedVersions || ''),
+        width: new ObservableValue(-10),
+      },
+      {
         id: 'introducedThrough',
         name: 'Introduced Through',
         readonly: true,
         renderCell: renderAdvisoryIntroducedThroughCell,
-        sortProps: {
-          ariaLabelAscending: 'Sorted low to high',
-          ariaLabelDescending: 'Sorted high to low',
-        },
-        width: new ObservableValue(-25),
+        width: new ObservableValue(-20),
       },
     ];
 
@@ -152,15 +167,14 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
                 return item1.severity.id - item2.severity.id;
               },
-              // Sort on package name
+              // Sort on package
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
                 if (!item1.package || !item2.package) return 0;
                 return item1.package!.name!.localeCompare(item2.package!.name!);
               },
-              // Sort on number of chained packages
-              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
-                return item1.introducedThrough.length - item2.introducedThrough.length;
-              },
+              null,
+              null,
+              null,
             ],
             tableColumns,
             rawTableItems,
@@ -264,6 +278,20 @@ function getTransitivePackageChain(
   return chain;
 }
 
+function renderSimpleValueCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItemValue: string,
+): JSX.Element {
+  return SimpleTableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    children: <span>{tableItemValue}</span>,
+  });
+}
+
 function renderAdvisorySummaryCell(
   rowIndex: number,
   columnIndex: number,
@@ -314,8 +342,8 @@ function renderAdvisoryIntroducedThroughCell(
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
         {tableItem.introducedThrough.map((pkg, index) => (
-          <div key={index} className="rhythm-horizontal-4">
-            {index > 0 ? <Icon iconName="ChevronRightSmall" size={IconSize.small} /> : null}
+          <div key={index} className={'rhythm-horizontal-4' + (index > 0 ? ' secondary-text' : undefined)}>
+            {index > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
             <span>{pkg}</span>
           </div>
         ))}
