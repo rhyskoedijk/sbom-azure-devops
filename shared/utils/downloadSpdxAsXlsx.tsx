@@ -1,9 +1,11 @@
 import * as Path from 'path';
 
 import { IJsonSheet, ISettings } from 'json-as-xlsx';
-import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22Document';
+import { IDocument } from '../models/spdx/2.2/IDocument';
+import { IPackage } from '../models/spdx/2.2/IPackage';
+import { IRelationship } from '../models/spdx/2.2/IRelationship';
 
-export function downloadSpdxAsXlsx(doc: ISpdx22Document): void {
+export function downloadSpdxAsXlsx(doc: IDocument): void {
   const xlsx = require('json-as-xlsx');
 
   const dependsOnRelationships = (doc?.relationships || []).filter((r) => r.relationshipType === 'DEPENDS_ON');

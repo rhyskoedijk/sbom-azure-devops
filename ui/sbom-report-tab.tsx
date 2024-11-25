@@ -8,13 +8,11 @@ import { MessageCard, MessageCardSeverity } from 'azure-devops-ui/MessageCard';
 import { Spinner } from 'azure-devops-ui/Spinner';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { SpdxDocumentPage } from './components/SpdxDocumentPage';
-import { ISpdx22Document } from './models/Spdx22Document';
-import { ISpdxBuildArtifact } from './models/SpdxBuildArtifact';
-
-import { BuildRestClient } from './utils/BuildRestClient';
-import './utils/StringExtensions';
-
+import '../shared/extensions/StringExtensions';
+import { ISbomBuildArtifact } from '../shared/models/ISbomBuildArtifact';
+import { IDocument } from '../shared/models/spdx/2.2/IDocument';
+import { BuildRestClient } from './clients/BuildRestClient';
+import { SbomDocumentPage } from './components/SbomDocumentPage';
 import './sbom-report-tab.scss';
 
 const SPDX_JSON_ATTACHMENT_TYPE = 'spdx.json';
@@ -22,7 +20,7 @@ const SPDX_XLSX_ATTACHMENT_TYPE = 'spdx.xlsx';
 const SPDX_SVG_ATTACHMENT_TYPE = 'spdx.svg';
 
 interface State {
-  artifacts: ISpdxBuildArtifact[] | undefined;
+  artifacts: ISbomBuildArtifact[] | undefined;
   loadError: any | undefined;
 }
 
@@ -38,14 +36,14 @@ export class Root extends React.Component<{}, State> {
       SDK.ready()
         .then(async () => {
           try {
-            // Load the SPDX artifacts for the current build
-            console.info('SDK is ready, loading SPDX artifacts...');
-            const artifacts = await this.getSpdxArtifactAttachmentsForCurrentBuild();
+            // Load the SBOM artifacts for the current build
+            console.info('SDK is ready, loading SBOM artifacts...');
+            const artifacts = await this.getSbomArtifactAttachmentsForCurrentBuild();
             if (artifacts) {
               this.setState({ artifacts: artifacts, loadError: undefined });
               await SDK.notifyLoadSucceeded();
             } else {
-              await SDK.notifyLoadFailed('Unable to load SPDX build artifacts');
+              await SDK.notifyLoadFailed('Unable to load SBOM build artifacts');
             }
           } catch (error) {
             console.log(error);
@@ -63,10 +61,10 @@ export class Root extends React.Component<{}, State> {
   }
 
   /**
-   * Get all SPDX artifact attachments for the current build
-   * @returns The SPDX build artifacts
+   * Get all SBOM artifact attachments for the current build
+   * @returns The SBOM build artifacts
    */
-  private async getSpdxArtifactAttachmentsForCurrentBuild(): Promise<ISpdxBuildArtifact[]> {
+  private async getSbomArtifactAttachmentsForCurrentBuild(): Promise<ISbomBuildArtifact[]> {
     // Get the current page project data
     const projectPageDataService = await SDK.getService<IProjectPageService>(CommonServiceIds.ProjectPageService);
     const projectPageData = await projectPageDataService.getProject();
@@ -83,27 +81,27 @@ export class Root extends React.Component<{}, State> {
       throw new Error('Unable to access the current build data');
     }
 
-    // Get the SPDX artifact attachments for the current build
+    // Get the SBOM artifact attachments for the current build
     const buildClient = getClient(BuildRestClient);
-    const spdxAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_JSON_ATTACHMENT_TYPE);
-    console.info(`Detected ${spdxAttachments.length} SPDX artifact attachment(s) for build ${buildId}`);
+    const sbomAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_JSON_ATTACHMENT_TYPE);
+    console.info(`Detected ${sbomAttachments.length} SBOM artifact attachment(s) for build ${buildId}`);
 
-    // Download and process each SPDX artifact attachment
-    const spdxArtifacts: ISpdxBuildArtifact[] = [];
-    for (const spdxAttachment of spdxAttachments) {
+    // Download and process each SBOM artifact attachment
+    const sbomArtifacts: ISbomBuildArtifact[] = [];
+    for (const sbomAttachment of sbomAttachments) {
       try {
         // Extract the attachment identifiers from the url
         // Format: `/{projectId}/_apis/build/builds/{buildId}/{timelineId}/{timelineRecordId}/attachments/{attachmentType}/{attachmentName}`
         // TODO: Change this if/when the DevOps API provides a better way to get the attachment stream
-        const spdxUrl = spdxAttachment._links?.self?.href;
+        const spdxUrl = sbomAttachment._links?.self?.href;
         if (!spdxUrl) {
-          throw new Error(`Attachment url not found for '${spdxAttachment.name}'`);
+          throw new Error(`Attachment url not found for '${sbomAttachment.name}'`);
         }
         const spdxUrlMatch = spdxUrl.match(
           /([a-f-0-9]*)\/_apis\/build\/builds\/([a-f-0-9]*)\/([a-f-0-9]*)\/([a-f-0-9]*)\/attachments\//i,
         );
         if (!spdxUrlMatch) {
-          throw new Error(`Attachment url format not recognized for '${spdxAttachment.name}'`);
+          throw new Error(`Attachment url format not recognized for '${sbomAttachment.name}'`);
         }
 
         // Download the SPDX document
@@ -113,16 +111,16 @@ export class Root extends React.Component<{}, State> {
           spdxUrlMatch[3],
           spdxUrlMatch[4],
           SPDX_JSON_ATTACHMENT_TYPE,
-          spdxAttachment.name,
+          sbomAttachment.name,
         );
         if (!spdxStream) {
-          throw new Error(`Attachment stream '${spdxAttachment.name}' could not be retrieved`);
+          throw new Error(`Attachment stream '${sbomAttachment.name}' could not be retrieved`);
         }
 
-        // Parse the SPDX document
-        const spdxDocument = JSON.parse(new TextDecoder().decode(spdxStream)) as ISpdx22Document;
+        // Parse the SPDX document JSON
+        const spdxDocument = JSON.parse(new TextDecoder().decode(spdxStream)) as IDocument;
         if (!spdxDocument) {
-          throw new Error(`Attachment stream '${spdxAttachment.name}' could not be parsed as JSON`);
+          throw new Error(`Attachment stream '${sbomAttachment.name}' could not be parsed as JSON`);
         }
 
         // Attempt to download the SPDX document XLSX spreadsheet, if available
@@ -134,10 +132,10 @@ export class Root extends React.Component<{}, State> {
             spdxUrlMatch[3],
             spdxUrlMatch[4],
             SPDX_XLSX_ATTACHMENT_TYPE,
-            spdxAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_XLSX_ATTACHMENT_TYPE),
+            sbomAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_XLSX_ATTACHMENT_TYPE),
           );
         } catch (error) {
-          console.warn(`Unable find SPDX XLSX artifact for '${spdxAttachment.name}'. ${error}`);
+          console.warn(`Unable find SPDX XLSX artifact for '${sbomAttachment.name}'. ${error}`);
         }
 
         // Attempt to download the SPDX document SVG graph, if available
@@ -149,24 +147,24 @@ export class Root extends React.Component<{}, State> {
             spdxUrlMatch[3],
             spdxUrlMatch[4],
             SPDX_SVG_ATTACHMENT_TYPE,
-            spdxAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
+            sbomAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
           );
         } catch (error) {
-          console.warn(`Unable find SPDX SVG artifact for '${spdxAttachment.name}'. ${error}`);
+          console.warn(`Unable find SPDX SVG artifact for '${sbomAttachment.name}'. ${error}`);
         }
 
-        spdxArtifacts.push({
+        sbomArtifacts.push({
           spdxDocument: spdxDocument,
           xlsxDocument: spdxXlsxDocumentStream,
           svgDocument: spdxSvgDocumentStream,
         });
       } catch (error) {
-        throw new Error(`Unable to parse build attachment '${spdxAttachment.name}'. ${error}`.trim());
+        throw new Error(`Unable to parse build attachment '${sbomAttachment.name}'. ${error}`.trim());
       }
     }
 
-    console.info(`Loaded ${Object.keys(spdxArtifacts).length} SPDX artifact(s) for build ${buildId}`);
-    return spdxArtifacts;
+    console.info(`Loaded ${Object.keys(sbomArtifacts).length} SBOM artifact(s) for build ${buildId}`);
+    return sbomArtifacts;
   }
 
   public render(): JSX.Element {
@@ -174,20 +172,20 @@ export class Root extends React.Component<{}, State> {
       <div className="flex-grow">
         {this.state.loadError ? (
           <MessageCard severity={MessageCardSeverity.Error}>
-            {this.state.loadError.message || 'An error occurred while loading SPDX build artifacts.'}
+            {this.state.loadError.message || 'An error occurred while loading SBOM build artifacts.'}
           </MessageCard>
         ) : !this.state.artifacts ? (
-          <Spinner label="Loading SPDX build artifacts..." />
+          <Spinner label="Loading SBOM build artifacts..." />
         ) : !this.state.artifacts[0] ? (
           <ZeroData
             iconProps={{ iconName: 'Certificate' }}
             primaryText="Empty"
-            secondaryText="Unable to find any SPDX artifacts for this build."
+            secondaryText="Unable to find any SBOM artifacts for this build."
             imageAltText=""
           />
         ) : (
           // TODO: Add support for multiple artifacts in a single build?
-          <SpdxDocumentPage artifact={this.state.artifacts[0]} />
+          <SbomDocumentPage artifact={this.state.artifacts[0]} />
         )}
       </div>
     );

@@ -17,15 +17,18 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISecurityAdvisory, parseSecurityAdvisory } from '../models/SecurityAdvisory';
-import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22Document';
+import { ISecurityAdvisory } from '../../shared/models/securityAdvisory/ISecurityAdvisory';
+import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
+import { IPackage } from '../../shared/models/spdx/2.2/IPackage';
+import { IRelationship } from '../../shared/models/spdx/2.2/IRelationship';
+import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/utils/parseSecurityAdvisoryFromSpdxExternalRef';
 
 interface ISecurityAdvisoryTableItem extends ISecurityAdvisory {
   introducedThrough: string[];
 }
 
 interface Props {
-  document: ISpdx22Document;
+  document: IDocument;
   filter: IFilter;
 }
 
@@ -68,7 +71,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
 
     const rawTableItems: ISecurityAdvisoryTableItem[] =
       securityAdvisories.map((x) => {
-        const securityAdvisory = parseSecurityAdvisory(x, packages);
+        const securityAdvisory = parseSecurityAdvisoryFromSpdxExternalRef(x, packages);
         const pkg = packages.find(
           (p) => p.name === securityAdvisory.package?.name && p.versionInfo === securityAdvisory.package?.version,
         );

@@ -17,8 +17,11 @@ import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISecurityAdvisory, parseSecurityAdvisory } from '../models/SecurityAdvisory';
-import { IPackage, IRelationship, ISpdx22Document } from '../models/Spdx22Document';
+import { ISecurityAdvisory } from '../../shared/models/securityAdvisory/ISecurityAdvisory';
+import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
+import { IPackage } from '../../shared/models/spdx/2.2/IPackage';
+import { IRelationship } from '../../shared/models/spdx/2.2/IRelationship';
+import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/utils/parseSecurityAdvisoryFromSpdxExternalRef';
 
 interface IPackageTableItem {
   id: string;
@@ -34,7 +37,7 @@ interface IPackageTableItem {
 }
 
 interface Props {
-  document: ISpdx22Document;
+  document: IDocument;
   filter: IFilter;
 }
 
@@ -96,7 +99,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           introducedThrough: getTransitivePackageChain(x.SPDXID, packages, dependsOnRelationships),
           packageManager: packageManager || '',
           isVulnerable: securityAdvisories?.length || false ? 'Yes' : 'No',
-          securityAdvisories: securityAdvisories?.map((a) => parseSecurityAdvisory(a)),
+          securityAdvisories: securityAdvisories?.map((a) => parseSecurityAdvisoryFromSpdxExternalRef(a)),
         };
       }) || [];
 

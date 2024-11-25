@@ -13,19 +13,19 @@ import { HeaderCommandBar, IHeaderCommandBarItem } from 'azure-devops-ui/HeaderC
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import { PillGroup, PillGroupOverflow } from 'azure-devops-ui/PillGroup';
 
+import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
+import { ISeverity } from '../../shared/models/securityAdvisory/ISeverity';
 import {
-  defaultSecurityAdvisorySeverity,
-  ISecurityAdvisorySeverity,
-  parseSecurityAdvisory,
-  securityAdvisorySeverities,
-} from '../models/SecurityAdvisory';
-import { ISpdxBuildArtifact } from '../models/SpdxBuildArtifact';
-import { downloadSpdxAsJson } from '../utils/SpdxToJson';
-import { downloadSpdxAsSvg } from '../utils/SpdxToSvg';
-import { downloadSpdxAsXlsx } from '../utils/SpdxToXlsx';
+  DEFAULT_SECURITY_ADVISORY_SEVERITY,
+  SECURITY_ADVISORY_SEVERITIES,
+} from '../../shared/models/securityAdvisory/Severities';
+import { downloadSpdxAsJson } from '../../shared/utils/downloadSpdxAsJson';
+import { downloadSpdxAsSvg } from '../../shared/utils/downloadSpdxAsSvg';
+import { downloadSpdxAsXlsx } from '../../shared/utils/downloadSpdxAsXlsx';
+import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/utils/parseSecurityAdvisoryFromSpdxExternalRef';
 
 interface Props {
-  artifact: ISpdxBuildArtifact;
+  artifact: ISbomBuildArtifact;
 }
 
 interface State {
@@ -37,13 +37,13 @@ interface State {
   documentCreatedByOrganisation: string | undefined;
   documentCreatedWithTool: string | undefined;
   documentProperties: { label: string; value: string | number }[];
-  documentSecurityAdvisoryCountsBySeverity: { severity: ISecurityAdvisorySeverity; count: number }[];
+  documentSecurityAdvisoryCountsBySeverity: { severity: ISeverity; count: number }[];
 }
 
-export class SpdxDocumentHeader extends React.Component<Props, State> {
+export class SbomDocumentHeader extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = SpdxDocumentHeader.getDerivedStateFromProps(props);
+    this.state = SbomDocumentHeader.getDerivedStateFromProps(props);
   }
 
   static getDerivedStateFromProps(props: Props): State {
@@ -52,7 +52,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
       .flatMap((p) =>
         p.externalRefs.filter((r) => r.referenceCategory === 'SECURITY' && r.referenceType === 'advisory'),
       )
-      .map((x) => parseSecurityAdvisory(x)?.severity)
+      .map((x) => parseSecurityAdvisoryFromSpdxExternalRef(x)?.severity)
       .reduce((acc, severity) => {
         if (severity !== undefined) {
           acc[severity.name] = (acc[severity.name] || 0) + 1;
@@ -61,7 +61,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
       }, securityAdvisoryCountsBySeverityName);
 
     const state: State = {
-      commandBarItems: SpdxDocumentHeader.getCommandBarItems(props.artifact),
+      commandBarItems: SbomDocumentHeader.getCommandBarItems(props.artifact),
       documentName: props.artifact.spdxDocument.name,
       documentSpdxVersion: props.artifact.spdxDocument.spdxVersion,
       documentDataLicense: props.artifact.spdxDocument.dataLicense,
@@ -77,7 +77,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
         (severityName) => {
           return {
             severity:
-              securityAdvisorySeverities.find((s) => s.name === severityName) || defaultSecurityAdvisorySeverity,
+              SECURITY_ADVISORY_SEVERITIES.find((s) => s.name === severityName) || DEFAULT_SECURITY_ADVISORY_SEVERITY,
             count: securityAdvisoryCountsBySeverityName[severityName],
           };
         },
@@ -110,7 +110,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
     return state;
   }
 
-  static getCommandBarItems(artifact: ISpdxBuildArtifact): IHeaderCommandBarItem[] {
+  static getCommandBarItems(artifact: ISbomBuildArtifact): IHeaderCommandBarItem[] {
     return [
       {
         id: 'downloadSpdx',
@@ -145,7 +145,7 @@ export class SpdxDocumentHeader extends React.Component<Props, State> {
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
     if (prevProps.artifact !== this.props.artifact) {
-      this.setState(SpdxDocumentHeader.getDerivedStateFromProps(this.props));
+      this.setState(SbomDocumentHeader.getDerivedStateFromProps(this.props));
     }
   }
 

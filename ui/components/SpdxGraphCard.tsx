@@ -4,10 +4,10 @@ import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISpdx22Document } from '../models/Spdx22Document';
+import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
 
 interface Props {
-  document: ISpdx22Document;
+  document: IDocument;
   documentGraphSvg: ArrayBuffer | undefined;
 }
 

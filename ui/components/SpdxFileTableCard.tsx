@@ -15,7 +15,7 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISpdx22Document } from '../models/Spdx22Document';
+import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
 
 interface IFileTableItem extends ISimpleTableCell {
   id: string;
@@ -24,7 +24,7 @@ interface IFileTableItem extends ISimpleTableCell {
 }
 
 interface Props {
-  document: ISpdx22Document;
+  document: IDocument;
   filter: IFilter;
 }
 

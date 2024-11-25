@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "dependencies": {
+    "json-as-xlsx": "^2.5.6"
+  }
+}

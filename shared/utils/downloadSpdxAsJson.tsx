@@ -1,6 +1,6 @@
-import { ISpdx22Document } from '../models/Spdx22Document';
+import { IDocument } from '../models/spdx/2.2/IDocument';
 
-export function downloadSpdxAsJson(doc: ISpdx22Document): void {
+export function downloadSpdxAsJson(doc: IDocument): void {
   const blob = new Blob([JSON.stringify(doc, null, 2)], { type: 'text/json' });
   const elem = window.document.createElement('a');
   try {

@@ -1,6 +1,6 @@
-import { ISpdx22Document } from '../models/Spdx22Document';
+import { IDocument } from '../models/spdx/2.2/IDocument';
 
-export function downloadSpdxAsSvg(doc: ISpdx22Document, svg: ArrayBuffer): void {
+export function downloadSpdxAsSvg(doc: IDocument, svg: ArrayBuffer): void {
   const blob = new Blob([svg], { type: 'image/svg+xml' });
   const elem = window.document.createElement('a');
   try {

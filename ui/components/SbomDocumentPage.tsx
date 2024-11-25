@@ -7,15 +7,15 @@ import { Tab, TabBar, TabContent, TabSize } from 'azure-devops-ui/Tabs';
 import { InlineKeywordFilterBarItem } from 'azure-devops-ui/TextFilterBarItem';
 import { Filter, IFilter } from 'azure-devops-ui/Utilities/Filter';
 
-import { ISpdxBuildArtifact } from '../models/SpdxBuildArtifact';
-import { SpdxDocumentHeader } from './SpdxDocumentHeader';
+import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
+import { SbomDocumentHeader } from './SbomDocumentHeader';
 import { SpdxFileTableCard } from './SpdxFileTableCard';
 import { SpdxGraphCard } from './SpdxGraphCard';
 import { SpdxPackageTableCard } from './SpdxPackageTableCard';
 import { SpdxSecurityTableCard } from './SpdxSecurityTableCard';
 
 interface Props {
-  artifact: ISpdxBuildArtifact;
+  artifact: ISbomBuildArtifact;
 }
 
 interface State {
@@ -26,13 +26,13 @@ interface State {
   licenseCount: number;
 }
 
-export class SpdxDocumentPage extends React.Component<Props, State> {
+export class SbomDocumentPage extends React.Component<Props, State> {
   private selectedTabId: ObservableValue<string>;
   private filter: IFilter;
 
   constructor(props: Props) {
     super(props);
-    this.state = SpdxDocumentPage.getDerivedStateFromProps(props);
+    this.state = SbomDocumentPage.getDerivedStateFromProps(props);
     this.selectedTabId = new ObservableValue('files');
     this.filter = new Filter();
   }
@@ -55,7 +55,7 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
     if (prevProps.artifact !== this.props.artifact) {
-      this.setState(SpdxDocumentPage.getDerivedStateFromProps(this.props));
+      this.setState(SbomDocumentPage.getDerivedStateFromProps(this.props));
     }
   }
 
@@ -66,7 +66,7 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
     // TODO: Use page providers; https://developer.microsoft.com/en-us/azure-devops/components/page#page-with-providers
     return (
       <Page orientation={Orientation.Vertical}>
-        <SpdxDocumentHeader artifact={this.props.artifact} />
+        <SbomDocumentHeader artifact={this.props.artifact} />
         <TabBar
           onSelectedTabChanged={this.onSelectedTabChanged}
           selectedTabId={this.selectedTabId}
