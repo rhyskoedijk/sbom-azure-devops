@@ -120,7 +120,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
         },
-        width: new ObservableValue(-5),
+        width: new ObservableValue(-7.5),
       },
       {
         id: 'name',
@@ -155,7 +155,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-5),
+        width: new ObservableValue(-7.5),
       },
       {
         id: 'introducedThrough',
@@ -167,7 +167,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-35),
+        width: new ObservableValue(-30),
       },
       {
         id: 'securityAdvisories',

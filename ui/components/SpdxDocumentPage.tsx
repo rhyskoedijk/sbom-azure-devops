@@ -22,6 +22,8 @@ interface State {
   fileCount: number;
   packageCount: number;
   securityAdvisoryCount: number;
+  supplierCount: number;
+  licenseCount: number;
 }
 
 export class SpdxDocumentPage extends React.Component<Props, State> {
@@ -44,6 +46,10 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
         props.artifact.spdxDocument?.packages?.flatMap((p) =>
           p.externalRefs.filter((r) => r.referenceCategory == 'SECURITY' && r.referenceType == 'advisory'),
         )?.length || 0,
+      supplierCount: new Set(props.artifact.spdxDocument?.packages?.map((p) => p.supplier)).size,
+      licenseCount: new Set(
+        props.artifact.spdxDocument?.packages?.map((p) => p.licenseConcluded || p.licenseDeclared || ''),
+      ).size,
     };
   }
 
@@ -71,7 +77,11 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
           <Tab name="Files" id="files" badgeCount={this.state.fileCount} />
           <Tab name="Packages" id="packages" badgeCount={this.state.packageCount} />
           <Tab name="Security Advisories" id="securityAdvisories" badgeCount={this.state.securityAdvisoryCount} />
-          {this.props.artifact.svgDocument ? <Tab name="Graph View" id="graph" /> : null}
+          <Tab name="Suppliers" id="suppliers" badgeCount={this.state.supplierCount} />
+          <Tab name="Licenses" id="licenses" badgeCount={this.state.licenseCount} />
+          {this.props.artifact.svgDocument ? (
+            <Tab name="Graph Viewer" id="graph" iconProps={{ iconName: 'BranchFork2', className: 'margin-right-4' }} />
+          ) : null}
         </TabBar>
         <TabContent>
           <Observer selectedTabId={this.selectedTabId}>
@@ -93,6 +103,18 @@ export class SpdxDocumentPage extends React.Component<Props, State> {
                   return (
                     <div className="page-content">
                       <SpdxSecurityTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
+                    </div>
+                  );
+                case 'suppliers':
+                  return (
+                    <div className="page-content">
+                      <p>TODO: Suppliers...</p>
+                    </div>
+                  );
+                case 'licenses':
+                  return (
+                    <div className="page-content">
+                      <p>TODO: Licenses...</p>
                     </div>
                   );
                 case 'graph':

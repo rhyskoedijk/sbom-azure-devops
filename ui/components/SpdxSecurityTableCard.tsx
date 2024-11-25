@@ -105,7 +105,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-40),
+        width: new ObservableValue(-35),
       },
       {
         id: 'package',
@@ -126,7 +126,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
           renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.affectedVersions || ''),
-        width: new ObservableValue(-10),
+        width: new ObservableValue(-7.5),
       },
       {
         id: 'patchedVersions',
@@ -135,14 +135,14 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
           renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.patchedVersions || ''),
-        width: new ObservableValue(-10),
+        width: new ObservableValue(-7.5),
       },
       {
         id: 'introducedThrough',
         name: 'Introduced Through',
         readonly: true,
         renderCell: renderAdvisoryIntroducedThroughCell,
-        width: new ObservableValue(-20),
+        width: new ObservableValue(-30),
       },
     ];
 
