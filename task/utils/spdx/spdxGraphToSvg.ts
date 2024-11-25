@@ -1,4 +1,12 @@
+// getrandom does not directly support ES Modules running on Node.js.
+// However, we can get it to work by adding a shim to support the Web Cryptography API:
+// See: https://docs.rs/getrandom/latest/getrandom/#nodejs-es-module-support
+import { webcrypto } from 'node:crypto';
+globalThis.crypto = webcrypto as Crypto;
+
+// Vizdom must be imported after the getrandom shim above, else it will throw an error
 import { DirectedGraph, EdgeStyle, Shape, VertexWeakRef } from '@vizdom/vizdom-ts-node';
+
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 import * as path from 'path';

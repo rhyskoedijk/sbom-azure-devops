@@ -80,21 +80,6 @@
   "baseUri": "https://localhost:3000/",
   "files": [
     {
-      "path": "task/task.json"
-    },
-    {
-      "path": "task/index.js"
-    },
-    {
-      "path": "task/icon.png"
-    },
-    {
-      "path": "task/utils"
-    },
-    {
-      "path": "task/node_modules"
-    },
-    {
       "path": "images",
       "addressable": true
     },
@@ -102,6 +87,10 @@
       "path": "ui/dist",
       "packagePath": "/",
       "addressable": true
+    },
+    {
+      "path": "task/dist",
+      "packagePath": "/"
     }
   ],
   "contributions": [

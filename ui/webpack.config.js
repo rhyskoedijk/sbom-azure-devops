@@ -1,15 +1,15 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
-const { dir } = require('console');
 
 module.exports = (env, argv) => ({
+  target: 'web',
   entry: {
     'sbom-report-tab': path.resolve('./sbom-report-tab.tsx'),
   },
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
-    fallback: { path: require.resolve('path-browserify') },
+  output: {
+    path: path.resolve(__dirname, 'dist', 'ui'),
+    publicPath: '/ui/',
   },
   module: {
     rules: [
@@ -35,9 +35,11 @@ module.exports = (env, argv) => ({
       },
     ],
   },
-  output: {
-    path: path.resolve(__dirname, 'dist', 'ui'),
-    publicPath: '/ui/',
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      path: require.resolve('path-browserify'),
+    },
   },
   optimization: {
     minimize: true,
@@ -60,6 +62,7 @@ module.exports = (env, argv) => ({
   stats: {
     warnings: false,
   },
+
   ...(env.WEBPACK_SERVE
     ? {
         devtool: 'inline-source-map',
