@@ -1,6 +1,9 @@
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
-import { getSecurityAdvisoriesAsync, IPackage, ISecurityAdvisory } from '../github/securityAdvisories';
+
+import { GitHubGraphClient } from '../../../shared/ghsa/GitHubGraphClient';
+import { IPackage } from '../../../shared/ghsa/IPackage';
+import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 
 /**
  * Check SPDX packages for security advisories; adds external references for all applicable advisories
@@ -37,25 +40,32 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
     }
   }
 
-  // Fetch security advisories for each package manager
-  const securityAdvisories: ISecurityAdvisory[] = [];
+  // Fetch security vulnerabilities for each package manager
+  const ghsa = new GitHubGraphClient(gitHubAccessToken);
+  const securityVulnerabilities: ISecurityVulnerability[] = [];
   for (const [packageManager, packages] of Object.entries(packageManagers)) {
-    securityAdvisories.push(...(await getSecurityAdvisoriesAsync(gitHubAccessToken, packageManager, packages)));
+    console.info(`Checking security vulnerabilities for ${packages.length} ${packageManager.toLowerCase()} packages`);
+    const vulnerabilities = await ghsa.getSecurityVulnerabilitiesAsync(packageManager, packages);
+    if (vulnerabilities) {
+      const vulnerablePackageCount = new Set(vulnerabilities.map((v) => v.package.name)).size;
+      console.info(`Found ${vulnerabilities.length} advisories; affecting ${vulnerablePackageCount} packages`);
+      securityVulnerabilities.push(...vulnerabilities);
+    }
   }
 
-  // Exit early if no security advisories found
-  if (securityAdvisories.length === 0) {
+  // Exit early if no security vulnerabilities found
+  if (securityVulnerabilities.length === 0) {
     console.info('No security advisories found');
     return;
   }
 
-  // Add external references for each security advisory
-  for (const advisory of securityAdvisories) {
+  // Add a security advisory external reference for each found vulnerability
+  for (const vulnerability of securityVulnerabilities) {
     const pkg = (sbom.packages as any[]).find((p) => {
       const packageReferenceLocator = (p.externalRefs as any[])?.find(
         (r) => r.referenceCategory === 'PACKAGE-MANAGER',
       )?.referenceLocator;
-      return packageReferenceLocator === advisory.package.id;
+      return packageReferenceLocator === vulnerability.package.id;
     });
     if (pkg) {
       if (!pkg.externalRefs) {
@@ -64,8 +74,8 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
       pkg.externalRefs.push({
         referenceCategory: 'SECURITY',
         referenceType: 'advisory',
-        referenceLocator: advisory.permalink,
-        comment: `[${advisory.severity}] ${advisory.summary}; Affects ${advisory.package.name} v${advisory.package.version}`,
+        referenceLocator: vulnerability.advisory.permalink,
+        comment: `[${vulnerability.advisory.severity}] ${vulnerability.advisory.summary}; Affects ${vulnerability.package.name} v${vulnerability.package.version}`,
       });
     }
   }
