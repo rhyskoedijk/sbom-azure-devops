@@ -86,18 +86,19 @@ export async function getSecurityAdvisoriesAsync(
     );
     if (response.status < 200 || response.status > 299) {
       throw new Error(
-        `Failed to fetch security advisories for '${pkg.name}': ${response.status} ${response.statusText}`,
+        `GHSA GraphQL request failed querying 'securityVulnerabilities' with '${packageEcosystem}' '${pkg.name}'. Response: ${response.status} ${response.statusText}`,
       );
     }
     const vulnerabilities = response.data?.data?.securityVulnerabilities?.nodes;
-    return vulnerabilities.map((vulnerabilitity: any) => {
+    return vulnerabilities?.map((vulnerabilitity: any) => {
       return {
         package: pkg,
         affectedVersionRange: vulnerabilitity.vulnerableVersionRange,
-        identifiers: vulnerabilitity.advisory?.identifiers?.map((id: any) => ({
-          type: id.type,
-          value: id.value,
-        })),
+        identifiers:
+          vulnerabilitity.advisory?.identifiers?.map((id: any) => ({
+            type: id.type,
+            value: id.value,
+          })) || [],
         severity: vulnerabilitity.advisory?.severity,
         summary: vulnerabilitity.advisory?.summary,
         description: vulnerabilitity.advisory?.description,
@@ -131,9 +132,13 @@ async function batchSecurityAdvisoryQueryAsync(
   for (let i = 0; i < packages.length; i += batchSize) {
     const batch = packages.slice(i, i + batchSize);
     if (batch?.length) {
-      const batchResults = await Promise.all(batch.map(action));
-      if (batchResults?.length) {
-        results.push(...batchResults.flat());
+      try {
+        const batchResults = await Promise.all(batch.map(action));
+        if (batchResults?.length) {
+          results.push(...batchResults.flat());
+        }
+      } catch (error) {
+        console.error(`Error fetching security advisories batch [${i}-${i + batchSize}]`, error);
       }
     }
   }
