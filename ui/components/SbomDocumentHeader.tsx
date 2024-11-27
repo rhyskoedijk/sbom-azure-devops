@@ -20,10 +20,9 @@ import {
   SECURITY_ADVISORY_SEVERITIES,
 } from '../../shared/models/securityAdvisory/Severities';
 import { ExternalRefCategory, ExternalRefSecurityType } from '../../shared/models/spdx/2.3/IExternalRef';
-import { downloadSpdxAsJson } from '../../shared/utils/downloadSpdxAsJson';
-import { downloadSpdxAsSvg } from '../../shared/utils/downloadSpdxAsSvg';
-import { downloadSpdxAsXlsx } from '../../shared/utils/downloadSpdxAsXlsx';
-import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/utils/parseSecurityAdvisoryFromSpdxExternalRef';
+import { convertSpdxToSvgAsync } from '../../shared/spdx/convertSpdxToSvg';
+import { convertSpdxToXlsxAsync } from '../../shared/spdx/convertSpdxToXlsx';
+import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/spdx/parseSecurityAdvisoryFromSpdxExternalRef';
 
 interface Props {
   artifact: ISbomBuildArtifact;
@@ -124,7 +123,10 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
           iconName: 'Download',
         },
         important: true,
-        onActivate: () => downloadSpdxAsJson(artifact.spdxDocument),
+        onActivate: () =>
+          downloadFile(`${artifact.spdxDocument.name}.spdx.json`, `text/json`, async () =>
+            Buffer.from(JSON.stringify(artifact.spdxDocument, null, 2)),
+          ),
       },
       {
         id: 'exportXlsx',
@@ -133,7 +135,13 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
           iconName: 'ExcelDocument',
         },
         important: false,
-        onActivate: () => downloadSpdxAsXlsx(artifact.spdxDocument),
+        onActivate: () =>
+          downloadFile(
+            `${artifact.spdxDocument.name}.spdx.xlsx`,
+            `application/octet-stream`,
+            async () =>
+              artifact.xlsxDocument || (await convertSpdxToXlsxAsync(artifact.spdxDocument)) || new ArrayBuffer(0),
+          ),
       },
       {
         id: 'exportSvg',
@@ -143,7 +151,13 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
         },
         important: false,
         disabled: artifact.svgDocument === undefined,
-        onActivate: () => downloadSpdxAsSvg(artifact.spdxDocument, artifact.svgDocument || new ArrayBuffer(0)),
+        onActivate: () =>
+          downloadFile(
+            `${artifact.spdxDocument.name}.spdx.svg`,
+            `image/svg+xml`,
+            async () =>
+              artifact.svgDocument || (await convertSpdxToSvgAsync(artifact.spdxDocument)) || new ArrayBuffer(0),
+          ),
       },
     ];
   }
@@ -197,4 +211,19 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
       </CustomHeader>
     );
   }
+}
+
+function downloadFile(name: string, type: string, dataBuilder: () => Promise<ArrayBuffer>): void {
+  dataBuilder().then((data) => {
+    const blob = new Blob([data], { type: type });
+    const elem = window.document.createElement('a');
+    try {
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = name;
+      document.body.appendChild(elem);
+      elem.click();
+    } finally {
+      document.body.removeChild(elem);
+    }
+  });
 }

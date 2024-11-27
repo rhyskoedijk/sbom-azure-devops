@@ -22,7 +22,7 @@ import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
 import { ExternalRefCategory, ExternalRefSecurityType } from '../../shared/models/spdx/2.3/IExternalRef';
 import { IPackage } from '../../shared/models/spdx/2.3/IPackage';
 import { IRelationship, RelationshipType } from '../../shared/models/spdx/2.3/IRelationship';
-import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/utils/parseSecurityAdvisoryFromSpdxExternalRef';
+import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/spdx/parseSecurityAdvisoryFromSpdxExternalRef';
 
 interface ISecurityAdvisoryTableItem extends ISecurityAdvisory {
   introducedThrough: string[];

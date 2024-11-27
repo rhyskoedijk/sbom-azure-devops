@@ -39,9 +39,7 @@
       "required": true,
       "helpMarkDown": "The [sbom-tool command](https://github.com/microsoft/sbom-tool?tab=readme-ov-file#run-the-tool) to run",
       "options": {
-        "generate": "Generate",
-        "validate": "Validate (not implemented)",
-        "redact": "Redact (not implemented)"
+        "generate": "Generate"
       }
     },
     {
@@ -90,12 +88,21 @@
       "visibleRule": "command=generate"
     },
     {
-      "name": "enableManifestGraphGeneration",
+      "name": "enableManifestSpreadsheetGeneration",
       "type": "boolean",
-      "label": "Enable Manifest Graph Diagram Generation",
+      "label": "Enable Manifest XLSX Spreadsheet Generation",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to `true`, a SBOM network graph (in SVG format) will be generated in the manifest directory.",
+      "helpMarkDown": "If set to `true`, a XLSX spreadsheet representation of the SBOM content will be generated in the manifest directory.",
+      "visibleRule": "command=generate"
+    },
+    {
+      "name": "enableManifestGraphGeneration",
+      "type": "boolean",
+      "label": "Enable Manifest SVG Graph Generation",
+      "defaultValue": false,
+      "required": false,
+      "helpMarkDown": "If set to `true`, a SVG graph diagram of the SBOM content will be generated in the manifest directory.",
       "visibleRule": "command=generate"
     },
     {

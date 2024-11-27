@@ -4,7 +4,7 @@ import { getEndpointAuthorization, getInput, loc } from 'azure-pipelines-task-li
  * Extract the GitHub access token from `gitHubAccessToken` or `gitHubConnection` inputs
  * @returns The GitHub access token
  */
-export default function getGithubAccessToken(): string | undefined {
+export function getGithubAccessToken(): string | undefined {
   const gitHubAccessToken = getInput('gitHubAccessToken', false);
   if (gitHubAccessToken) {
     return gitHubAccessToken;

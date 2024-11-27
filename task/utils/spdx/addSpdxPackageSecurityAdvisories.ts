@@ -17,7 +17,7 @@ import {
  * @param spdxFilePath The path to the SPDX file
  * @param gitHubAccessToken The GitHub access token
  */
-export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
+export async function addSpdxPackageSecurityAdvisoryExternalRefsAsync(
   spdxFilePath: string,
   gitHubAccessToken: string,
 ): Promise<void> {
@@ -97,17 +97,20 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
         referenceCategory: ExternalRefCategory.Security,
         referenceType: ExternalRefSecurityType.Url,
         referenceLocator: `data:text/json;base64,${Buffer.from(JSON.stringify(vulnerability)).toString('base64')}`,
-        comment: `${advisoryId} security vulnerability details encoded as Base64 JSON text`,
+        comment: `GHSA security vulnerability details for ${advisoryId} encoded as Base64 JSON text`,
       });
     }
   }
 
   // Bump the SPDX document version to 2.3; This is minimum version that supports security advisory/url external references
   // https://spdx.github.io/spdx-spec/v2.3/diffs-from-previous-editions/
-  sbom.spdxVersion = DocumentVersion.SPDX_2_3;
+  if (sbom.spdxVersion !== DocumentVersion.SPDX_2_3) {
+    console.info(`Upgrading SDPX version from ${sbom.spdxVersion} to ${DocumentVersion.SPDX_2_3}`);
+    sbom.spdxVersion = DocumentVersion.SPDX_2_3;
+  }
 
   // Write changes to the SPDX file
-  console.info(`Exporting security advisories to SPDX file: '${spdxFilePath}'`);
+  console.info(`Enriching SDPX with security advisory external references`);
   await fs.writeFile(spdxFilePath, JSON.stringify(sbom, null, 2), 'utf-8');
 }
 

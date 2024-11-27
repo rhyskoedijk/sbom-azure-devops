@@ -1,10 +1,10 @@
 import { getBoolInput, getInput, getInputRequired, setResult, TaskResult } from 'azure-pipelines-task-lib/task';
-import getGithubAccessToken from './utils/github/accessToken';
-import { SbomTool } from './utils/spdx/sbomTool';
+import { getGithubAccessToken } from './utils/azureDevOps/getGithubAccessToken';
+import { SbomToolRunner } from './utils/sbomToolRunner';
 
 async function run() {
   try {
-    const sbomTool = new SbomTool(getInput('version', false));
+    const sbomTool = new SbomToolRunner(getInput('version', false));
     const sbomCommand = getInput('command', true);
     switch (sbomCommand) {
       case 'generate':
@@ -14,6 +14,7 @@ async function run() {
           buildFileList: getInput('buildFileList', false),
           buildDockerImagesToScan: getInput('buildDockerImagesToScan', false),
           manifestOutputPath: getInput('manifestOutputPath', false),
+          enableManifestSpreadsheetGeneration: getBoolInput('enableManifestSpreadsheetGeneration', false),
           enableManifestGraphGeneration: getBoolInput('enableManifestGraphGeneration', false),
           enablePackageMetadataParsing: getBoolInput('enablePackageMetadataParsing', false),
           fetchLicenseInformation: getBoolInput('fetchLicenseInformation', false),

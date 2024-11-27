@@ -1,5 +1,3 @@
-import { existsSync as fileExistsSync } from 'fs';
-import * as fs from 'fs/promises';
 import * as path from 'path';
 
 // getrandom does not directly support ES Modules running on Node.js.
@@ -13,6 +11,7 @@ import { DirectedGraph, EdgeStyle, Shape, VertexWeakRef } from '@vizdom/vizdom-t
 
 import { SecurityAdvisorySeverity } from '../../../shared/ghsa/ISecurityAdvisory';
 import { NOASSERTION } from '../../../shared/models/spdx/2.3/Constants';
+import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 import { ExternalRefCategory, ExternalRefSecurityType } from '../../../shared/models/spdx/2.3/IExternalRef';
 
 const VERTEX_DOC_FILL_COLOR = '#E0E0E0';
@@ -21,42 +20,36 @@ const VERTEX_REF_FILL_COLOR = '#FAFAFA';
 const VERTEX_FILE_FILL_COLOR = '#E0E0E0';
 
 /**
- * Graph SPDX file to an SVG file
- * @param spdxFilePath The path to the SPDX file
+ * Convert an SPDX document to SVG graph diagram
+ * @param spdxJson The SPDX document
+ * @return The SPDX as SVG buffer
  */
-export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string> {
-  if (!fileExistsSync(spdxFilePath)) {
-    throw new Error(`SPDX file not found: ${spdxFilePath}`);
-  }
-
-  // Read the SPDX file
-  const sbom = JSON.parse(await fs.readFile(spdxFilePath, 'utf-8'));
-  const vertices = new Map<string, VertexWeakRef>();
-
+export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
   // Create a new graph
   const graph = new DirectedGraph();
+  const vertices = new Map<string, VertexWeakRef>();
 
   // Create a vertex for the document itself
   console.info(`Generating graph vertex for document root`);
-  const sbomProperties = [
-    `SPDX Version: ${sbom.spdxVersion || NOASSERTION}`,
-    `Data License: ${sbom.dataLicense || NOASSERTION}`,
+  const spdxProperties = [
+    `SPDX Version: ${spdx.spdxVersion || NOASSERTION}`,
+    `Data License: ${spdx.dataLicense || NOASSERTION}`,
   ];
   vertices.set(
-    sbom.SPDXID,
+    spdx.SPDXID,
     graph.new_vertex({
       render: {
         shape: Shape.Circle,
-        label: sbom.name,
-        tooltip: ((sbom.creationInfo?.creators as string[]) || []).concat(sbomProperties).join('\n'),
+        label: spdx.name,
+        tooltip: ((spdx.creationInfo?.creators as string[]) || []).concat(spdxProperties).join('\n'),
         fill_color: VERTEX_DOC_FILL_COLOR,
       },
     }),
   );
 
   // Create vertices for each package
-  console.info(`Generating graph vertices and edges for ${sbom.packages?.length || 0} packages`);
-  for (const pkg of sbom.packages) {
+  console.info(`Generating graph vertices and edges for ${spdx.packages?.length || 0} packages`);
+  for (const pkg of spdx.packages) {
     const pkgProperties = [`${pkg.supplier}`, `License: ${pkg.licenseConcluded || pkg.licenseDeclared || NOASSERTION}`];
     const pkgVertex = graph.new_vertex({
       render: {
@@ -71,7 +64,7 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
     // Create vertices and edges for each file contained in the package
     if (pkg.hasFiles) {
       for (const fileId of pkg.hasFiles) {
-        const file = (sbom.files as any[]).find((f) => f.SPDXID === fileId);
+        const file = (spdx.files as any[]).find((f) => f.SPDXID === fileId);
         graphFileAndParentDirectoriesRecursive(file, graph, vertices, pkgVertex);
       }
     }
@@ -143,8 +136,8 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
   }
 
   // Create edges for each relationship
-  console.info(`Generating graph edges for ${sbom.relationships?.length || 0} relationships`);
-  for (const relationship of sbom.relationships) {
+  console.info(`Generating graph edges for ${spdx.relationships?.length || 0} relationships`);
+  for (const relationship of spdx.relationships) {
     const sourceVertex = vertices.get(relationship.spdxElementId);
     const targetVertex = vertices.get(relationship.relatedSpdxElement);
     if (sourceVertex && targetVertex) {
@@ -159,11 +152,8 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
   // Position the graph
   const positioned = graph.layout();
 
-  // Write the SVG file
-  const svgFilePath = path.format({ ...path.parse(spdxFilePath), base: '', ext: '.svg' });
-  console.info(`Exporting graph to SVG file: '${svgFilePath}'`);
-  await fs.writeFile(svgFilePath, positioned.to_svg().to_string(), 'utf-8');
-  return svgFilePath;
+  // Export the graph as SVG text
+  return Buffer.from(positioned.to_svg().to_string(), 'utf8');
 }
 
 function graphFileAndParentDirectoriesRecursive(

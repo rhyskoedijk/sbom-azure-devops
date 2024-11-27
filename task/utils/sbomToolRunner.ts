@@ -3,9 +3,12 @@ import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'path';
-import { section } from '../azureDevOps/formattingCommands';
-import { spdxGraphToSvgAsync } from './spdxGraphToSvg';
-import { spdxAddPackageSecurityAdvisoryExternalRefsAsync } from './spdxPackageSecurityAdvisories';
+
+import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { convertSpdxToXlsxAsync } from '../../shared/spdx/convertSpdxToXlsx';
+import { section } from './azureDevOps/formatCommands';
+import { addSpdxPackageSecurityAdvisoryExternalRefsAsync } from './spdx/addSpdxPackageSecurityAdvisories';
+import { convertSpdxToSvgAsync } from './spdx/convertSpdxToSvg';
 
 const GITHUB_RELEASES_URL = 'https://github.com/microsoft/sbom-tool/releases';
 const MANIFEST_DIR_NAME = '_manifest';
@@ -18,6 +21,7 @@ export interface SbomGenerateArgs {
   buildFileList?: string;
   buildDockerImagesToScan?: string;
   manifestOutputPath?: string;
+  enableManifestSpreadsheetGeneration?: boolean;
   enableManifestGraphGeneration?: boolean;
   enablePackageMetadataParsing?: boolean;
   fetchLicenseInformation?: boolean;
@@ -32,7 +36,7 @@ export interface SbomGenerateArgs {
   externalDocumentReferenceListFile?: string;
 }
 
-export class SbomTool {
+export class SbomToolRunner {
   private toolsDirectory: string;
   private toolArchitecture: string;
   private toolVersion?: string;
@@ -123,18 +127,32 @@ export class SbomTool {
     // Check packages for security advisories
     if (args.fetchSecurityAdvisories && args.gitHubAccessToken) {
       section('Checking package security advisories');
-      await spdxAddPackageSecurityAdvisoryExternalRefsAsync(spdxPath, args.gitHubAccessToken);
+      await addSpdxPackageSecurityAdvisoryExternalRefsAsync(spdxPath, args.gitHubAccessToken);
     }
 
     // Attach the SPDX file to the build timeline; This is used by the SBOM report tab.
-    section(`Attaching SPDX file to build timeline`);
     addAttachment(`${MANIFEST_FORMAT}.json`, path.basename(spdxPath), spdxPath);
+    const spdxContent = await fs.readFile(spdxPath, 'utf8');
+    const spdx = JSON.parse(spdxContent) as IDocument;
 
-    // Generate a user-friendly graph diagram of the SPDX file
-    if (args.enableManifestGraphGeneration) {
-      section(`Generating graph diagram`);
-      const svgPath = await spdxGraphToSvgAsync(spdxPath);
-      if (svgPath) {
+    // Generate a XLSX spreadsheet of the SPDX file, if configured
+    if (args.enableManifestSpreadsheetGeneration && spdxContent) {
+      section(`Generating XLSX spreadsheet`);
+      const xlsx = await convertSpdxToXlsxAsync(spdx);
+      if (xlsx) {
+        const xlsxPath = path.format({ ...path.parse(spdxPath), base: '', ext: '.xlsx' });
+        await fs.writeFile(xlsxPath, xlsx);
+        addAttachment(`${MANIFEST_FORMAT}.xlsx`, path.basename(xlsxPath), xlsxPath);
+      }
+    }
+
+    // Generate a SVG graph diagram of the SPDX file
+    if (args.enableManifestGraphGeneration && spdxContent) {
+      section(`Generating SVG graph diagram`);
+      const svg = await convertSpdxToSvgAsync(spdx);
+      if (svg) {
+        const svgPath = path.format({ ...path.parse(spdxPath), base: '', ext: '.svg' });
+        await fs.writeFile(svgPath, svg);
         addAttachment(`${MANIFEST_FORMAT}.svg`, path.basename(svgPath), svgPath);
       }
     }

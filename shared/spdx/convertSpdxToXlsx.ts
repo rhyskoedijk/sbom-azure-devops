@@ -1,6 +1,6 @@
 import * as Path from 'path';
 
-import { IJsonSheet, ISettings } from 'json-as-xlsx';
+import { IJsonSheet } from 'json-as-xlsx';
 import { ChecksumAlgorithm } from '../models/spdx/2.3/IChecksum';
 import { IDocument } from '../models/spdx/2.3/IDocument';
 import {
@@ -11,14 +11,19 @@ import {
 import { IPackage } from '../models/spdx/2.3/IPackage';
 import { IRelationship, RelationshipType } from '../models/spdx/2.3/IRelationship';
 
-export function downloadSpdxAsXlsx(doc: IDocument): void {
-  const xlsx = require('json-as-xlsx');
+import '../extensions/StringExtensions';
 
-  const dependsOnRelationships = (doc?.relationships || []).filter(
+/**
+ * Convert an SPDX document to XLSX spreadsheet
+ * @param spdx The SPDX document
+ * @return The SPDX as XLSX buffer
+ */
+export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
+  const dependsOnRelationships = (spdx?.relationships || []).filter(
     (r) => r.relationshipType === RelationshipType.DependsOn,
   );
-  const rootPackageId = doc.documentDescribes?.[0];
-  const packages = (doc?.packages || []).filter((p) => {
+  const rootPackageId = spdx.documentDescribes?.[0];
+  const packages = (spdx?.packages || []).filter((p) => {
     return dependsOnRelationships?.some((r) => r.relatedSpdxElement === p.SPDXID);
   });
 
@@ -36,16 +41,16 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
     ],
     content: [
       {
-        id: doc.SPDXID,
-        name: doc.name,
-        spdxVersion: doc.spdxVersion,
-        dataLicense: doc.dataLicense,
-        created: new Date(doc.creationInfo.created).toLocaleString(),
+        id: spdx.SPDXID,
+        name: spdx.name,
+        spdxVersion: spdx.spdxVersion,
+        dataLicense: spdx.dataLicense,
+        created: new Date(spdx.creationInfo.created).toLocaleString(),
         organization:
-          doc.creationInfo.creators.map((c) => c.match(/^Organization\:(.*)$/i)?.[1]?.trim()).filter((c) => c)?.[0] ||
+          spdx.creationInfo.creators.map((c) => c.match(/^Organization\:(.*)$/i)?.[1]?.trim()).filter((c) => c)?.[0] ||
           '',
-        tool: doc.creationInfo.creators.map((c) => c.match(/^Tool\:(.*)$/i)?.[1]?.trim()).filter((c) => c)?.[0] || '',
-        describes: doc.documentDescribes?.join(', ') || '',
+        tool: spdx.creationInfo.creators.map((c) => c.match(/^Tool\:(.*)$/i)?.[1]?.trim()).filter((c) => c)?.[0] || '',
+        describes: spdx.documentDescribes?.join(', ') || '',
       },
     ],
   };
@@ -57,7 +62,7 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
       { label: 'Name', value: 'name' },
       { label: 'Checksum (SHA256)', value: 'checksum' },
     ],
-    content: doc.files.map((x) => {
+    content: spdx.files.map((x) => {
       return {
         id: x.SPDXID,
         name: Path.normalize(x.fileName),
@@ -80,7 +85,7 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
       { label: 'License', value: 'license' },
       { label: 'Supplier', value: 'supplier' },
     ],
-    content: doc.packages.map((x) => {
+    content: spdx.packages.map((x) => {
       const packageManager = x.externalRefs
         ?.find(
           (a) =>
@@ -128,7 +133,7 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
       { label: 'Package', value: 'package' },
       { label: 'URL', value: 'url' },
     ],
-    content: doc.packages
+    content: spdx.packages
       .flatMap((p) => {
         return (
           p.externalRefs.filter(
@@ -139,7 +144,7 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
         );
       })
       .map((x) => {
-        const pkg = doc.packages.find((p) => p.externalRefs.includes(x));
+        const pkg = spdx.packages.find((p) => p.externalRefs.includes(x));
         const ghsaId = x.referenceLocator?.match(/GHSA-[0-9a-z-]+/i)?.[0];
         const severity = x.comment?.match(/^\[(\w+)\]/)?.[1]?.toPascalCase();
         const summary = x.comment?.match(/^\[(\w+)\]([^;]*)/)?.[2]?.trim();
@@ -154,18 +159,16 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
       }),
   };
 
-  const data: IJsonSheet[] = [documentSheet, filesSheet, packagesSheet, securityAdvisoriesSheet];
-
-  const settings: ISettings = {
-    fileName: `${doc.name}.spdx`,
-    writeMode: 'writeFile',
+  const sheets: IJsonSheet[] = [documentSheet, filesSheet, packagesSheet, securityAdvisoriesSheet];
+  const xlsx = require('json-as-xlsx');
+  return xlsx(sheets, {
     writeOptions: {
       // https://docs.sheetjs.com/docs/api/write-options
+      type: 'buffer',
+      bookType: 'xlsx',
       compression: true,
     },
-  };
-
-  xlsx(data, settings);
+  });
 }
 
 function getTransitivePackageChain(
