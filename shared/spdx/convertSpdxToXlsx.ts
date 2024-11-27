@@ -1,17 +1,22 @@
 import * as Path from 'path';
 
 import { IJsonSheet } from 'json-as-xlsx';
-import { ChecksumAlgorithm } from '../models/spdx/2.3/IChecksum';
-import { IDocument } from '../models/spdx/2.3/IDocument';
+
+import { ChecksumAlgorithm, getChecksum } from '../models/spdx/2.3/IChecksum';
+import { getCreatorOrganization, getCreatorTool } from '../models/spdx/2.3/ICreationInfo';
+import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
-  ExternalRefPackageManagerType,
   ExternalRefSecurityType,
+  getExternalRefPackageManager,
+  parseExternalRefsAs,
 } from '../models/spdx/2.3/IExternalRef';
-import { IPackage } from '../models/spdx/2.3/IPackage';
-import { IRelationship, RelationshipType } from '../models/spdx/2.3/IRelationship';
+import { getLicense } from '../models/spdx/2.3/ILicense';
+import { getPackageLicense, getPackageSupplierOrganization } from '../models/spdx/2.3/IPackage';
 
-import '../extensions/StringExtensions';
+import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../ghsa/ILicense';
+import { SecurityAdvisoryIdentifierType, SecurityAdvisorySeverity } from '../ghsa/ISecurityAdvisory';
+import { ISecurityVulnerability } from '../ghsa/ISecurityVulnerability';
 
 /**
  * Convert an SPDX document to XLSX spreadsheet
@@ -19,25 +24,28 @@ import '../extensions/StringExtensions';
  * @return The SPDX as XLSX buffer
  */
 export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
-  const dependsOnRelationships = (spdx?.relationships || []).filter(
-    (r) => r.relationshipType === RelationshipType.DependsOn,
-  );
-  const rootPackageId = spdx.documentDescribes?.[0];
-  const packages = (spdx?.packages || []).filter((p) => {
-    return dependsOnRelationships?.some((r) => r.relatedSpdxElement === p.SPDXID);
+  const rootPackageIds = spdx.documentDescribes;
+  const relationships = spdx.relationships || [];
+  const files = spdx.files || [];
+  const packages = (spdx.packages || []).filter((p) => {
+    return !rootPackageIds.includes(p.SPDXID);
   });
 
+  /**
+   * Document sheet
+   */
   const documentSheet: IJsonSheet = {
     sheet: 'Document',
     columns: [
       { label: 'ID', value: 'id' },
+      { label: 'Describes', value: 'describes' },
       { label: 'Name', value: 'name' },
       { label: 'Created', value: 'created' },
       { label: 'Creator', value: 'organization' },
       { label: 'Tool', value: 'tool' },
-      { label: 'Version', value: 'spdxVersion' },
+      { label: 'SPDX Version', value: 'spdxVersion' },
       { label: 'Data License', value: 'dataLicense' },
-      { label: 'Describes', value: 'describes' },
+      { label: 'Namespace', value: 'namespace' },
     ],
     content: [
       {
@@ -46,15 +54,17 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
         spdxVersion: spdx.spdxVersion,
         dataLicense: spdx.dataLicense,
         created: new Date(spdx.creationInfo.created).toLocaleString(),
-        organization:
-          spdx.creationInfo.creators.map((c) => c.match(/^Organization\:(.*)$/i)?.[1]?.trim()).filter((c) => c)?.[0] ||
-          '',
-        tool: spdx.creationInfo.creators.map((c) => c.match(/^Tool\:(.*)$/i)?.[1]?.trim()).filter((c) => c)?.[0] || '',
+        organization: getCreatorOrganization(spdx.creationInfo) || '',
+        tool: getCreatorTool(spdx.creationInfo) || '',
+        namespace: spdx.documentNamespace || '',
         describes: spdx.documentDescribes?.join(', ') || '',
       },
     ],
   };
 
+  /**
+   * Files sheet
+   */
   const filesSheet: IJsonSheet = {
     sheet: 'Files',
     columns: [
@@ -62,132 +72,211 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'Name', value: 'name' },
       { label: 'Checksum (SHA256)', value: 'checksum' },
     ],
-    content: spdx.files.map((x) => {
+    content: files.map((file) => {
       return {
-        id: x.SPDXID,
-        name: Path.normalize(x.fileName),
-        checksum: x.checksums.find((c: any) => c.algorithm === ChecksumAlgorithm.SHA256)?.checksumValue || '',
+        id: file.SPDXID,
+        name: Path.normalize(file.fileName),
+        checksum: getChecksum(file.checksums, ChecksumAlgorithm.SHA256) || '',
       };
     }),
   };
 
+  /**
+   * Packages sheet
+   */
   const packagesSheet: IJsonSheet = {
     sheet: 'Packages',
     columns: [
       { label: 'ID', value: 'id' },
-      { label: 'Type', value: 'packageManager' },
       { label: 'Name', value: 'name' },
       { label: 'Version', value: 'version' },
-      { label: 'Level', value: 'level' },
+      { label: 'Source', value: 'packageManager' },
+      { label: 'Type', value: 'type' },
       { label: 'Introduced Through', value: 'introducedThrough' },
-      { label: 'Vulnerable', value: 'isVulnerable' },
-      { label: 'Security Advisories', value: 'securityAdvisories' },
       { label: 'License', value: 'license' },
       { label: 'Supplier', value: 'supplier' },
+      { label: 'Total Vulnerabilities', value: 'totalVulnerabilities' },
+      { label: 'Critical Vulnerabilities', value: 'criticalVulnerabilities' },
+      { label: 'High Vulnerabilities', value: 'highVulnerabilities' },
+      { label: 'Moderate Vulnerabilities', value: 'moderateVulnerabilities' },
+      { label: 'Low Vulnerabilities', value: 'lowVulnerabilities' },
+      { label: 'Security Advisories', value: 'securityAdvisories' },
     ],
-    content: spdx.packages.map((x) => {
-      const packageManager = x.externalRefs
-        ?.find(
-          (a) =>
-            a.referenceCategory === ExternalRefCategory.PackageManager &&
-            a.referenceType === ExternalRefPackageManagerType.PackageUrl,
-        )
-        ?.referenceLocator?.match(/^pkg\:([^\:]+)\//i)?.[1]
-        ?.toPascalCase()
-        ?.trim();
-      const securityAdvisories = x.externalRefs?.filter(
-        (a) =>
-          a.referenceCategory === ExternalRefCategory.Security && a.referenceType === ExternalRefSecurityType.Advisory,
+    content: packages.map((pkg) => {
+      const securityAdvisories = parseExternalRefsAs<ISecurityVulnerability>(
+        pkg.externalRefs || [],
+        ExternalRefCategory.Security,
+        ExternalRefSecurityType.Url,
       );
-      const isTopLevel =
-        x.SPDXID == rootPackageId ||
-        dependsOnRelationships.some(
-          (r) =>
-            r.spdxElementId == rootPackageId &&
-            r.relatedSpdxElement === x.SPDXID &&
-            r.relationshipType === RelationshipType.DependsOn,
-        );
       return {
-        id: x.SPDXID,
-        name: x.name,
-        version: x.versionInfo,
-        supplier: x.supplier?.match(/^Organization\:(.*)$/i)?.[1]?.trim() || x.supplier || '',
-        license: x.licenseConcluded || x.licenseDeclared || '',
-        level: isTopLevel ? 'Top-Level' : 'Transitive',
-        introducedThrough: getTransitivePackageChain(x.SPDXID, packages, dependsOnRelationships).join(' > '),
-        packageManager: packageManager || '',
-        isVulnerable: securityAdvisories?.length || false ? 'Yes' : 'No',
-        securityAdvisories: securityAdvisories
-          ?.map((a) => a.referenceLocator?.match(/GHSA-[0-9a-z-]+/i)?.[0])
-          .join(', '),
+        id: pkg.SPDXID,
+        name: pkg.name,
+        version: pkg.versionInfo,
+        type: isPackageTopLevel(spdx, pkg) ? 'Top-Level' : 'Transitive',
+        introducedThrough: getPackageDependsOnChain(spdx, pkg)
+          .map((x) => x.name)
+          .join(' > '),
+        packageManager: getExternalRefPackageManager(pkg.externalRefs) || '',
+        totalVulnerabilities: securityAdvisories.length,
+        criticalVulnerabilities: securityAdvisories.filter(
+          (a) => a.advisory?.severity === SecurityAdvisorySeverity.Critical,
+        ).length,
+        highVulnerabilities: securityAdvisories.filter((a) => a.advisory?.severity === SecurityAdvisorySeverity.High)
+          .length,
+        moderateVulnerabilities: securityAdvisories.filter(
+          (a) => a.advisory?.severity === SecurityAdvisorySeverity.Moderate,
+        ).length,
+        lowVulnerabilities: securityAdvisories.filter((a) => a.advisory?.severity === SecurityAdvisorySeverity.Low)
+          .length,
+        securityAdvisories:
+          securityAdvisories
+            .map((a) => a.advisory?.identifiers?.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value)
+            .join(', ') || '',
+        license: getPackageLicense(pkg) || '',
+        supplier: getPackageSupplierOrganization(pkg) || '',
       };
     }),
   };
 
+  /**
+   * Security advisories sheet
+   */
   const securityAdvisoriesSheet: IJsonSheet = {
     sheet: 'Security Advisories',
     columns: [
-      { label: 'ID', value: 'id' },
-      { label: 'Severity', value: 'severity' },
+      { label: 'GHSA ID', value: 'ghsaId' },
+      { label: 'CVE ID', value: 'cveId' },
       { label: 'Summary', value: 'summary' },
       { label: 'Package', value: 'package' },
-      { label: 'URL', value: 'url' },
+      { label: 'Vulnerable Versions', value: 'vulnerableVersionRange' },
+      { label: 'Fixed In', value: 'firstPatchedVersion' },
+      { label: 'Severity', value: 'severity' },
+      { label: 'CVSS Score', value: 'cvssScore' },
+      { label: 'CVSS Vector', value: 'cvssVector' },
+      { label: 'CWEs', value: 'cweIds' },
+      { label: 'EPSS Percentage', value: 'epssPercentage' },
+      { label: 'EPSS Percentile', value: 'epssPercentile' },
+      { label: 'Published At', value: 'publishedAt' },
+      { label: 'URL', value: 'permalink' },
     ],
-    content: spdx.packages
-      .flatMap((p) => {
-        return (
-          p.externalRefs.filter(
-            (r) =>
-              r.referenceCategory == ExternalRefCategory.Security &&
-              r.referenceType == ExternalRefSecurityType.Advisory,
-          ) || []
-        );
-      })
-      .map((x) => {
-        const pkg = spdx.packages.find((p) => p.externalRefs.includes(x));
-        const ghsaId = x.referenceLocator?.match(/GHSA-[0-9a-z-]+/i)?.[0];
-        const severity = x.comment?.match(/^\[(\w+)\]/)?.[1]?.toPascalCase();
-        const summary = x.comment?.match(/^\[(\w+)\]([^;]*)/)?.[2]?.trim();
-        const url = x.referenceLocator;
+    content: packages
+      .map((pkg) => pkg.externalRefs || [])
+      .flatMap((externalRefs) =>
+        parseExternalRefsAs<ISecurityVulnerability>(
+          externalRefs,
+          ExternalRefCategory.Security,
+          ExternalRefSecurityType.Url,
+        ),
+      )
+      .filter((vuln) => vuln.package && vuln.advisory)
+      .map((vuln) => {
         return {
-          id: ghsaId || '',
-          severity: severity || '',
-          summary: summary || '',
-          url: url,
-          package: `${pkg?.name} ${pkg?.versionInfo}`,
+          ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
+          cveId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Cve)?.value || '',
+          summary: vuln.advisory.summary,
+          package: `${vuln.package.name} ${vuln.package.version}`,
+          vulnerableVersionRange: vuln.vulnerableVersionRange,
+          firstPatchedVersion: vuln.firstPatchedVersion,
+          severity: vuln.advisory.severity.toPascalCase(),
+          cvssScore: vuln.advisory.cvss.score,
+          cvssVector: vuln.advisory.cvss.vectorString,
+          cweIds: vuln.advisory.cwes.map((x) => x.id).join(', '),
+          epssPercentage: (vuln.advisory.epss.percentage * 100).toFixed(3),
+          epssPercentile: (vuln.advisory.epss.percentile * 100).toFixed(2),
+          publishedAt: vuln.advisory.publishedAt,
+          permalink: vuln.advisory.permalink,
         };
       }),
   };
 
-  const sheets: IJsonSheet[] = [documentSheet, filesSheet, packagesSheet, securityAdvisoriesSheet];
+  /**
+   * Licenses sheet
+   */
+  const licensesSheet: IJsonSheet = {
+    sheet: 'Licenses',
+    columns: [
+      { label: 'ID', value: 'id' },
+      { label: 'Name', value: 'name' },
+      { label: 'Packages', value: 'packages' },
+      { label: 'Risk', value: 'riskSeverity' },
+      { label: 'Risk Reason', value: 'riskReasons' },
+      { label: 'URL', value: 'url' },
+    ],
+    content: Array.from(new Set(packages.map((pkg) => getPackageLicense(pkg))))
+      .filter((license): license is string => !!license)
+      .map((license: string) => {
+        const licenseDetails = getLicense(license);
+        const licensePackages = packages.filter((p) => getPackageLicense(p) == license);
+        const licenseRisk = getLicenseRiskAssessment(license);
+        return {
+          id: licenseDetails?.licenseId || license || '',
+          name: licenseDetails?.name || license || '',
+          packages: licensePackages.length,
+          riskSeverity: licenseRisk.severity.toPascalCase(),
+          riskReasons: licenseRisk.severity !== LicenseRiskSeverity.Unknown ? licenseRisk.reasons.join('; ') : '',
+          url: licenseDetails?.reference || '',
+        };
+      }),
+  };
+
+  /**
+   * Suppliers sheet
+   */
+  const suppliersSheet: IJsonSheet = {
+    sheet: 'Suppliers',
+    columns: [
+      { label: 'Name', value: 'name' },
+      { label: 'Packages', value: 'packages' },
+    ],
+    content: Array.from(new Set(packages.map((pkg) => getPackageSupplierOrganization(pkg))))
+      .filter((supplier): supplier is string => !!supplier)
+      .map((supplier) => {
+        const supplierPackages = packages.filter((p) => getPackageSupplierOrganization(p) == supplier);
+        return {
+          name: supplier || '',
+          packages: supplierPackages.length,
+        };
+      }),
+  };
+
+  /**
+   * Relationships sheet
+   */
+  const relationshipsSheet: IJsonSheet = {
+    sheet: 'Relationships',
+    columns: [
+      { label: 'Source ID', value: 'sourceId' },
+      { label: 'Type', value: 'type' },
+      { label: 'Target ID', value: 'targetId' },
+    ],
+    content: relationships.map((relationship) => {
+      return {
+        sourceId: relationship.spdxElementId,
+        targetId: relationship.relatedSpdxElement,
+        type: relationship.relationshipType,
+      };
+    }),
+  };
+
+  // Generate the XLSX document
   const xlsx = require('json-as-xlsx');
-  return xlsx(sheets, {
-    writeOptions: {
+  return xlsx(
+    [
+      documentSheet,
+      filesSheet,
+      packagesSheet,
+      securityAdvisoriesSheet,
+      licensesSheet,
+      suppliersSheet,
+      relationshipsSheet,
+    ],
+    {
       // https://docs.sheetjs.com/docs/api/write-options
-      type: 'buffer',
-      bookType: 'xlsx',
-      compression: true,
+      writeOptions: {
+        type: 'buffer',
+        bookType: 'xlsx',
+        compression: true,
+      },
     },
-  });
-}
-
-function getTransitivePackageChain(
-  packageId: string,
-  packages: IPackage[],
-  dependsOnRelationships: IRelationship[],
-): string[] {
-  const chain: string[] = [];
-  let currentId = packageId;
-  while (currentId) {
-    const relationship = dependsOnRelationships.find((r) => r.relatedSpdxElement === currentId);
-    if (!relationship) break;
-
-    const pkg = packages.find((p) => p.SPDXID === relationship.spdxElementId);
-    if (!pkg) break;
-
-    chain.unshift(pkg.name);
-    currentId = relationship.spdxElementId;
-  }
-
-  return chain;
+  );
 }

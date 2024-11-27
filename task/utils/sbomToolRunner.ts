@@ -4,9 +4,11 @@ import * as fs from 'fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'path';
 
-import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
-import { convertSpdxToXlsxAsync } from '../../shared/spdx/convertSpdxToXlsx';
 import { section } from './azureDevOps/formatCommands';
+
+import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+
+import { convertSpdxToXlsxAsync } from '../../shared/spdx/convertSpdxToXlsx';
 import { addSpdxPackageSecurityAdvisoryExternalRefsAsync } from './spdx/addSpdxPackageSecurityAdvisories';
 import { convertSpdxToSvgAsync } from './spdx/convertSpdxToSvg';
 

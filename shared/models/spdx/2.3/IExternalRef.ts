@@ -1,3 +1,5 @@
+import '../../../extensions/StringExtensions';
+
 export interface IExternalRef {
   referenceCategory: ExternalRefCategory;
   referenceType: ExternalRefSecurityType | ExternalRefPackageManagerType | ExternalRefPersistentIdType | string;
@@ -32,4 +34,28 @@ export enum ExternalRefPackageManagerType {
 export enum ExternalRefPersistentIdType {
   Swh = 'swh',
   Gitoid = 'gitoid',
+}
+
+export function parseExternalRefsAs<T>(externalRefs: IExternalRef[], category: ExternalRefCategory, type: string): T[] {
+  return externalRefs
+    .filter(
+      (ref) =>
+        ref.referenceCategory === category &&
+        ref.referenceType === type &&
+        ref.referenceLocator.match(/data\:text\/json\;base64/i),
+    )
+    .map((ref) => JSON.parse(Buffer.from(ref.referenceLocator?.split(',')[1] || '', 'base64').toString('utf-8')) as T)
+    .filter((x) => x);
+}
+
+export function getExternalRefPackageManager(externalRefs: IExternalRef[]): string | undefined {
+  return externalRefs
+    .find(
+      (ref) =>
+        ref.referenceCategory === ExternalRefCategory.PackageManager &&
+        ref.referenceType === ExternalRefPackageManagerType.PackageUrl,
+    )
+    ?.referenceLocator?.match(/^pkg\:([^\:]+)\//i)?.[1]
+    ?.toPascalCase()
+    ?.trim();
 }

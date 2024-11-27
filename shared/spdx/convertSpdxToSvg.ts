@@ -6,6 +6,6 @@ import { IDocument } from '../models/spdx/2.3/IDocument';
  * @return The SPDX as SVG buffer
  */
 export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
-  // TODO: Implement this...
+  // TODO: Implement this from task/ulils/spdx/convertSpdxToSvg.ts
   throw new Error('Not implemented');
 }

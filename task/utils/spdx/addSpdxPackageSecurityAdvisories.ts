@@ -5,6 +5,7 @@ import { GitHubGraphClient } from '../../../shared/ghsa/GitHubGraphClient';
 import { IPackage } from '../../../shared/ghsa/IPackage';
 import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+
 import { DocumentVersion } from '../../../shared/models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
@@ -36,7 +37,7 @@ export async function addSpdxPackageSecurityAdvisoryExternalRefsAsync(
         r.referenceCategory === ExternalRefCategory.PackageManager &&
         r.referenceType === ExternalRefPackageManagerType.PackageUrl,
     )?.referenceLocator;
-    const packageManager = getGHSAEcosystemFromPackageUrl(packageReferenceLocator);
+    const packageManager = getGhsaEcosystemFromPackageUrl(packageReferenceLocator);
     if (packageManager) {
       if (!packageManagers[packageManager]) {
         packageManagers[packageManager] = [];
@@ -119,7 +120,7 @@ export async function addSpdxPackageSecurityAdvisoryExternalRefsAsync(
  * @param url
  * @returns
  */
-function getGHSAEcosystemFromPackageUrl(purl: string): string | undefined {
+function getGhsaEcosystemFromPackageUrl(purl: string): string | undefined {
   const packageType = purl?.split('/')[0] || '';
   const packageManager = (packageType.includes(':') ? packageType.split(':')[1] : packageType).toUpperCase();
   switch (packageManager) {

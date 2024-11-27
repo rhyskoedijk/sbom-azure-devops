@@ -1,15 +1,16 @@
 import * as path from 'path';
 
-// getrandom does not directly support ES Modules running on Node.js.
-// However, we can get it to work by adding a shim to support the Web Cryptography API:
+// `getrandom` does not directly support ES Modules running on Node.js.
+// However, we can get it to work by adding a shim to the Web Cryptography API:
 // See: https://docs.rs/getrandom/latest/getrandom/#nodejs-es-module-support
 import { webcrypto } from 'node:crypto';
 Object.defineProperty(globalThis, 'crypto', { value: webcrypto });
 
-// Vizdom must be imported after the getrandom shim above, else it will throw an error
+// Vizdom must be imported AFTER the getrandom shim above, else it will throw an error
 import { DirectedGraph, EdgeStyle, Shape, VertexWeakRef } from '@vizdom/vizdom-ts-node';
 
 import { SecurityAdvisorySeverity } from '../../../shared/ghsa/ISecurityAdvisory';
+
 import { NOASSERTION } from '../../../shared/models/spdx/2.3/Constants';
 import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 import { ExternalRefCategory, ExternalRefSecurityType } from '../../../shared/models/spdx/2.3/IExternalRef';
@@ -18,6 +19,10 @@ const VERTEX_DOC_FILL_COLOR = '#E0E0E0';
 const VERTEX_PKG_FILL_COLOR = '#E0E0E0';
 const VERTEX_REF_FILL_COLOR = '#FAFAFA';
 const VERTEX_FILE_FILL_COLOR = '#E0E0E0';
+const VERTEX_CRITICAL_FILL_COLOR = '#E57373';
+const VERTEX_HIGH_FILL_COLOR = '#FF8A65';
+const VERTEX_MODERATE_FILL_COLOR = '#FFB74D';
+const VERTEX_LOW_FILL_COLOR = '#64B5F6';
 
 /**
  * Convert an SPDX document to SVG graph diagram
@@ -98,16 +103,16 @@ export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
               referenceShape = Shape.Diamond;
               switch (advisory.severity) {
                 case SecurityAdvisorySeverity.Critical:
-                  referenceFillColour = '#E57373';
+                  referenceFillColour = VERTEX_CRITICAL_FILL_COLOR;
                   break;
                 case SecurityAdvisorySeverity.High:
-                  referenceFillColour = '#FF8A65';
+                  referenceFillColour = VERTEX_HIGH_FILL_COLOR;
                   break;
                 case SecurityAdvisorySeverity.Moderate:
-                  referenceFillColour = '#FFB74D';
+                  referenceFillColour = VERTEX_MODERATE_FILL_COLOR;
                   break;
                 case SecurityAdvisorySeverity.Low:
-                  referenceFillColour = '#64B5F6';
+                  referenceFillColour = VERTEX_LOW_FILL_COLOR;
                   break;
               }
               break;

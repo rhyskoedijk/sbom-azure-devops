@@ -22,3 +22,7 @@ export enum ChecksumAlgorithm {
   MD6 = 'MD6',
   ADLER32 = 'ADLER32',
 }
+
+export function getChecksum(checksums: IChecksum[], algorithm: ChecksumAlgorithm): string | undefined {
+  return checksums.find((checksum) => checksum.algorithm === algorithm)?.checksumValue;
+}

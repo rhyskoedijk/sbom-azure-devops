@@ -1,0 +1,740 @@
+{
+  "data": {
+    "licenses": [
+      {
+        "spdxId": "AGPL-3.0",
+        "nickname": "GNU AGPLv3",
+        "name": "GNU Affero General Public License v3.0",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "patent-use",
+            "label": "Patent use",
+            "description": "This license provides an express grant of patent rights from contributors."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          },
+          {
+            "key": "document-changes",
+            "label": "State changes",
+            "description": "Changes made to the licensed material must be documented."
+          },
+          {
+            "key": "disclose-source",
+            "label": "Disclose source",
+            "description": "Source code must be made available when the licensed material is distributed."
+          },
+          {
+            "key": "network-use-disclose",
+            "label": "Network use is distribution",
+            "description": "Users who interact with the licensed material via network are given the right to receive a copy of the source code."
+          },
+          {
+            "key": "same-license",
+            "label": "Same license",
+            "description": "Modifications must be released under the same license when distributing the licensed material. In some cases a similar or related license may be used."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/agpl-3.0/"
+      },
+      {
+        "spdxId": "Apache-2.0",
+        "nickname": null,
+        "name": "Apache License 2.0",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "patent-use",
+            "label": "Patent use",
+            "description": "This license provides an express grant of patent rights from contributors."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          },
+          {
+            "key": "document-changes",
+            "label": "State changes",
+            "description": "Changes made to the licensed material must be documented."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "trademark-use",
+            "label": "Trademark use",
+            "description": "This license explicitly states that it does NOT grant trademark rights, even though licenses without such a statement probably do not grant any implicit trademark rights."
+          },
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/apache-2.0/"
+      },
+      {
+        "spdxId": "BSD-2-Clause",
+        "nickname": null,
+        "name": "BSD 2-Clause \"Simplified\" License",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/bsd-2-clause/"
+      },
+      {
+        "spdxId": "BSD-3-Clause",
+        "nickname": "Modified BSD License",
+        "name": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/bsd-3-clause/"
+      },
+      {
+        "spdxId": "BSL-1.0",
+        "nickname": null,
+        "name": "Boost Software License 1.0",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright--source",
+            "label": "License and copyright notice for source",
+            "description": "A copy of the license and copyright notice must be included with the licensed material in source form, but is not required for binaries."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/bsl-1.0/"
+      },
+      {
+        "spdxId": "CC0-1.0",
+        "nickname": null,
+        "name": "Creative Commons Zero v1.0 Universal",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "trademark-use",
+            "label": "Trademark use",
+            "description": "This license explicitly states that it does NOT grant trademark rights, even though licenses without such a statement probably do not grant any implicit trademark rights."
+          },
+          {
+            "key": "patent-use",
+            "label": "Patent use",
+            "description": "This license explicitly states that it does NOT grant any rights in the patents of contributors."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/cc0-1.0/"
+      },
+      {
+        "spdxId": "EPL-2.0",
+        "nickname": null,
+        "name": "Eclipse Public License 2.0",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "patent-use",
+            "label": "Patent use",
+            "description": "This license provides an express grant of patent rights from contributors."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "disclose-source",
+            "label": "Disclose source",
+            "description": "Source code must be made available when the licensed material is distributed."
+          },
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          },
+          {
+            "key": "same-license",
+            "label": "Same license",
+            "description": "Modifications must be released under the same license when distributing the licensed material. In some cases a similar or related license may be used."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/epl-2.0/"
+      },
+      {
+        "spdxId": "GPL-2.0",
+        "nickname": "GNU GPLv2",
+        "name": "GNU General Public License v2.0",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          },
+          {
+            "key": "document-changes",
+            "label": "State changes",
+            "description": "Changes made to the licensed material must be documented."
+          },
+          {
+            "key": "disclose-source",
+            "label": "Disclose source",
+            "description": "Source code must be made available when the licensed material is distributed."
+          },
+          {
+            "key": "same-license",
+            "label": "Same license",
+            "description": "Modifications must be released under the same license when distributing the licensed material. In some cases a similar or related license may be used."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/gpl-2.0/"
+      },
+      {
+        "spdxId": "GPL-3.0",
+        "nickname": "GNU GPLv3",
+        "name": "GNU General Public License v3.0",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "patent-use",
+            "label": "Patent use",
+            "description": "This license provides an express grant of patent rights from contributors."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          },
+          {
+            "key": "document-changes",
+            "label": "State changes",
+            "description": "Changes made to the licensed material must be documented."
+          },
+          {
+            "key": "disclose-source",
+            "label": "Disclose source",
+            "description": "Source code must be made available when the licensed material is distributed."
+          },
+          {
+            "key": "same-license",
+            "label": "Same license",
+            "description": "Modifications must be released under the same license when distributing the licensed material. In some cases a similar or related license may be used."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/gpl-3.0/"
+      },
+      {
+        "spdxId": "LGPL-2.1",
+        "nickname": "GNU LGPLv2.1",
+        "name": "GNU Lesser General Public License v2.1",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          },
+          {
+            "key": "disclose-source",
+            "label": "Disclose source",
+            "description": "Source code must be made available when the licensed material is distributed."
+          },
+          {
+            "key": "document-changes",
+            "label": "State changes",
+            "description": "Changes made to the licensed material must be documented."
+          },
+          {
+            "key": "same-license--library",
+            "label": "Same license (library)",
+            "description": "Modifications must be released under the same license when distributing the licensed material. In some cases a similar or related license may be used, or this condition may not apply to works that use the licensed material as a library."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/lgpl-2.1/"
+      },
+      {
+        "spdxId": "MIT",
+        "nickname": null,
+        "name": "MIT License",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/mit/"
+      },
+      {
+        "spdxId": "MPL-2.0",
+        "nickname": null,
+        "name": "Mozilla Public License 2.0",
+        "permissions": [
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          },
+          {
+            "key": "patent-use",
+            "label": "Patent use",
+            "description": "This license provides an express grant of patent rights from contributors."
+          },
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          }
+        ],
+        "conditions": [
+          {
+            "key": "disclose-source",
+            "label": "Disclose source",
+            "description": "Source code must be made available when the licensed material is distributed."
+          },
+          {
+            "key": "include-copyright",
+            "label": "License and copyright notice",
+            "description": "A copy of the license and copyright notice must be included with the licensed material."
+          },
+          {
+            "key": "same-license--file",
+            "label": "Same license (file)",
+            "description": "Modifications of existing files must be released under the same license when distributing the licensed material. In some cases a similar or related license may be used."
+          }
+        ],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "trademark-use",
+            "label": "Trademark use",
+            "description": "This license explicitly states that it does NOT grant trademark rights, even though licenses without such a statement probably do not grant any implicit trademark rights."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/mpl-2.0/"
+      },
+      {
+        "spdxId": "Unlicense",
+        "nickname": null,
+        "name": "The Unlicense",
+        "permissions": [
+          {
+            "key": "private-use",
+            "label": "Private use",
+            "description": "The licensed material may be used and modified in private."
+          },
+          {
+            "key": "commercial-use",
+            "label": "Commercial use",
+            "description": "The licensed material and derivatives may be used for commercial purposes."
+          },
+          {
+            "key": "modifications",
+            "label": "Modification",
+            "description": "The licensed material may be modified."
+          },
+          {
+            "key": "distribution",
+            "label": "Distribution",
+            "description": "The licensed material may be distributed."
+          }
+        ],
+        "conditions": [],
+        "limitations": [
+          {
+            "key": "liability",
+            "label": "Liability",
+            "description": "This license includes a limitation of liability."
+          },
+          {
+            "key": "warranty",
+            "label": "Warranty",
+            "description": "This license explicitly states that it does NOT provide any warranty."
+          }
+        ],
+        "url": "http://choosealicense.com/licenses/unlicense/"
+      }
+    ]
+  }
+}
