@@ -5,6 +5,7 @@ import { GitHubGraphClient } from '../../../shared/ghsa/GitHubGraphClient';
 import { IPackage } from '../../../shared/ghsa/IPackage';
 import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+import { DocumentVersion } from '../../../shared/models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
   ExternalRefPackageManagerType,
@@ -100,6 +101,10 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
       });
     }
   }
+
+  // Bump the SPDX document version to 2.3; This is minimum version that supports security advisory/url external references
+  // https://spdx.github.io/spdx-spec/v2.3/diffs-from-previous-editions/
+  sbom.spdxVersion = DocumentVersion.SPDX_2_3;
 
   // Write changes to the SPDX file
   console.info(`Exporting security advisories to SPDX file: '${spdxFilePath}'`);
