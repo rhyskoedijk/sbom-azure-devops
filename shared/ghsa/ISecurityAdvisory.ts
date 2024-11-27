@@ -1,20 +1,18 @@
 export interface ISecurityAdvisory {
   identifiers: {
-    type: string;
+    type: SecurityAdvisoryIdentifierType | string;
     value: string;
   }[];
-  severity: string;
+  severity: SecurityAdvisorySeverity;
   summary: string;
   description: string;
-  references: {
-    url: string;
-  }[];
+  references: string[];
   cvss: {
     score: number;
     vectorString: string;
   };
   cwes: {
-    cweId: string;
+    id: string;
     name: string;
     description: string;
   }[];
@@ -26,4 +24,16 @@ export interface ISecurityAdvisory {
   updatedAt: string;
   withdrawnAt: string;
   permalink: string;
+}
+
+export enum SecurityAdvisoryIdentifierType {
+  Cve = 'CVE',
+  Ghsa = 'GHSA',
+}
+
+export enum SecurityAdvisorySeverity {
+  Low = 'LOW',
+  Moderate = 'MODERATE',
+  High = 'HIGH',
+  Critical = 'CRITICAL',
 }

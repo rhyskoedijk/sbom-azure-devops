@@ -38,7 +38,7 @@ export enum RelationshipType {
   TestCaseOf = 'TEST_CASE_OF',
   BuildToolOf = 'BUILD_TOOL_OF',
   DevToolOf = 'DEV_TOOL_OF',
-  TestOf = 'TEST_OF',
+  TestOf = 'TEST_OF', // codespell:ignore
   TestToolOf = 'TEST_TOOL_OF',
   DocumentationOf = 'DOCUMENTATION_OF',
   OptionalComponentOf = 'OPTIONAL_COMPONENT_OF',

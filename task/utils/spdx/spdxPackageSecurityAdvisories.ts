@@ -3,6 +3,7 @@ import * as fs from 'fs/promises';
 
 import { GitHubGraphClient } from '../../../shared/ghsa/GitHubGraphClient';
 import { IPackage } from '../../../shared/ghsa/IPackage';
+import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import {
   ExternalRefCategory,
@@ -78,11 +79,24 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
       if (!pkg.externalRefs) {
         pkg.externalRefs = [];
       }
+
+      // Add a human readable reference to the security advisory web page
       pkg.externalRefs.push({
         referenceCategory: ExternalRefCategory.Security,
         referenceType: ExternalRefSecurityType.Advisory,
         referenceLocator: vulnerability.advisory.permalink,
         comment: `[${vulnerability.advisory.severity}] ${vulnerability.advisory.summary}; Affects ${vulnerability.package.name} v${vulnerability.package.version}`,
+      });
+
+      // Add a machine readable reference to the security advisory GHSA data; This is used by the SBOM tab to display extended advisory details in the UI
+      const advisoryId =
+        vulnerability.advisory.identifiers?.find((i) => i.type === SecurityAdvisoryIdentifierType.Ghsa)?.value ||
+        vulnerability.advisory?.identifiers[0]?.value;
+      pkg.externalRefs.push({
+        referenceCategory: ExternalRefCategory.Security,
+        referenceType: ExternalRefSecurityType.Url,
+        referenceLocator: `data:text/json;base64,${Buffer.from(JSON.stringify(vulnerability)).toString('base64')}`,
+        comment: `${advisoryId} security vulnerability details encoded as Base64 JSON text`,
       });
     }
   }

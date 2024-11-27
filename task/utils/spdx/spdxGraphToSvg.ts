@@ -11,6 +11,7 @@ Object.defineProperty(globalThis, 'crypto', { value: webcrypto });
 // Vizdom must be imported after the getrandom shim above, else it will throw an error
 import { DirectedGraph, EdgeStyle, Shape, VertexWeakRef } from '@vizdom/vizdom-ts-node';
 
+import { SecurityAdvisorySeverity } from '../../../shared/ghsa/ISecurityAdvisory';
 import { NOASSERTION } from '../../../shared/models/spdx/2.3/Constants';
 import { ExternalRefCategory, ExternalRefSecurityType } from '../../../shared/models/spdx/2.3/IExternalRef';
 
@@ -103,16 +104,16 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
               referenceUrl = externalRef.referenceLocator;
               referenceShape = Shape.Diamond;
               switch (advisory.severity) {
-                case 'CRITICAL':
+                case SecurityAdvisorySeverity.Critical:
                   referenceFillColour = '#E57373';
                   break;
-                case 'HIGH':
+                case SecurityAdvisorySeverity.High:
                   referenceFillColour = '#FF8A65';
                   break;
-                case 'MODERATE':
+                case SecurityAdvisorySeverity.Moderate:
                   referenceFillColour = '#FFB74D';
                   break;
-                case 'LOW':
+                case SecurityAdvisorySeverity.Low:
                   referenceFillColour = '#64B5F6';
                   break;
               }
