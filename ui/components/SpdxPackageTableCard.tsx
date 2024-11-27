@@ -18,9 +18,14 @@ import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISecurityAdvisory } from '../../shared/models/securityAdvisory/ISecurityAdvisory';
-import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
-import { IPackage } from '../../shared/models/spdx/2.2/IPackage';
-import { IRelationship } from '../../shared/models/spdx/2.2/IRelationship';
+import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import {
+  ExternalRefCategory,
+  ExternalRefPackageManagerType,
+  ExternalRefSecurityType,
+} from '../../shared/models/spdx/2.3/IExternalRef';
+import { IPackage } from '../../shared/models/spdx/2.3/IPackage';
+import { IRelationship, RelationshipType } from '../../shared/models/spdx/2.3/IRelationship';
 import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/utils/parseSecurityAdvisoryFromSpdxExternalRef';
 
 interface IPackageTableItem {
@@ -64,7 +69,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     const dependsOnRelationships = (props.document?.relationships || []).filter(
-      (r) => r.relationshipType === 'DEPENDS_ON',
+      (r) => r.relationshipType === RelationshipType.DependsOn,
     );
     const rootPackageId = props.document.documentDescribes?.[0];
     const packages = (props.document?.packages || []).filter((p) => {
@@ -74,12 +79,18 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
     const rawTableItems: IPackageTableItem[] =
       packages.map((x) => {
         const packageManager = x.externalRefs
-          ?.find((a) => a.referenceCategory === 'PACKAGE-MANAGER' && a.referenceType === 'purl')
+          ?.find(
+            (a) =>
+              a.referenceCategory === ExternalRefCategory.PackageManager &&
+              a.referenceType === ExternalRefPackageManagerType.PackageUrl,
+          )
           ?.referenceLocator?.match(/^pkg\:([^\:]+)\//i)?.[1]
           ?.toPascalCase()
           ?.trim();
         const securityAdvisories = x.externalRefs?.filter(
-          (a) => a.referenceCategory === 'SECURITY' && a.referenceType === 'advisory',
+          (a) =>
+            a.referenceCategory === ExternalRefCategory.Security &&
+            a.referenceType === ExternalRefSecurityType.Advisory,
         );
         const isTopLevel =
           x.SPDXID == rootPackageId ||
@@ -87,7 +98,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             (r) =>
               r.spdxElementId == rootPackageId &&
               r.relatedSpdxElement === x.SPDXID &&
-              r.relationshipType === 'DEPENDS_ON',
+              r.relationshipType === RelationshipType.DependsOn,
           );
         return {
           id: x.SPDXID,
@@ -99,7 +110,10 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           introducedThrough: getTransitivePackageChain(x.SPDXID, packages, dependsOnRelationships),
           packageManager: packageManager || '',
           isVulnerable: securityAdvisories?.length || false ? 'Yes' : 'No',
-          securityAdvisories: securityAdvisories?.map((a) => parseSecurityAdvisoryFromSpdxExternalRef(a)),
+          securityAdvisories:
+            securityAdvisories
+              ?.map((a) => parseSecurityAdvisoryFromSpdxExternalRef(a))
+              .filter((a): a is ISecurityAdvisory => !!a) || [],
         };
       }) || [];
 

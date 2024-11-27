@@ -15,7 +15,8 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
+import { ChecksumAlgorithm } from '../../shared/models/spdx/2.3/IChecksum';
+import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
 
 interface IFileTableItem extends ISimpleTableCell {
   id: string;
@@ -55,7 +56,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
         return {
           id: x.SPDXID,
           name: Path.normalize(x.fileName),
-          checksum: x.checksums.find((c) => c.algorithm === 'SHA256')?.checksumValue || '',
+          checksum: x.checksums.find((c) => c.algorithm === ChecksumAlgorithm.SHA256)?.checksumValue || '',
         };
       }) || [];
 

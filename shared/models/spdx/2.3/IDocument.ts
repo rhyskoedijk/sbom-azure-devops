@@ -3,6 +3,9 @@ import { IFile } from './IFile';
 import { IPackage } from './IPackage';
 import { IRelationship } from './IRelationship';
 
+/**
+ * https://spdx.github.io/spdx-spec/v2.3/document-creation-information/
+ */
 export interface IDocument {
   files: IFile[];
   packages: IPackage[];

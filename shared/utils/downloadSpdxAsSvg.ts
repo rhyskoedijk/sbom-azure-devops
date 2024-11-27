@@ -1,4 +1,4 @@
-import { IDocument } from '../models/spdx/2.2/IDocument';
+import { IDocument } from '../models/spdx/2.3/IDocument';
 
 export function downloadSpdxAsSvg(doc: IDocument, svg: ArrayBuffer): void {
   const blob = new Blob([svg], { type: 'image/svg+xml' });

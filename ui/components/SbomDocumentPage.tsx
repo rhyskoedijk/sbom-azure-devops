@@ -8,6 +8,8 @@ import { InlineKeywordFilterBarItem } from 'azure-devops-ui/TextFilterBarItem';
 import { Filter, IFilter } from 'azure-devops-ui/Utilities/Filter';
 
 import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
+import { ExternalRefCategory, ExternalRefSecurityType } from '../../shared/models/spdx/2.3/IExternalRef';
+import { RelationshipType } from '../../shared/models/spdx/2.3/IRelationship';
 import { SbomDocumentHeader } from './SbomDocumentHeader';
 import { SpdxFileTableCard } from './SpdxFileTableCard';
 import { SpdxGraphCard } from './SpdxGraphCard';
@@ -43,10 +45,15 @@ export class SbomDocumentPage extends React.Component<Props, State> {
     return {
       fileCount: props.artifact.spdxDocument?.files?.length || 0,
       packageCount:
-        props.artifact.spdxDocument?.relationships?.filter((r) => r.relationshipType == 'DEPENDS_ON')?.length || 0,
+        props.artifact.spdxDocument?.relationships?.filter((r) => r.relationshipType == RelationshipType.DependsOn)
+          ?.length || 0,
       securityAdvisoryCount:
         props.artifact.spdxDocument?.packages?.flatMap((p) =>
-          p.externalRefs.filter((r) => r.referenceCategory == 'SECURITY' && r.referenceType == 'advisory'),
+          p.externalRefs.filter(
+            (r) =>
+              r.referenceCategory == ExternalRefCategory.Security &&
+              r.referenceType == ExternalRefSecurityType.Advisory,
+          ),
         )?.length || 0,
       supplierCount: new Set(props.artifact.spdxDocument?.packages?.map((p) => p.supplier)).size,
       licenseCount: new Set(

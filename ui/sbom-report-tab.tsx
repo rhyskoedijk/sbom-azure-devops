@@ -10,7 +10,7 @@ import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import '../shared/extensions/StringExtensions';
 import { ISbomBuildArtifact } from '../shared/models/ISbomBuildArtifact';
-import { IDocument } from '../shared/models/spdx/2.2/IDocument';
+import { IDocument } from '../shared/models/spdx/2.3/IDocument';
 import { BuildRestClient } from './clients/BuildRestClient';
 import { SbomDocumentPage } from './components/SbomDocumentPage';
 import './sbom-report-tab.scss';

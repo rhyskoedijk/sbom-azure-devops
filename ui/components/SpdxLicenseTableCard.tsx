@@ -14,7 +14,7 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
+import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
 
 interface ILicenseTableItem {
   id: string;

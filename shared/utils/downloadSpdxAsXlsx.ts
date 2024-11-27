@@ -1,14 +1,22 @@
 import * as Path from 'path';
 
 import { IJsonSheet, ISettings } from 'json-as-xlsx';
-import { IDocument } from '../models/spdx/2.2/IDocument';
-import { IPackage } from '../models/spdx/2.2/IPackage';
-import { IRelationship } from '../models/spdx/2.2/IRelationship';
+import { ChecksumAlgorithm } from '../models/spdx/2.3/IChecksum';
+import { IDocument } from '../models/spdx/2.3/IDocument';
+import {
+  ExternalRefCategory,
+  ExternalRefPackageManagerType,
+  ExternalRefSecurityType,
+} from '../models/spdx/2.3/IExternalRef';
+import { IPackage } from '../models/spdx/2.3/IPackage';
+import { IRelationship, RelationshipType } from '../models/spdx/2.3/IRelationship';
 
 export function downloadSpdxAsXlsx(doc: IDocument): void {
   const xlsx = require('json-as-xlsx');
 
-  const dependsOnRelationships = (doc?.relationships || []).filter((r) => r.relationshipType === 'DEPENDS_ON');
+  const dependsOnRelationships = (doc?.relationships || []).filter(
+    (r) => r.relationshipType === RelationshipType.DependsOn,
+  );
   const rootPackageId = doc.documentDescribes?.[0];
   const packages = (doc?.packages || []).filter((p) => {
     return dependsOnRelationships?.some((r) => r.relatedSpdxElement === p.SPDXID);
@@ -53,7 +61,7 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
       return {
         id: x.SPDXID,
         name: Path.normalize(x.fileName),
-        checksum: x.checksums.find((c: any) => c.algorithm === 'SHA256')?.checksumValue || '',
+        checksum: x.checksums.find((c: any) => c.algorithm === ChecksumAlgorithm.SHA256)?.checksumValue || '',
       };
     }),
   };
@@ -74,12 +82,17 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
     ],
     content: doc.packages.map((x) => {
       const packageManager = x.externalRefs
-        ?.find((a) => a.referenceCategory === 'PACKAGE-MANAGER' && a.referenceType === 'purl')
+        ?.find(
+          (a) =>
+            a.referenceCategory === ExternalRefCategory.PackageManager &&
+            a.referenceType === ExternalRefPackageManagerType.PackageUrl,
+        )
         ?.referenceLocator?.match(/^pkg\:([^\:]+)\//i)?.[1]
         ?.toPascalCase()
         ?.trim();
       const securityAdvisories = x.externalRefs?.filter(
-        (a) => a.referenceCategory === 'SECURITY' && a.referenceType === 'advisory',
+        (a) =>
+          a.referenceCategory === ExternalRefCategory.Security && a.referenceType === ExternalRefSecurityType.Advisory,
       );
       const isTopLevel =
         x.SPDXID == rootPackageId ||
@@ -87,7 +100,7 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
           (r) =>
             r.spdxElementId == rootPackageId &&
             r.relatedSpdxElement === x.SPDXID &&
-            r.relationshipType === 'DEPENDS_ON',
+            r.relationshipType === RelationshipType.DependsOn,
         );
       return {
         id: x.SPDXID,
@@ -117,7 +130,13 @@ export function downloadSpdxAsXlsx(doc: IDocument): void {
     ],
     content: doc.packages
       .flatMap((p) => {
-        return p.externalRefs.filter((r) => r.referenceCategory == 'SECURITY' && r.referenceType == 'advisory') || [];
+        return (
+          p.externalRefs.filter(
+            (r) =>
+              r.referenceCategory == ExternalRefCategory.Security &&
+              r.referenceType == ExternalRefSecurityType.Advisory,
+          ) || []
+        );
       })
       .map((x) => {
         const pkg = doc.packages.find((p) => p.externalRefs.includes(x));

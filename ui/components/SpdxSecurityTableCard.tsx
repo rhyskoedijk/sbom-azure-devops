@@ -18,9 +18,10 @@ import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISecurityAdvisory } from '../../shared/models/securityAdvisory/ISecurityAdvisory';
-import { IDocument } from '../../shared/models/spdx/2.2/IDocument';
-import { IPackage } from '../../shared/models/spdx/2.2/IPackage';
-import { IRelationship } from '../../shared/models/spdx/2.2/IRelationship';
+import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { ExternalRefCategory, ExternalRefSecurityType } from '../../shared/models/spdx/2.3/IExternalRef';
+import { IPackage } from '../../shared/models/spdx/2.3/IPackage';
+import { IRelationship, RelationshipType } from '../../shared/models/spdx/2.3/IRelationship';
 import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/utils/parseSecurityAdvisoryFromSpdxExternalRef';
 
 interface ISecurityAdvisoryTableItem extends ISecurityAdvisory {
@@ -59,35 +60,43 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     const dependsOnRelationships = (props.document?.relationships || []).filter(
-      (r) => r.relationshipType === 'DEPENDS_ON',
+      (r) => r.relationshipType === RelationshipType.DependsOn,
     );
     const rootPackageId = props.document.documentDescribes?.[0];
     const packages = (props.document?.packages || []).filter((p) => {
       return dependsOnRelationships?.some((r) => r.relatedSpdxElement === p.SPDXID);
     });
     const securityAdvisories = packages.flatMap((p) => {
-      return p.externalRefs.filter((r) => r.referenceCategory == 'SECURITY' && r.referenceType == 'advisory') || [];
+      return (
+        p.externalRefs.filter(
+          (r) =>
+            r.referenceCategory == ExternalRefCategory.Security && r.referenceType == ExternalRefSecurityType.Advisory,
+        ) || []
+      );
     });
 
     const rawTableItems: ISecurityAdvisoryTableItem[] =
-      securityAdvisories.map((x) => {
-        const securityAdvisory = parseSecurityAdvisoryFromSpdxExternalRef(x, packages);
-        const pkg = packages.find(
-          (p) => p.name === securityAdvisory.package?.name && p.versionInfo === securityAdvisory.package?.version,
-        );
-        const isTopLevel =
-          pkg?.SPDXID == rootPackageId ||
-          dependsOnRelationships.some(
-            (r) =>
-              r.spdxElementId == rootPackageId &&
-              r.relatedSpdxElement === pkg?.SPDXID &&
-              r.relationshipType === 'DEPENDS_ON',
+      securityAdvisories
+        .map((x) => {
+          const securityAdvisory = parseSecurityAdvisoryFromSpdxExternalRef(x, packages);
+          if (!securityAdvisory) return undefined;
+          const pkg = packages.find(
+            (p) => p.name === securityAdvisory.package?.name && p.versionInfo === securityAdvisory.package?.version,
           );
-        return {
-          ...securityAdvisory,
-          introducedThrough: getTransitivePackageChain(pkg?.SPDXID || '', packages, props.document.relationships),
-        };
-      }) || [];
+          const isTopLevel =
+            pkg?.SPDXID == rootPackageId ||
+            dependsOnRelationships.some(
+              (r) =>
+                r.spdxElementId == rootPackageId &&
+                r.relatedSpdxElement === pkg?.SPDXID &&
+                r.relationshipType === RelationshipType.DependsOn,
+            );
+          return {
+            ...securityAdvisory,
+            introducedThrough: getTransitivePackageChain(pkg?.SPDXID || '', packages, props.document.relationships),
+          };
+        })
+        .filter((x): x is ISecurityAdvisoryTableItem => x !== undefined) || [];
 
     const tableColumnResize = function onSize(
       event: MouseEvent | KeyboardEvent,

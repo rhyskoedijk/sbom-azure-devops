@@ -1,3 +1,7 @@
+import { existsSync as fileExistsSync } from 'fs';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+
 // getrandom does not directly support ES Modules running on Node.js.
 // However, we can get it to work by adding a shim to support the Web Cryptography API:
 // See: https://docs.rs/getrandom/latest/getrandom/#nodejs-es-module-support
@@ -7,11 +11,9 @@ Object.defineProperty(globalThis, 'crypto', { value: webcrypto });
 // Vizdom must be imported after the getrandom shim above, else it will throw an error
 import { DirectedGraph, EdgeStyle, Shape, VertexWeakRef } from '@vizdom/vizdom-ts-node';
 
-import { existsSync as fileExistsSync } from 'fs';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import { NOASSERTION } from '../../../shared/models/spdx/2.3/Constants';
+import { ExternalRefCategory, ExternalRefSecurityType } from '../../../shared/models/spdx/2.3/IExternalRef';
 
-const NO_ASSERTION = 'NOASSERTION';
 const VERTEX_DOC_FILL_COLOR = '#E0E0E0';
 const VERTEX_PKG_FILL_COLOR = '#E0E0E0';
 const VERTEX_REF_FILL_COLOR = '#FAFAFA';
@@ -36,8 +38,8 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
   // Create a vertex for the document itself
   console.info(`Generating graph vertex for document root`);
   const sbomProperties = [
-    `SPDX Version: ${sbom.spdxVersion || NO_ASSERTION}`,
-    `Data License: ${sbom.dataLicense || NO_ASSERTION}`,
+    `SPDX Version: ${sbom.spdxVersion || NOASSERTION}`,
+    `Data License: ${sbom.dataLicense || NOASSERTION}`,
   ];
   vertices.set(
     sbom.SPDXID,
@@ -54,10 +56,7 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
   // Create vertices for each package
   console.info(`Generating graph vertices and edges for ${sbom.packages?.length || 0} packages`);
   for (const pkg of sbom.packages) {
-    const pkgProperties = [
-      `${pkg.supplier}`,
-      `License: ${pkg.licenseConcluded || pkg.licenseDeclared || NO_ASSERTION}`,
-    ];
+    const pkgProperties = [`${pkg.supplier}`, `License: ${pkg.licenseConcluded || pkg.licenseDeclared || NOASSERTION}`];
     const pkgVertex = graph.new_vertex({
       render: {
         label: `${pkg.name} v${pkg.versionInfo}`,
@@ -87,16 +86,19 @@ export async function spdxGraphToSvgAsync(spdxFilePath: string): Promise<string>
           let referenceShape = undefined;
           let referenceFillColour = VERTEX_REF_FILL_COLOR;
           switch (externalRef.referenceCategory) {
-            case 'PACKAGE-MANAGER':
+            case ExternalRefCategory.PackageManager:
               continue;
-            case 'SECURITY':
+            case ExternalRefCategory.Security:
               const advisory = parseSecurityAdvisory(externalRef);
+              if (!advisory) {
+                continue;
+              }
               referenceId = `${advisory.cveId || advisory.ghsaId || externalRef.referenceLocator} [${advisory.severity}]`;
               referenceProperties = [
-                `CVE: ${advisory.cveId || NO_ASSERTION}`,
-                `GHSA: ${advisory.ghsaId || NO_ASSERTION}`,
-                `Severity: ${advisory.severity || NO_ASSERTION}`,
-                `Summary: ${advisory.summary || NO_ASSERTION}`,
+                `CVE: ${advisory.cveId || NOASSERTION}`,
+                `GHSA: ${advisory.ghsaId || NOASSERTION}`,
+                `Severity: ${advisory.severity || NOASSERTION}`,
+                `Summary: ${advisory.summary || NOASSERTION}`,
               ];
               referenceUrl = externalRef.referenceLocator;
               referenceShape = Shape.Diamond;
@@ -219,6 +221,12 @@ function graphFileAndParentDirectoriesRecursive(
 }
 
 function parseSecurityAdvisory(externalRef: any): any {
+  if (
+    externalRef.referenceCategory !== ExternalRefCategory.Security ||
+    externalRef.referenceType !== ExternalRefSecurityType.Advisory
+  ) {
+    return undefined;
+  }
   return {
     ghsaId: externalRef.referenceLocator?.match(/GHSA-[0-9a-z-]+/i)?.[0],
     cveId: externalRef.comment?.match(/CVE-[0-9-]+/i)?.[0],

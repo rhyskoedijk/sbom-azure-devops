@@ -19,6 +19,7 @@ import {
   DEFAULT_SECURITY_ADVISORY_SEVERITY,
   SECURITY_ADVISORY_SEVERITIES,
 } from '../../shared/models/securityAdvisory/Severities';
+import { ExternalRefCategory, ExternalRefSecurityType } from '../../shared/models/spdx/2.3/IExternalRef';
 import { downloadSpdxAsJson } from '../../shared/utils/downloadSpdxAsJson';
 import { downloadSpdxAsSvg } from '../../shared/utils/downloadSpdxAsSvg';
 import { downloadSpdxAsXlsx } from '../../shared/utils/downloadSpdxAsXlsx';
@@ -50,7 +51,11 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
     const securityAdvisoryCountsBySeverityName: Record<string, number> = {};
     props.artifact.spdxDocument.packages
       .flatMap((p) =>
-        p.externalRefs.filter((r) => r.referenceCategory === 'SECURITY' && r.referenceType === 'advisory'),
+        p.externalRefs.filter(
+          (r) =>
+            r.referenceCategory === ExternalRefCategory.Security &&
+            r.referenceType === ExternalRefSecurityType.Advisory,
+        ),
       )
       .map((x) => parseSecurityAdvisoryFromSpdxExternalRef(x)?.severity)
       .reduce((acc, severity) => {

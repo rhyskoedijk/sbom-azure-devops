@@ -1,4 +1,4 @@
-import { IDocument } from '../models/spdx/2.2/IDocument';
+import { IDocument } from '../models/spdx/2.3/IDocument';
 
 export function downloadSpdxAsJson(doc: IDocument): void {
   const blob = new Blob([JSON.stringify(doc, null, 2)], { type: 'text/json' });

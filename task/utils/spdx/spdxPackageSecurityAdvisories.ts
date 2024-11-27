@@ -4,6 +4,11 @@ import * as fs from 'fs/promises';
 import { GitHubGraphClient } from '../../../shared/ghsa/GitHubGraphClient';
 import { IPackage } from '../../../shared/ghsa/IPackage';
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+import {
+  ExternalRefCategory,
+  ExternalRefPackageManagerType,
+  ExternalRefSecurityType,
+} from '../../../shared/models/spdx/2.3/IExternalRef';
 
 /**
  * Check SPDX packages for security advisories; adds external references for all applicable advisories
@@ -25,7 +30,9 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
   const packageManagers: Record<string, IPackage[]> = {};
   for (const pkg of sbom.packages) {
     const packageReferenceLocator = (pkg.externalRefs as any[])?.find(
-      (r) => r.referenceCategory === 'PACKAGE-MANAGER' && r.referenceType === 'purl',
+      (r) =>
+        r.referenceCategory === ExternalRefCategory.PackageManager &&
+        r.referenceType === ExternalRefPackageManagerType.PackageUrl,
     )?.referenceLocator;
     const packageManager = getGHSAEcosystemFromPackageUrl(packageReferenceLocator);
     if (packageManager) {
@@ -63,7 +70,7 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
   for (const vulnerability of securityVulnerabilities) {
     const pkg = (sbom.packages as any[]).find((p) => {
       const packageReferenceLocator = (p.externalRefs as any[])?.find(
-        (r) => r.referenceCategory === 'PACKAGE-MANAGER',
+        (r) => r.referenceCategory === ExternalRefCategory.PackageManager,
       )?.referenceLocator;
       return packageReferenceLocator === vulnerability.package.id;
     });
@@ -72,8 +79,8 @@ export async function spdxAddPackageSecurityAdvisoryExternalRefsAsync(
         pkg.externalRefs = [];
       }
       pkg.externalRefs.push({
-        referenceCategory: 'SECURITY',
-        referenceType: 'advisory',
+        referenceCategory: ExternalRefCategory.Security,
+        referenceType: ExternalRefSecurityType.Advisory,
         referenceLocator: vulnerability.advisory.permalink,
         comment: `[${vulnerability.advisory.severity}] ${vulnerability.advisory.summary}; Affects ${vulnerability.package.name} v${vulnerability.package.version}`,
       });
