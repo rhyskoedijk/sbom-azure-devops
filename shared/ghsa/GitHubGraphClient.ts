@@ -5,6 +5,7 @@ import { IPackage } from './IPackage';
 import { ISecurityVulnerability } from './ISecurityVulnerability';
 
 const GHSA_GRAPHQL_API = 'https://api.github.com/graphql';
+
 const GHSA_SECURITY_VULNERABILITIES_QUERY = `
   query($ecosystem: SecurityAdvisoryEcosystem, $package: String) {
     securityVulnerabilities(first: 100, ecosystem: $ecosystem, package: $package) {
@@ -98,11 +99,47 @@ export class GitHubGraphClient {
           );
         }
         const vulnerabilities = response.data?.data?.securityVulnerabilities?.nodes;
-        return vulnerabilities?.map((vulnerabilitity: any) => {
+        return vulnerabilities?.map((v: any) => {
           return {
             ecosystem: packageEcosystem,
             package: pkg,
-            ...vulnerabilitity,
+            advisory: {
+              identifiers: v.advisory.identifiers?.map((i: any) => {
+                return {
+                  type: i.type,
+                  value: i.value,
+                };
+              }),
+              severity: v.advisory.severity,
+              summary: v.advisory.summary,
+              description: v.advisory.description,
+              references: v.advisory.references?.map((r: any) => r.url),
+              cvss: !v.advisory.cvss
+                ? undefined
+                : {
+                    score: v.advisory.cvss.score,
+                    vectorString: v.advisory.cvss.vectorString,
+                  },
+              cwes: v.advisory.cwes?.nodes?.map((c: any) => {
+                return {
+                  id: c.cweId,
+                  name: c.name,
+                  description: c.description,
+                };
+              }),
+              epss: !v.advisory.epss
+                ? undefined
+                : {
+                    percentage: v.advisory.epss.percentage,
+                    percentile: v.advisory.epss.percentile,
+                  },
+              publishedAt: v.advisory.publishedAt,
+              updatedAt: v.advisory.updatedAt,
+              withdrawnAt: v.advisory.withdrawnAt,
+              permalink: v.advisory.permalink,
+            },
+            vulnerableVersionRange: v.vulnerableVersionRange,
+            firstPatchedVersion: v.firstPatchedVersion?.identifier,
           };
         });
       },
@@ -117,6 +154,14 @@ export class GitHubGraphClient {
           return false;
         }
 
+        /**
+         * The vulnerable version range follows a basic syntax with a few forms:
+         *   `= 0.2.0` denotes a single vulnerable version
+         *   `<= 1.0.8` denotes a version range up to and including the specified version
+         *   `< 0.1.11` denotes a version range up to, but excluding, the specified version
+         *   `>= 4.3.0, < 4.3.5` denotes a version range with a known minimum and maximum version
+         *   `>= 0.0.1` denotes a version range with a known minimum, but no known maximum
+         */
         const versionRangeRequirements = v.vulnerableVersionRange.split(',').map((v) => v.trim());
         return versionRangeRequirements.every((r) => pkg.version && semver.satisfies(pkg.version, r));
       });
@@ -124,6 +169,13 @@ export class GitHubGraphClient {
     return affectedVulnerabilities;
   }
 
+  /**
+   * Batch requests in parallel to speed up the process when we are forced to do a N+1 query
+   * @param batchSize
+   * @param items
+   * @param action
+   * @returns
+   */
   private async batchGraphQueryAsync<T1, T2>(batchSize: number, items: T1[], action: (item: T1) => Promise<T2[]>) {
     const results: T2[] = [];
     for (let i = 0; i < items.length; i += batchSize) {
