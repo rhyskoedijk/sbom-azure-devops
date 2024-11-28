@@ -46,7 +46,7 @@ export class Root extends React.Component<{}, State> {
               await SDK.notifyLoadFailed('Unable to load SBOM build artifacts');
             }
           } catch (error) {
-            console.log(error);
+            console.error(error);
             this.setState({ artifacts: undefined, loadError: error });
           }
         })

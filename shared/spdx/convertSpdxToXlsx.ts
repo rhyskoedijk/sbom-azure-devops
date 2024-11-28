@@ -30,10 +30,17 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   const packages = (spdx.packages || []).filter((p) => {
     return !rootPackageIds.includes(p.SPDXID);
   });
+  const licenses = Array.from(new Set(packages.map((pkg) => getPackageLicense(pkg)))).filter(
+    (license): license is string => !!license,
+  );
+  const suppliers = Array.from(new Set(packages.map((pkg) => getPackageSupplierOrganization(pkg)))).filter(
+    (supplier): supplier is string => !!supplier,
+  );
 
   /**
    * Document sheet
    */
+  console.info('Generating document sheet');
   const documentSheet: IJsonSheet = {
     sheet: 'Document',
     columns: [
@@ -65,6 +72,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   /**
    * Files sheet
    */
+  console.info(`Generating files sheet for ${files.length} row(s)`);
   const filesSheet: IJsonSheet = {
     sheet: 'Files',
     columns: [
@@ -84,6 +92,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   /**
    * Packages sheet
    */
+  console.info(`Generating packages sheet for ${packages.length} row(s)`);
   const packagesSheet: IJsonSheet = {
     sheet: 'Packages',
     columns: [
@@ -141,6 +150,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   /**
    * Security advisories sheet
    */
+  console.info(`Generating security advisories sheet for ${packages.length} row(s)`);
   const securityAdvisoriesSheet: IJsonSheet = {
     sheet: 'Security Advisories',
     columns: [
@@ -192,6 +202,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   /**
    * Licenses sheet
    */
+  console.info(`Generating licenses sheet for ${licenses.length} row(s)`);
   const licensesSheet: IJsonSheet = {
     sheet: 'Licenses',
     columns: [
@@ -202,46 +213,44 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'Risk Reason', value: 'riskReasons' },
       { label: 'URL', value: 'url' },
     ],
-    content: Array.from(new Set(packages.map((pkg) => getPackageLicense(pkg))))
-      .filter((license): license is string => !!license)
-      .map((license: string) => {
-        const licenseDetails = getLicense(license);
-        const licensePackages = packages.filter((p) => getPackageLicense(p) == license);
-        const licenseRisk = getLicenseRiskAssessment(license);
-        return {
-          id: licenseDetails?.licenseId || license || '',
-          name: licenseDetails?.name || license || '',
-          packages: licensePackages.length,
-          riskSeverity: licenseRisk.severity.toPascalCase(),
-          riskReasons: licenseRisk.severity !== LicenseRiskSeverity.Unknown ? licenseRisk.reasons.join('; ') : '',
-          url: licenseDetails?.reference || '',
-        };
-      }),
+    content: licenses.map((license: string) => {
+      const licenseDetails = getLicense(license);
+      const licensePackages = packages.filter((p) => getPackageLicense(p) == license);
+      const licenseRisk = getLicenseRiskAssessment(license);
+      return {
+        id: licenseDetails?.licenseId || license || '',
+        name: licenseDetails?.name || license || '',
+        packages: licensePackages.length,
+        riskSeverity: licenseRisk.severity.toPascalCase(),
+        riskReasons: licenseRisk.severity !== LicenseRiskSeverity.Unknown ? licenseRisk.reasons.join('; ') : '',
+        url: licenseDetails?.reference || '',
+      };
+    }),
   };
 
   /**
    * Suppliers sheet
    */
+  console.info(`Generating suppliers sheet for ${suppliers.length} row(s)`);
   const suppliersSheet: IJsonSheet = {
     sheet: 'Suppliers',
     columns: [
       { label: 'Name', value: 'name' },
       { label: 'Packages', value: 'packages' },
     ],
-    content: Array.from(new Set(packages.map((pkg) => getPackageSupplierOrganization(pkg))))
-      .filter((supplier): supplier is string => !!supplier)
-      .map((supplier) => {
-        const supplierPackages = packages.filter((p) => getPackageSupplierOrganization(p) == supplier);
-        return {
-          name: supplier || '',
-          packages: supplierPackages.length,
-        };
-      }),
+    content: suppliers.map((supplier) => {
+      const supplierPackages = packages.filter((p) => getPackageSupplierOrganization(p) == supplier);
+      return {
+        name: supplier || '',
+        packages: supplierPackages.length,
+      };
+    }),
   };
 
   /**
    * Relationships sheet
    */
+  console.info(`Generating relationships sheet for ${relationships.length} row(s)`);
   const relationshipsSheet: IJsonSheet = {
     sheet: 'Relationships',
     columns: [
@@ -259,6 +268,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   };
 
   // Generate the XLSX document
+  console.info('Writing XLSX workbook');
   const xlsx = require('json-as-xlsx');
   return xlsx(
     [

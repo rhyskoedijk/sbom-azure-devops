@@ -158,6 +158,7 @@ export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
   const positioned = graph.layout();
 
   // Export the graph as SVG text
+  console.info(`Writing SVG image`);
   return Buffer.from(positioned.to_svg().to_string(), 'utf8');
 }
 
