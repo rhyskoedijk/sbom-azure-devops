@@ -125,7 +125,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
         important: true,
         onActivate: () =>
           downloadFile(`${artifact.spdxDocument.name}.spdx.json`, `text/json`, async () =>
-            Buffer.from(JSON.stringify(artifact.spdxDocument, null, 2)),
+            new TextEncoder().encode(JSON.stringify(artifact.spdxDocument, null, 2)),
           ),
       },
       {
