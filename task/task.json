@@ -129,7 +129,7 @@
       "label": "Fetch Security Advisory Information",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to true, we will attempt to fetch security advisory information of packages detected in the SBOM from the [GitHub Advisory Database](https://github.com/advisories). If `true`, one of `gitHubAccessToken` or `gitHubServiceConnection` must be configured.",
+      "helpMarkDown": "If set to true, we will attempt to fetch security advisory information of packages detected in the SBOM from the [GitHub Advisory Database](https://github.com/advisories). If enabled, one of `gitHubAccessToken` or `gitHubServiceConnection` must be configured to access the GHSA database. If any security advisories are found, the SPDX document version will be upgraded to 2.3, the minimum version that supports security advisory references.",
       "visibleRule": "command=generate"
     },
     {
