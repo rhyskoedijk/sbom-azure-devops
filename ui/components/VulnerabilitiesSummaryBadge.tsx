@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
+import { Tooltip } from 'azure-devops-ui/TooltipEx';
 
 import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
 import { ISeverity } from '../../shared/models/severity/ISeverity';
 import { DEFAULT_SEVERITY, SEVERITIES } from '../../shared/models/severity/Severities';
 
-import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import './VulnerabilitiesSummaryBadge.scss';
 
 interface Props {
