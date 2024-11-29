@@ -41,12 +41,15 @@ export function isPackageTopLevel(document: IDocument, pkg: IPackage): boolean {
 }
 
 export function getPackageDependsOnChain(document: IDocument, pkg: IPackage): IPackage[] {
-  const packages = document.packages || [];
+  const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];
   const dependsOnRelationships = relationships.filter((r) => r.relationshipType === RelationshipType.DependsOn);
-  const packageChain: IPackage[] = [];
+  const packages = (document.packages || []).filter((p) => {
+    return !rootPackageIds.includes(p.SPDXID);
+  });
 
   // Walk the chain of "DependsOn" relationships for the package to discover the dependencies
+  const packageChain: IPackage[] = [];
   let currentElementId = pkg.SPDXID;
   while (currentElementId) {
     const relationship = dependsOnRelationships.find((r) => r.relatedSpdxElement === currentElementId);
