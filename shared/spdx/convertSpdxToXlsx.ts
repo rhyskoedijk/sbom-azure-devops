@@ -149,11 +149,13 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           id: pkg.SPDXID,
           name: pkg.name,
           version: pkg.versionInfo,
+          packageManager: getExternalRefPackageManager(pkg.externalRefs) || '',
           type: isPackageTopLevel(spdx, pkg) ? 'Top-Level' : 'Transitive',
           introducedThrough: getPackageDependsOnChain(spdx, pkg)
             .map((x) => x.name)
             .join(' > '),
-          packageManager: getExternalRefPackageManager(pkg.externalRefs) || '',
+          license: getPackageLicenseExpression(pkg) || '',
+          supplier: getPackageSupplierOrganization(pkg) || '',
           totalVulnerabilities: securityAdvisories.length,
           criticalVulnerabilities: securityAdvisories.filter(
             (a) => a.advisory?.severity === SecurityAdvisorySeverity.Critical,
@@ -169,8 +171,6 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
             securityAdvisories
               .map((a) => a.advisory?.identifiers?.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value)
               .join(', ') || '',
-          license: getPackageLicenseExpression(pkg) || '',
-          supplier: getPackageSupplierOrganization(pkg) || '',
         };
       }),
   };

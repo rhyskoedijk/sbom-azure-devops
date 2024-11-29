@@ -7,14 +7,27 @@ import { Tab, TabBar, TabContent, TabSize } from 'azure-devops-ui/Tabs';
 import { InlineKeywordFilterBarItem } from 'azure-devops-ui/TextFilterBarItem';
 import { Filter, IFilter } from 'azure-devops-ui/Utilities/Filter';
 
+import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
 import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
-import { ExternalRefCategory, ExternalRefSecurityType } from '../../shared/models/spdx/2.3/IExternalRef';
-import { RelationshipType } from '../../shared/models/spdx/2.3/IRelationship';
+import {
+  ExternalRefCategory,
+  ExternalRefSecurityType,
+  IExternalRef,
+  parseExternalRefAs,
+} from '../../shared/models/spdx/2.3/IExternalRef';
+import { IFile } from '../../shared/models/spdx/2.3/IFile';
+import { getLicensesFromExpression, ILicense } from '../../shared/models/spdx/2.3/ILicense';
+import {
+  getPackageLicenseExpression,
+  getPackageSupplierOrganization,
+  IPackage,
+} from '../../shared/models/spdx/2.3/IPackage';
+
 import { SbomDocumentHeader } from './SbomDocumentHeader';
 import { SpdxFileTableCard } from './SpdxFileTableCard';
-import { SpdxGraphCard } from './SpdxGraphCard';
 import { SpdxLicenseTableCard } from './SpdxLicenseTableCard';
 import { SpdxPackageTableCard } from './SpdxPackageTableCard';
+import { SpdxRelationshipCard } from './SpdxRelationshipCard';
 import { SpdxSecurityTableCard } from './SpdxSecurityTableCard';
 import { SpdxSupplierTableCard } from './SpdxSupplierTableCard';
 
@@ -24,11 +37,11 @@ interface Props {
 }
 
 interface State {
-  fileCount: number;
-  packageCount: number;
-  securityAdvisoryCount: number;
-  supplierCount: number;
-  licenseCount: number;
+  files: IFile[];
+  packages: IPackage[];
+  securityAdvisories: ISecurityVulnerability[];
+  licenses: ILicense[];
+  suppliers: string[];
 }
 
 export class SbomDocumentPage extends React.Component<Props, State> {
@@ -38,28 +51,46 @@ export class SbomDocumentPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = SbomDocumentPage.getDerivedStateFromProps(props);
-    this.selectedTabId = new ObservableValue('files');
+    this.selectedTabId = new ObservableValue('summary');
     this.filter = new Filter();
   }
 
   static getDerivedStateFromProps(props: Props): State {
+    const spdx = props.artifact.spdxDocument;
+    const rootPackageIds = spdx.documentDescribes;
+    const files = spdx.files || [];
+    const packages = (spdx.packages || []).filter((p) => {
+      return !rootPackageIds.includes(p.SPDXID);
+    });
+    const securityAdvisories = packages
+      .flatMap((pkg: IPackage) => pkg.externalRefs || [])
+      .map((externalRef: IExternalRef) =>
+        parseExternalRefAs<ISecurityVulnerability>(
+          externalRef,
+          ExternalRefCategory.Security,
+          ExternalRefSecurityType.Url,
+        ),
+      )
+      .filter((vuln): vuln is ISecurityVulnerability => !!vuln && !!vuln.package && !!vuln.advisory)
+      .distinctBy((vuln: ISecurityVulnerability) => vuln.advisory.permalink);
+    const licenses = packages
+      .map((pkg) => getPackageLicenseExpression(pkg))
+      .distinct()
+      .filter((licenseExpression): licenseExpression is string => !!licenseExpression)
+      .flatMap((licenseExpression: string) => getLicensesFromExpression(licenseExpression))
+      .filter((license): license is ILicense => !!license)
+      .distinctBy((license: ILicense) => license.licenseId);
+    const suppliers = packages
+      .map((pkg) => getPackageSupplierOrganization(pkg))
+      .filter((supplier): supplier is string => !!supplier)
+      .distinct();
+
     return {
-      fileCount: props.artifact.spdxDocument?.files?.length || 0,
-      packageCount:
-        props.artifact.spdxDocument?.relationships?.filter((r) => r.relationshipType == RelationshipType.DependsOn)
-          ?.length || 0,
-      securityAdvisoryCount:
-        props.artifact.spdxDocument?.packages?.flatMap((p) =>
-          p.externalRefs.filter(
-            (r) =>
-              r.referenceCategory == ExternalRefCategory.Security &&
-              r.referenceType == ExternalRefSecurityType.Advisory,
-          ),
-        )?.length || 0,
-      supplierCount: new Set(props.artifact.spdxDocument?.packages?.map((p) => p.supplier)).size,
-      licenseCount: new Set(
-        props.artifact.spdxDocument?.packages?.map((p) => p.licenseConcluded || p.licenseDeclared || ''),
-      ).size,
+      files,
+      packages,
+      securityAdvisories,
+      licenses,
+      suppliers,
     };
   }
 
@@ -84,29 +115,56 @@ export class SbomDocumentPage extends React.Component<Props, State> {
           renderAdditionalContent={this.onRenderFilterBar}
           className="margin-vertical-16"
         >
-          <Tab name="Files" id="files" badgeCount={this.state.fileCount} />
-          <Tab name="Packages" id="packages" badgeCount={this.state.packageCount} />
-          <Tab name="Security Advisories" id="securityAdvisories" badgeCount={this.state.securityAdvisoryCount} />
-          <Tab name="Suppliers" id="suppliers" badgeCount={this.state.supplierCount} />
-          <Tab name="Licenses" id="licenses" badgeCount={this.state.licenseCount} />
+          <Tab id="summary" name="Summary" />
+          <Tab id="files" name="Files" badgeCount={this.state.files.length} />
+          {this.state.packages.length ? (
+            <Tab id="packages" name="Packages" badgeCount={this.state.packages.length} />
+          ) : null}
+          {this.state.securityAdvisories.length ? (
+            <Tab id="securityAdvisories" name="Security Advisories" badgeCount={this.state.securityAdvisories.length} />
+          ) : null}
+          {this.state.licenses.length ? (
+            <Tab id="licenses" name="Licenses" badgeCount={this.state.licenses.length} />
+          ) : null}
+          {this.state.suppliers.length ? (
+            <Tab id="suppliers" name="Suppliers" badgeCount={this.state.suppliers.length} />
+          ) : null}
           {this.props.artifact.svgDocument ? (
-            <Tab name="Graph Viewer" id="graph" iconProps={{ iconName: 'BranchFork2', className: 'margin-right-4' }} />
+            <Tab
+              id="relationships"
+              name="Relationship View"
+              iconProps={{ iconName: 'BranchFork2', className: 'margin-right-4' }}
+            />
           ) : null}
         </TabBar>
         <TabContent>
           <Observer selectedTabId={this.selectedTabId}>
             {(props: { selectedTabId: string }) => {
               switch (props.selectedTabId) {
+                case 'summary':
+                  return (
+                    <div className="page-content">
+                      <div>TODO...</div>
+                    </div>
+                  );
                 case 'files':
                   return (
                     <div className="page-content">
-                      <SpdxFileTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
+                      <SpdxFileTableCard
+                        document={this.props.artifact.spdxDocument}
+                        files={this.state.files}
+                        filter={this.filter}
+                      />
                     </div>
                   );
                 case 'packages':
                   return (
                     <div className="page-content">
-                      <SpdxPackageTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
+                      <SpdxPackageTableCard
+                        document={this.props.artifact.spdxDocument}
+                        packages={this.state.packages}
+                        filter={this.filter}
+                      />
                     </div>
                   );
                 case 'securityAdvisories':
@@ -127,9 +185,9 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                       <SpdxLicenseTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
                     </div>
                   );
-                case 'graph':
+                case 'relationships':
                   return (
-                    <SpdxGraphCard
+                    <SpdxRelationshipCard
                       document={this.props.artifact.spdxDocument}
                       documentGraphSvg={this.props.artifact.svgDocument}
                     />

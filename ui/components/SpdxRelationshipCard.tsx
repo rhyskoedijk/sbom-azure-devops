@@ -16,10 +16,10 @@ interface State {
   documentGraphSvg?: string;
 }
 
-export class SpdxGraphCard extends React.Component<Props, State> {
+export class SpdxRelationshipCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = SpdxGraphCard.getDerivedStateFromProps(props);
+    this.state = SpdxRelationshipCard.getDerivedStateFromProps(props);
   }
 
   static getDerivedStateFromProps(props: Props): State {
@@ -32,7 +32,7 @@ export class SpdxGraphCard extends React.Component<Props, State> {
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
     if (prevProps.document !== this.props.document || prevProps.documentGraphSvg !== this.props.documentGraphSvg) {
-      this.setState(SpdxGraphCard.getDerivedStateFromProps(this.props));
+      this.setState(SpdxRelationshipCard.getDerivedStateFromProps(this.props));
     }
   }
 

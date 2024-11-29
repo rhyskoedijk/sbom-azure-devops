@@ -17,6 +17,7 @@ import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ChecksumAlgorithm } from '../../shared/models/spdx/2.3/IChecksum';
 import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { IFile } from '../../shared/models/spdx/2.3/IFile';
 
 interface IFileTableItem extends ISimpleTableCell {
   id: string;
@@ -26,6 +27,7 @@ interface IFileTableItem extends ISimpleTableCell {
 
 interface Props {
   document: IDocument;
+  files: IFile[];
   filter: IFilter;
 }
 
@@ -52,13 +54,15 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     const rawTableItems: IFileTableItem[] =
-      props.document?.files?.map((x) => {
-        return {
-          id: x.SPDXID,
-          name: Path.normalize(x.fileName),
-          checksum: x.checksums.find((c) => c.algorithm === ChecksumAlgorithm.SHA256)?.checksumValue || '',
-        };
-      }) || [];
+      props.files
+        ?.orderBy((file: IFile) => file.fileName)
+        ?.map((x) => {
+          return {
+            id: x.SPDXID,
+            name: Path.normalize(x.fileName),
+            checksum: x.checksums.find((c) => c.algorithm === ChecksumAlgorithm.SHA256)?.checksumValue || '',
+          };
+        }) || [];
 
     const tableColumnResize = function onSize(
       event: MouseEvent | KeyboardEvent,
@@ -68,6 +72,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
     ) {
       (column.width as ObservableValue<number>).value = width;
     };
+
     const tableColumns: ITableColumn<IFileTableItem>[] = [
       {
         id: 'name',
@@ -139,7 +144,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document) {
+    if (prevProps.document !== this.props.document || prevProps.files !== this.props.files) {
       this.setState(SpdxFileTableCard.getDerivedStateFromProps(this.props));
     }
   }
