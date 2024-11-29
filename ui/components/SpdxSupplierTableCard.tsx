@@ -15,6 +15,7 @@ import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { getPackageSupplierOrganization } from '../../shared/models/spdx/2.3/IPackage';
 
 interface ISupplierTableItem {
   id: string;
@@ -25,6 +26,7 @@ interface ISupplierTableItem {
 
 interface Props {
   document: IDocument;
+  suppliers: string[];
   filter: IFilter;
 }
 
@@ -50,18 +52,21 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props: Props): State {
-    const suppliers = Array.from(new Set(props.document?.packages?.map((p) => p.supplier || '')));
     const rawTableItems: ISupplierTableItem[] =
-      suppliers?.map((x) => {
-        const supplier = x.match(/^Organization\:(.*)$/i)?.[1]?.trim() || x;
-        const packages = props.document?.packages?.filter((p) => p.supplier === x);
-        return {
-          id: supplier,
-          name: supplier,
-          packageCount: packages?.length,
-          packages: packages.map((p) => p.name),
-        };
-      }) || [];
+      props.suppliers
+        ?.orderBy((supplier: string) => supplier)
+        ?.map((supplier: string) => {
+          const packagesFromSupplier = props.document.packages
+            ?.filter((p) => getPackageSupplierOrganization(p) == supplier)
+            ?.map((p) => p.name || '')
+            ?.distinct();
+          return {
+            id: supplier || '',
+            name: supplier || '',
+            packageCount: packagesFromSupplier.length,
+            packages: packagesFromSupplier,
+          };
+        }) || [];
 
     const tableColumnResize = function onSize(
       event: MouseEvent | KeyboardEvent,
@@ -83,7 +88,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
         },
-        width: new ObservableValue(-15),
+        width: new ObservableValue(-25),
       },
       {
         id: 'packageCount',
@@ -102,7 +107,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         name: 'Packages',
         readonly: true,
         renderCell: renderPackagesCell,
-        width: new ObservableValue(-80),
+        width: new ObservableValue(-70),
       },
     ];
 
@@ -156,7 +161,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document) {
+    if (prevProps.document !== this.props.document || prevProps.suppliers !== this.props.suppliers) {
       this.setState(SpdxSupplierTableCard.getDerivedStateFromProps(this.props));
     }
   }
@@ -221,7 +226,7 @@ function renderPackagesCell(
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
         {tableItem.packages.map((pkg, index) => (
-          <span key={index}>{pkg}</span>
+          <span key={index}>{pkg}; </span>
         ))}
       </div>
     ),

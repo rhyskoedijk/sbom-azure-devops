@@ -13,6 +13,7 @@ import {
   TableCell,
   TwoLineTableCell,
 } from 'azure-devops-ui/Table';
+import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
@@ -163,6 +164,10 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         name: 'CWEs',
         readonly: true,
         renderCell: renderAdvisorCwesCell,
+        sortProps: {
+          ariaLabelAscending: 'Sorted low to high',
+          ariaLabelDescending: 'Sorted high to low',
+        },
         width: new ObservableValue(-10),
       },
       {
@@ -210,7 +215,10 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
                 return item1.cvssScore - item2.cvssScore;
               },
-              null,
+              // Sort on cwes
+              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
+                return item1.cweIds.length - item2.cweIds.length;
+              },
               // Sort on epss
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
                 return item1.epssPercentage - item2.epssPercentage;
@@ -350,12 +358,17 @@ function renderAdvisorCvssCell(
   tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
   tableItem: ISecurityAdvisoryTableItem,
 ): JSX.Element {
-  return TwoLineTableCell({
+  return TableCell({
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    line1: <div className="primary-text">{tableItem.cvssScore} / 10</div>,
-    line2: <div className="secondary-text">{tableItem.cvssVector}</div>,
+    children: (
+      <div className="bolt-table-cell-content">
+        <Tooltip text={tableItem.cvssVector}>
+          <span>{tableItem.cvssScore} / 10</span>
+        </Tooltip>
+      </div>
+    ),
   });
 }
 
@@ -373,7 +386,7 @@ function renderAdvisorCwesCell(
       <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
         {tableItem.cweIds.map((cwe, index) => (
           <div key={index} className="rhythm-horizontal-4">
-            <span>{cwe}</span>
+            <span>{cwe}; </span>
           </div>
         ))}
       </div>
@@ -392,6 +405,11 @@ function renderAdvisorEpssCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     line1: <div className="primary-text">{tableItem.epssPercentage.toFixed(3)}%</div>,
-    line2: <div className="secondary-text">{tableItem.epssPercentile.toFixed(0)} percentile</div>,
+    line2: (
+      <div className="secondary-text">
+        {tableItem.epssPercentile.toFixed(0)}
+        {tableItem.epssPercentile.toOridinal()} percentile
+      </div>
+    ),
   });
 }

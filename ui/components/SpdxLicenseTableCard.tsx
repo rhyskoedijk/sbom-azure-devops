@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
+import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
   ITableColumn,
@@ -11,20 +12,30 @@ import {
   Table,
   TableCell,
 } from 'azure-devops-ui/Table';
+import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
+import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../../shared/ghsa/ILicense';
+import { ISeverity } from '../../shared/models/severity/ISeverity';
+import { getSeverityByName } from '../../shared/models/severity/Severities';
 import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { ILicense } from '../../shared/models/spdx/2.3/ILicense';
+import { getPackageLicenseExpression } from '../../shared/models/spdx/2.3/IPackage';
 
 interface ILicenseTableItem {
   id: string;
   name: string;
   packageCount: number;
   packages: string[];
+  riskSeverity: ISeverity;
+  riskReasons: string[];
+  url: string;
 }
 
 interface Props {
   document: IDocument;
+  licenses: ILicense[];
   filter: IFilter;
 }
 
@@ -54,15 +65,24 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
       new Set(props.document?.packages?.map((p) => p.licenseConcluded || p.licenseDeclared || '')),
     );
     const rawTableItems: ILicenseTableItem[] =
-      licenses?.map((x) => {
-        const packages = props.document?.packages?.filter((p) => p.licenseConcluded === x || p.licenseDeclared === x);
-        return {
-          id: x,
-          name: x,
-          packageCount: packages?.length,
-          packages: packages.map((p) => p.name),
-        };
-      }) || [];
+      props.licenses
+        ?.orderBy((license: ILicense) => license.licenseId)
+        ?.map((license: ILicense) => {
+          const packagesWithLicense = props.document.packages
+            ?.filter((p) => getPackageLicenseExpression(p)?.includes(license.licenseId))
+            ?.map((p) => p.name || '')
+            ?.distinct();
+          const licenseRisk = getLicenseRiskAssessment(license.licenseId);
+          return {
+            id: license.licenseId,
+            name: license.name,
+            packageCount: packagesWithLicense.length,
+            packages: packagesWithLicense,
+            riskSeverity: getSeverityByName(licenseRisk?.severity || LicenseRiskSeverity.Low),
+            riskReasons: licenseRisk?.reasons || [],
+            url: license.reference,
+          };
+        }) || [];
 
     const tableColumnResize = function onSize(
       event: MouseEvent | KeyboardEvent,
@@ -78,13 +98,12 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
         name: 'Name',
         onSize: tableColumnResize,
         readonly: true,
-        renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.name),
+        renderCell: renderLicenseSummaryCell,
         sortProps: {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
         },
-        width: new ObservableValue(-15),
+        width: new ObservableValue(-25),
       },
       {
         id: 'packageCount',
@@ -103,7 +122,7 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
         name: 'Packages',
         readonly: true,
         renderCell: renderPackagesCell,
-        width: new ObservableValue(-80),
+        width: new ObservableValue(-70),
       },
     ];
 
@@ -157,7 +176,7 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document) {
+    if (prevProps.document !== this.props.document || prevProps.licenses !== this.props.licenses) {
       this.setState(SpdxLicenseTableCard.getDerivedStateFromProps(this.props));
     }
   }
@@ -209,6 +228,33 @@ function renderSimpleValueCell(
   });
 }
 
+function renderLicenseSummaryCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ILicenseTableItem>,
+  tableItem: ILicenseTableItem,
+): JSX.Element {
+  return TableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    children: (
+      <div className="bolt-table-cell-content flex-row rhythm-horizontal-8">
+        <div className="primary-text">{tableItem.name}</div>
+        {tableItem.riskSeverity.id > 1 ? (
+          <Tooltip text={tableItem.riskReasons.join('; ')}>
+            <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.riskSeverity.color}>
+              <span className="font-weight-heavy text-on-communication-background">
+                {tableItem.riskSeverity.name} Risk
+              </span>
+            </Pill>
+          </Tooltip>
+        ) : null}
+      </div>
+    ),
+  });
+}
+
 function renderPackagesCell(
   rowIndex: number,
   columnIndex: number,
@@ -222,7 +268,7 @@ function renderPackagesCell(
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
         {tableItem.packages.map((pkg, index) => (
-          <span key={index}>{pkg}</span>
+          <span key={index}>{pkg}; </span>
         ))}
       </div>
     ),

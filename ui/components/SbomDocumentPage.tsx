@@ -177,16 +177,24 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                       />
                     </div>
                   );
-                case 'suppliers':
-                  return (
-                    <div className="page-content">
-                      <SpdxSupplierTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
-                    </div>
-                  );
                 case 'licenses':
                   return (
                     <div className="page-content">
-                      <SpdxLicenseTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
+                      <SpdxLicenseTableCard
+                        document={this.props.artifact.spdxDocument}
+                        licenses={this.state.licenses}
+                        filter={this.filter}
+                      />
+                    </div>
+                  );
+                case 'suppliers':
+                  return (
+                    <div className="page-content">
+                      <SpdxSupplierTableCard
+                        document={this.props.artifact.spdxDocument}
+                        suppliers={this.state.suppliers}
+                        filter={this.filter}
+                      />
                     </div>
                   );
                 case 'relationships':

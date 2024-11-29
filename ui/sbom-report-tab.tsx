@@ -9,6 +9,7 @@ import { Spinner } from 'azure-devops-ui/Spinner';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import '../shared/extensions/ArrayExtensions';
+import '../shared/extensions/NumberExtensions';
 import '../shared/extensions/StringExtensions';
 
 import { ISbomBuildArtifact } from '../shared/models/ISbomBuildArtifact';
