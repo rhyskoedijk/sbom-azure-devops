@@ -167,6 +167,20 @@ export class Root extends React.Component<{}, State> {
     return sbomArtifacts;
   }
 
+  /**
+   * Load SBOM artifact attachments from a user-supplied JSON file
+   * @param file The JSON file to load
+   */
+  private async loadSbomArtifactFromJsonFile(file: File) {
+    // Parse the SPDX document JSON
+    const spdxDocument = JSON.parse(new TextDecoder().decode(await file.arrayBuffer())) as IDocument;
+    if (!spdxDocument) {
+      throw new Error(`Attachment stream '${file.name}' could not be parsed as JSON`);
+    }
+
+    this.setState({ artifacts: [{ spdxDocument: spdxDocument }], loadError: undefined });
+  }
+
   public render(): JSX.Element {
     return (
       <div className="flex-grow">
@@ -185,7 +199,10 @@ export class Root extends React.Component<{}, State> {
           />
         ) : (
           // TODO: Add support for multiple artifacts in a single build?
-          <SbomDocumentPage artifact={this.state.artifacts[0]} />
+          <SbomDocumentPage
+            artifact={this.state.artifacts[0]}
+            onLoadArtifact={(file) => this.loadSbomArtifactFromJsonFile(file)}
+          />
         )}
       </div>
     );

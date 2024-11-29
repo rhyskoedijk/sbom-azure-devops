@@ -10,6 +10,7 @@ import {
   TitleSize,
 } from 'azure-devops-ui/Header';
 import { HeaderCommandBar, IHeaderCommandBarItem } from 'azure-devops-ui/HeaderCommandBar';
+import { MenuItemType } from 'azure-devops-ui/Menu';
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import { PillGroup, PillGroupOverflow } from 'azure-devops-ui/PillGroup';
 
@@ -26,6 +27,7 @@ import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/spdx/pars
 
 interface Props {
   artifact: ISbomBuildArtifact;
+  onLoadArtifact: (file: File) => void;
 }
 
 interface State {
@@ -64,8 +66,12 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
         return acc;
       }, securityAdvisoryCountsBySeverityName);
 
+    const isDebug = window.location.hostname === 'localhost';
     const state: State = {
-      commandBarItems: SbomDocumentHeader.getCommandBarItems(props.artifact),
+      commandBarItems: SbomDocumentHeader.getCommandBarItems(
+        props.artifact,
+        isDebug ? props.onLoadArtifact : undefined,
+      ),
       documentName: props.artifact.spdxDocument.name,
       documentSpdxVersion: props.artifact.spdxDocument.spdxVersion,
       documentDataLicense: props.artifact.spdxDocument.dataLicense,
@@ -114,7 +120,10 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
     return state;
   }
 
-  static getCommandBarItems(artifact: ISbomBuildArtifact): IHeaderCommandBarItem[] {
+  static getCommandBarItems(
+    artifact: ISbomBuildArtifact,
+    onLoadArtifact?: (file: File) => void,
+  ): IHeaderCommandBarItem[] {
     return [
       {
         id: 'downloadSpdx',
@@ -159,6 +168,29 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
               artifact.svgDocument || (await convertSpdxToSvgAsync(artifact.spdxDocument)) || new ArrayBuffer(0),
           ),
       },
+      ...(onLoadArtifact
+        ? [
+            {
+              id: 'separator',
+              itemType: MenuItemType.Divider,
+            },
+            {
+              id: 'uploadSpdx',
+              text: 'Upload SPDX',
+              iconProps: {
+                iconName: 'Upload',
+              },
+              important: false,
+              onActivate: () => {
+                uploadFile('.spdx.json').then((file) => {
+                  if (file) {
+                    onLoadArtifact(file);
+                  }
+                });
+              },
+            },
+          ]
+        : []),
     ];
   }
 
@@ -211,6 +243,25 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
       </CustomHeader>
     );
   }
+}
+
+function uploadFile(type: string): Promise<File | undefined> {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = false;
+    input.accept = type;
+    input.onchange = () => {
+      debugger;
+      const files = input.files ? Array.from(input.files) : [];
+      resolve(files[0]);
+    };
+    input.oncancel = () => {
+      debugger;
+      resolve(undefined);
+    };
+    input.click();
+  });
 }
 
 function downloadFile(name: string, type: string, dataBuilder: () => Promise<ArrayBuffer>): void {
