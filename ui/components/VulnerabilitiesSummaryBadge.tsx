@@ -3,11 +3,8 @@ import * as React from 'react';
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 
 import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
-import { ISeverity } from '../../shared/models/securityAdvisory/ISeverity';
-import {
-  DEFAULT_SECURITY_ADVISORY_SEVERITY,
-  SECURITY_ADVISORY_SEVERITIES,
-} from '../../shared/models/securityAdvisory/Severities';
+import { ISeverity } from '../../shared/models/severity/ISeverity';
+import { DEFAULT_SEVERITY, SEVERITIES } from '../../shared/models/severity/Severities';
 
 import './VulnerabilitiesSummaryBadge.scss';
 
@@ -30,7 +27,7 @@ export class VulnerabilitiesSummaryBadge extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     return {
-      severitySummary: SECURITY_ADVISORY_SEVERITIES.filter((severity) => severity.id > 0).map((severity) => {
+      severitySummary: SEVERITIES.filter((severity) => severity.id > 0).map((severity) => {
         return {
           severity,
           count:
@@ -59,9 +56,7 @@ export class VulnerabilitiesSummaryBadge extends React.Component<Props, State> {
                 className={`vulnerabilities-summary-badge`}
                 size={PillSize.compact}
                 variant={PillVariant.colored}
-                color={
-                  severitySummary.count > 0 ? severitySummary.severity.color : DEFAULT_SECURITY_ADVISORY_SEVERITY.color
-                }
+                color={severitySummary.count > 0 ? severitySummary.severity.color : DEFAULT_SEVERITY.color}
               >
                 <span className="text-on-communication-background">
                   {severitySummary.count} <span className="font-weight-heavy ">{severitySummary.severity.prefix}</span>

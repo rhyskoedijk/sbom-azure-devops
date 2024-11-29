@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
-import { Icon, IconSize } from 'azure-devops-ui/Icon';
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
@@ -17,19 +16,33 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISecurityAdvisory } from '../../shared/models/securityAdvisory/ISecurityAdvisory';
-import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
-import { ExternalRefCategory, ExternalRefSecurityType } from '../../shared/models/spdx/2.3/IExternalRef';
-import { IPackage } from '../../shared/models/spdx/2.3/IPackage';
-import { IRelationship, RelationshipType } from '../../shared/models/spdx/2.3/IRelationship';
-import { parseSecurityAdvisoryFromSpdxExternalRef } from '../../shared/spdx/parseSecurityAdvisoryFromSpdxExternalRef';
+import { IPackage } from '../../shared/ghsa/IPackage';
+import { SecurityAdvisoryIdentifierType } from '../../shared/ghsa/ISecurityAdvisory';
+import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
+import { ISeverity } from '../../shared/models/severity/ISeverity';
+import { getSeverityByName } from '../../shared/models/severity/Severities';
+import { getPackageDependsOnChain, IDocument } from '../../shared/models/spdx/2.3/IDocument';
 
-interface ISecurityAdvisoryTableItem extends ISecurityAdvisory {
-  introducedThrough: string[];
+interface ISecurityAdvisoryTableItem {
+  ghsaId: string;
+  cveId: string;
+  summary: string;
+  package: IPackage;
+  vulnerableVersionRange: string;
+  firstPatchedVersion: string;
+  severity: ISeverity;
+  cvssScore: number;
+  cvssVector: string;
+  cweIds: string[];
+  epssPercentage: number;
+  epssPercentile: number;
+  publishedAt: Date;
+  url: string;
 }
 
 interface Props {
   document: IDocument;
+  securityAdvisories: ISecurityVulnerability[];
   filter: IFilter;
 }
 
@@ -59,44 +72,29 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props: Props): State {
-    const dependsOnRelationships = (props.document?.relationships || []).filter(
-      (r) => r.relationshipType === RelationshipType.DependsOn,
-    );
-    const rootPackageId = props.document.documentDescribes?.[0];
-    const packages = (props.document?.packages || []).filter((p) => {
-      return dependsOnRelationships?.some((r) => r.relatedSpdxElement === p.SPDXID);
-    });
-    const securityAdvisories = packages.flatMap((p) => {
-      return (
-        p.externalRefs.filter(
-          (r) =>
-            r.referenceCategory == ExternalRefCategory.Security && r.referenceType == ExternalRefSecurityType.Advisory,
-        ) || []
-      );
-    });
-
     const rawTableItems: ISecurityAdvisoryTableItem[] =
-      securityAdvisories
-        .map((x) => {
-          const securityAdvisory = parseSecurityAdvisoryFromSpdxExternalRef(x, packages);
-          if (!securityAdvisory) return undefined;
-          const pkg = packages.find(
-            (p) => p.name === securityAdvisory.package?.name && p.versionInfo === securityAdvisory.package?.version,
-          );
-          const isTopLevel =
-            pkg?.SPDXID == rootPackageId ||
-            dependsOnRelationships.some(
-              (r) =>
-                r.spdxElementId == rootPackageId &&
-                r.relatedSpdxElement === pkg?.SPDXID &&
-                r.relationshipType === RelationshipType.DependsOn,
-            );
+      props.securityAdvisories
+        ?.orderBy((vuln: ISecurityVulnerability) => getSeverityByName(vuln.advisory.severity).weight, false)
+        ?.map((vuln: ISecurityVulnerability) => {
           return {
-            ...securityAdvisory,
-            introducedThrough: getTransitivePackageChain(pkg?.SPDXID || '', packages, props.document.relationships),
+            ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
+            cveId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Cve)?.value || '',
+            summary: vuln.advisory.summary,
+            package: vuln.package,
+            vulnerableVersionRange: vuln.vulnerableVersionRange,
+            fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
+            firstPatchedVersion: vuln.firstPatchedVersion,
+            introducedThrough: getPackageDependsOnChain(props.document, vuln.package.id).map((p) => p.name),
+            severity: getSeverityByName(vuln.advisory.severity),
+            cvssScore: vuln.advisory.cvss?.score,
+            cvssVector: vuln.advisory.cvss?.vectorString,
+            cweIds: vuln.advisory.cwes?.map((x) => x.id),
+            epssPercentage: (vuln.advisory.epss?.percentage || 0) * 100,
+            epssPercentile: (vuln.advisory.epss?.percentile || 0) * 100,
+            publishedAt: new Date(vuln.advisory.publishedAt),
+            url: vuln.advisory.permalink,
           };
-        })
-        .filter((x): x is ISecurityAdvisoryTableItem => x !== undefined) || [];
+        }) || [];
 
     const tableColumnResize = function onSize(
       event: MouseEvent | KeyboardEvent,
@@ -132,29 +130,51 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         width: new ObservableValue(-20),
       },
       {
-        id: 'affectedVersions',
-        name: 'Affected Versions',
+        id: 'vulnerableVersionRange',
+        name: 'Vulnerable Versions',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.affectedVersions || ''),
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.vulnerableVersionRange || ''),
         width: new ObservableValue(-7.5),
       },
       {
-        id: 'patchedVersions',
-        name: 'Patched Versions',
+        id: 'firstPatchedVersion',
+        name: 'Fixed In',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.patchedVersions || ''),
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.firstPatchedVersion || ''),
         width: new ObservableValue(-7.5),
       },
       {
-        id: 'introducedThrough',
-        name: 'Introduced Through',
+        id: 'cvss',
+        name: 'CVSS',
         readonly: true,
-        renderCell: renderAdvisoryIntroducedThroughCell,
-        width: new ObservableValue(-30),
+        renderCell: renderAdvisorCvssCell,
+        sortProps: {
+          ariaLabelAscending: 'Sorted low to high',
+          ariaLabelDescending: 'Sorted high to low',
+        },
+        width: new ObservableValue(-10),
+      },
+      {
+        id: 'cwes',
+        name: 'CWEs',
+        readonly: true,
+        renderCell: renderAdvisorCwesCell,
+        width: new ObservableValue(-10),
+      },
+      {
+        id: 'epss',
+        name: 'EPSS',
+        readonly: true,
+        renderCell: renderAdvisorEpssCell,
+        sortProps: {
+          ariaLabelAscending: 'Sorted low to high',
+          ariaLabelDescending: 'Sorted high to low',
+        },
+        width: new ObservableValue(-10),
       },
     ];
 
@@ -177,7 +197,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             [
               // Sort on severity
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
-                return item1.severity.id - item2.severity.id;
+                return item1.severity.weight - item2.severity.weight;
               },
               // Sort on package
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
@@ -186,7 +206,15 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
               },
               null,
               null,
+              // Sort on cvss
+              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
+                return item1.cvssScore - item2.cvssScore;
+              },
               null,
+              // Sort on epss
+              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
+                return item1.epssPercentage - item2.epssPercentage;
+              },
             ],
             tableColumns,
             rawTableItems,
@@ -199,7 +227,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
       const filteredItems = rawTableItems.filter(
         (item) =>
           !keyword ||
-          item.id?.toLowerCase()?.includes(keyword.toLowerCase()) ||
+          item.ghsaId?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.severity?.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.summary?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.package?.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
@@ -217,7 +245,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document) {
+    if (prevProps.document !== this.props.document || prevProps.securityAdvisories !== this.props.securityAdvisories) {
       this.setState(SpdxSecurityTableCard.getDerivedStateFromProps(this.props));
     }
   }
@@ -262,34 +290,6 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
   }
 }
 
-/**
- * Get a summary of the transitive dependency chain for a package.
- * @param packageId The SPDX ID of the package.
- * @param packages The list of packages in the document.
- * @param dependsOnRelationships The list of DEPENDS_ON relationships in the document.
- * @returns An array package names representing the transitive dependency chain.
- */
-function getTransitivePackageChain(
-  packageId: string,
-  packages: IPackage[],
-  dependsOnRelationships: IRelationship[],
-): string[] {
-  const chain: string[] = [];
-  let currentId = packageId;
-  while (currentId) {
-    const relationship = dependsOnRelationships.find((r) => r.relatedSpdxElement === currentId);
-    if (!relationship) break;
-
-    const pkg = packages.find((p) => p.SPDXID === relationship.spdxElementId);
-    if (!pkg) break;
-
-    chain.unshift(pkg.name);
-    currentId = relationship.spdxElementId;
-  }
-
-  return chain;
-}
-
 function renderSimpleValueCell(
   rowIndex: number,
   columnIndex: number,
@@ -320,7 +320,10 @@ function renderAdvisorySummaryCell(
         <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
           <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name}</span>
         </Pill>
-        <div className="secondary-text">{tableItem.id}</div>
+        <div className="secondary-text">
+          {tableItem.ghsaId}
+          {tableItem.cveId ? ', ' + tableItem.cveId : null}
+        </div>
       </div>
     ),
   });
@@ -341,7 +344,22 @@ function renderAdvisoryPackageCell(
   });
 }
 
-function renderAdvisoryIntroducedThroughCell(
+function renderAdvisorCvssCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItem: ISecurityAdvisoryTableItem,
+): JSX.Element {
+  return TwoLineTableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    line1: <div className="primary-text">{tableItem.cvssScore} / 10</div>,
+    line2: <div className="secondary-text">{tableItem.cvssVector}</div>,
+  });
+}
+
+function renderAdvisorCwesCell(
   rowIndex: number,
   columnIndex: number,
   tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
@@ -353,13 +371,27 @@ function renderAdvisoryIntroducedThroughCell(
     tableColumn: tableColumn,
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
-        {tableItem.introducedThrough.map((pkg, index) => (
-          <div key={index} className={'rhythm-horizontal-4' + (index > 0 ? ' secondary-text' : undefined)}>
-            {index > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
-            <span>{pkg}</span>
+        {tableItem.cweIds.map((cwe, index) => (
+          <div key={index} className="rhythm-horizontal-4">
+            <span>{cwe}</span>
           </div>
         ))}
       </div>
     ),
+  });
+}
+
+function renderAdvisorEpssCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItem: ISecurityAdvisoryTableItem,
+): JSX.Element {
+  return TwoLineTableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    line1: <div className="primary-text">{tableItem.epssPercentage.toFixed(3)}%</div>,
+    line2: <div className="secondary-text">{tableItem.epssPercentile.toFixed(0)} percentile</div>,
   });
 }

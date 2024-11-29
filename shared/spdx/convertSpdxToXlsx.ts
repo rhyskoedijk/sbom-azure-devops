@@ -2,6 +2,7 @@ import * as Path from 'path';
 
 import { IJsonSheet } from 'json-as-xlsx';
 
+import { getSeverityByName } from '../models/severity/Severities';
 import { ChecksumAlgorithm, getChecksum } from '../models/spdx/2.3/IChecksum';
 import { getCreatorOrganization, getCreatorTool } from '../models/spdx/2.3/ICreationInfo';
 import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../models/spdx/2.3/IDocument';
@@ -19,11 +20,7 @@ import { getPackageLicenseExpression, getPackageSupplierOrganization, IPackage }
 import { IRelationship } from '../models/spdx/2.3/IRelationship';
 
 import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../ghsa/ILicense';
-import {
-  getSecurityAdvisorySeverityWeight,
-  SecurityAdvisoryIdentifierType,
-  SecurityAdvisorySeverity,
-} from '../ghsa/ISecurityAdvisory';
+import { SecurityAdvisoryIdentifierType, SecurityAdvisorySeverity } from '../ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../ghsa/ISecurityVulnerability';
 
 import '../extensions/ArrayExtensions';
@@ -153,10 +150,11 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           name: pkg.name,
           version: pkg.versionInfo,
           packageManager: getExternalRefPackageManager(pkg.externalRefs) || '',
-          type: isPackageTopLevel(spdx, pkg) ? 'Top-Level' : 'Transitive',
-          introducedThrough: getPackageDependsOnChain(spdx, pkg)
-            .map((x) => x.name)
-            .join(' > '),
+          type: isPackageTopLevel(spdx, pkg.SPDXID) ? 'Top-Level' : 'Transitive',
+          introducedThrough:
+            getPackageDependsOnChain(spdx, pkg.SPDXID)
+              .map((x) => x.name)
+              .join(' > ') || '',
           license: getPackageLicenseExpression(pkg) || '',
           supplier: getPackageSupplierOrganization(pkg) || '',
           totalVulnerabilities: securityAdvisories.length,
@@ -192,6 +190,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'Vulnerable Versions', value: 'vulnerableVersionRange' },
       { label: 'Fix Available', value: 'fixAvailable' },
       { label: 'Fixed In', value: 'firstPatchedVersion' },
+      { label: 'Introduced Through', value: 'introducedThrough' },
       { label: 'Severity', value: 'severity' },
       { label: 'CVSS Score', value: 'cvssScore' },
       { label: 'CVSS Vector', value: 'cvssVector' },
@@ -202,7 +201,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'URL', value: 'permalink' },
     ],
     content: securityAdvisories
-      .orderBy((vuln: ISecurityVulnerability) => getSecurityAdvisorySeverityWeight(vuln.advisory.severity), false)
+      .orderBy((vuln: ISecurityVulnerability) => getSeverityByName(vuln.advisory.severity).weight, false)
       .map((vuln: ISecurityVulnerability) => {
         return {
           ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
@@ -212,6 +211,10 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           vulnerableVersionRange: vuln.vulnerableVersionRange,
           fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
           firstPatchedVersion: vuln.firstPatchedVersion,
+          introducedThrough:
+            getPackageDependsOnChain(spdx, vuln.package.id)
+              .map((p) => p.name)
+              .join(' > ') || '',
           severity: vuln.advisory.severity?.toPascalCase(),
           cvssScore: vuln.advisory.cvss?.score || '',
           cvssVector: vuln.advisory.cvss?.vectorString || '',

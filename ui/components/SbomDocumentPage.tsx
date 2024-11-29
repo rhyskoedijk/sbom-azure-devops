@@ -170,7 +170,11 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                 case 'securityAdvisories':
                   return (
                     <div className="page-content">
-                      <SpdxSecurityTableCard document={this.props.artifact.spdxDocument} filter={this.filter} />
+                      <SpdxSecurityTableCard
+                        document={this.props.artifact.spdxDocument}
+                        securityAdvisories={this.state.securityAdvisories}
+                        filter={this.filter}
+                      />
                     </div>
                   );
                 case 'suppliers':

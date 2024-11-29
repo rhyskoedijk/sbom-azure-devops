@@ -5,4 +5,5 @@ export interface ISeverity {
   name: string;
   prefix: string;
   color: IColor;
+  weight: number;
 }

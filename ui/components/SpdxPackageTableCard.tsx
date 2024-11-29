@@ -15,8 +15,8 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { getSecurityAdvisorySeverityWeight } from '../../shared/ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
+import { getSeverityByName } from '../../shared/models/severity/Severities';
 import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../../shared/models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
@@ -87,12 +87,12 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             name: pkg.name,
             version: pkg.versionInfo,
             packageManager: getExternalRefPackageManager(pkg.externalRefs) || '',
-            type: isPackageTopLevel(props.document, pkg) ? 'Top-Level' : 'Transitive',
-            introducedThrough: getPackageDependsOnChain(props.document, pkg).map((x) => x.name),
+            type: isPackageTopLevel(props.document, pkg.SPDXID) ? 'Top-Level' : 'Transitive',
+            introducedThrough: getPackageDependsOnChain(props.document, pkg.SPDXID).map((x) => x.name),
             license: getPackageLicenseExpression(pkg) || '',
             supplier: getPackageSupplierOrganization(pkg) || '',
             vulnerabilityServerityWeighting: securityAdvisories.reduce(
-              (acc, cur) => acc + 1 * getSecurityAdvisorySeverityWeight(cur.advisory.severity),
+              (acc, cur) => acc + 1 * getSeverityByName(cur.advisory.severity).weight,
               0,
             ),
             securityAdvisories: securityAdvisories,

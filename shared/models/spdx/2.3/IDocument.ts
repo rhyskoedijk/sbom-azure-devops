@@ -25,22 +25,22 @@ export enum DocumentVersion {
   SPDX_2_3 = 'SPDX-2.3',
 }
 
-export function isPackageTopLevel(document: IDocument, pkg: IPackage): boolean {
+export function isPackageTopLevel(document: IDocument, packageId: string): boolean {
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];
   const dependsOnRelationships = relationships.filter((r) => r.relationshipType === RelationshipType.DependsOn);
   return (
-    rootPackageIds.includes(pkg.SPDXID) ||
+    rootPackageIds.includes(packageId) ||
     dependsOnRelationships.some(
       (relationship) =>
         rootPackageIds.includes(relationship.spdxElementId) &&
-        relationship.relatedSpdxElement === pkg.SPDXID &&
+        relationship.relatedSpdxElement === packageId &&
         relationship.relationshipType === RelationshipType.DependsOn,
     )
   );
 }
 
-export function getPackageDependsOnChain(document: IDocument, pkg: IPackage): IPackage[] {
+export function getPackageDependsOnChain(document: IDocument, packageId: string): IPackage[] {
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];
   const dependsOnRelationships = relationships.filter((r) => r.relationshipType === RelationshipType.DependsOn);
@@ -50,7 +50,7 @@ export function getPackageDependsOnChain(document: IDocument, pkg: IPackage): IP
 
   // Walk the chain of "DependsOn" relationships for the package to discover the dependencies
   const packageChain: IPackage[] = [];
-  let currentElementId = pkg.SPDXID;
+  let currentElementId = packageId;
   while (currentElementId) {
     const relationship = dependsOnRelationships.find((r) => r.relatedSpdxElement === currentElementId);
     if (!relationship) break;
