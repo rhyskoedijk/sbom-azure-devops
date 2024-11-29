@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Icon, IconSize } from 'azure-devops-ui/Icon';
-import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
   ITableColumn,
@@ -13,11 +12,10 @@ import {
   Table,
   TableCell,
 } from 'azure-devops-ui/Table';
-import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { SecurityAdvisorySeverity } from '../../shared/ghsa/ISecurityAdvisory';
+import { getSecurityAdvisorySeverityWeight } from '../../shared/ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
 import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../../shared/models/spdx/2.3/IDocument';
 import {
@@ -32,6 +30,8 @@ import {
   IPackage,
 } from '../../shared/models/spdx/2.3/IPackage';
 
+import { VulnerabilitiesSummaryBadge } from './VulnerabilitiesSummaryBadge';
+
 interface IPackageTableItem {
   id: string;
   name: string;
@@ -41,12 +41,8 @@ interface IPackageTableItem {
   introducedThrough: string[];
   license: string;
   supplier: string;
-  isVulnerable: boolean;
-  totalVulnerabilities: number;
-  criticalVulnerabilities: number;
-  highVulnerabilities: number;
-  moderateVulnerabilities: number;
-  lowVulnerabilities: number;
+  vulnerabilityServerityWeighting: number;
+  securityAdvisories: ISecurityVulnerability[];
 }
 
 interface Props {
@@ -95,19 +91,11 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             introducedThrough: getPackageDependsOnChain(props.document, pkg).map((x) => x.name),
             license: getPackageLicenseExpression(pkg) || '',
             supplier: getPackageSupplierOrganization(pkg) || '',
-            isVulnerable: securityAdvisories.length > 0,
-            totalVulnerabilities: securityAdvisories.length,
-            criticalVulnerabilities: securityAdvisories.filter(
-              (a) => a.advisory?.severity === SecurityAdvisorySeverity.Critical,
-            ).length,
-            highVulnerabilities: securityAdvisories.filter(
-              (a) => a.advisory?.severity === SecurityAdvisorySeverity.High,
-            ).length,
-            moderateVulnerabilities: securityAdvisories.filter(
-              (a) => a.advisory?.severity === SecurityAdvisorySeverity.Moderate,
-            ).length,
-            lowVulnerabilities: securityAdvisories.filter((a) => a.advisory?.severity === SecurityAdvisorySeverity.Low)
-              .length,
+            vulnerabilityServerityWeighting: securityAdvisories.reduce(
+              (acc, cur) => acc + 1 * getSecurityAdvisorySeverityWeight(cur.advisory.severity),
+              0,
+            ),
+            securityAdvisories: securityAdvisories,
           };
         }) || [];
 
@@ -236,15 +224,15 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             columnIndex,
             proposedSortOrder,
             [
-              // Sort on package manager
-              (item1: IPackageTableItem, item2: IPackageTableItem): number => {
-                return item1.packageManager!.localeCompare(item2.packageManager!);
-              },
               // Sort on name
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
                 return item1.name!.localeCompare(item2.name!);
               },
               null,
+              // Sort on package manager
+              (item1: IPackageTableItem, item2: IPackageTableItem): number => {
+                return item1.packageManager!.localeCompare(item2.packageManager!);
+              },
               // Sort on type
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
                 return item1.type!.localeCompare(item2.type!);
@@ -253,10 +241,6 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
                 return item1.introducedThrough.length - item2.introducedThrough.length;
               },
-              // Sort on number of security advisories
-              (item1: IPackageTableItem, item2: IPackageTableItem): number => {
-                return item1.totalVulnerabilities - item2.totalVulnerabilities;
-              },
               // Sort on license
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
                 return item1.license!.localeCompare(item2.license!);
@@ -264,6 +248,10 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
               // Sort on supplier
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
                 return item1.supplier!.localeCompare(item2.supplier!);
+              },
+              // Sort on number of security advisories
+              (item1: IPackageTableItem, item2: IPackageTableItem): number => {
+                return item1.vulnerabilityServerityWeighting - item2.vulnerabilityServerityWeighting;
               },
             ],
             tableColumns,
@@ -380,23 +368,6 @@ function renderPackageVulnerabilitiesCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    children: (
-      <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
-        {tableItem.securityAdvisories
-          .sort((a, b) => b.severity.id - a.severity.id)
-          .map((advisory, index) => (
-            <Tooltip key={index} text={`${advisory.severity.name}: ${advisory.summary} (${advisory.id})`}>
-              <Pill
-                onClick={(x) => window.open(advisory.url, '_blank')}
-                size={PillSize.compact}
-                variant={PillVariant.colored}
-                color={advisory.severity.color}
-              >
-                <span className="font-weight-heavy text-on-communication-background">{advisory.severity.prefix}</span>
-              </Pill>
-            </Tooltip>
-          ))}
-      </div>
-    ),
+    children: <VulnerabilitiesSummaryBadge vulnerabilities={tableItem.securityAdvisories} />,
   });
 }

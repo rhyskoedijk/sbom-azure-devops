@@ -1,5 +1,16 @@
 @use 'node_modules/azure-devops-ui/Core/override.css';
 
+$severity-critical: hsl(from var(--component-status-error) h s calc(l - 5));
+$severity-critical-background: hsl(from var(--status-error-background) h s calc(l - 5));
+$severity-error: var(--component-status-error);
+$severity-error-background: var(--status-error-background);
+$severity-moderate: var(--component-status-warning);
+$severity-moderate-background: var(--status-warning-background);
+$severity-info: var(--component-status-info);
+$severity-info-background: var(--status-info-background);
+$severity-none: var(--component-status-neutral);
+$severity-none-background: var(--status-neutral-background);
+
 #root {
   height: 100%;
   width: 100%;

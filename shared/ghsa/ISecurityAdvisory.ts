@@ -37,3 +37,13 @@ export enum SecurityAdvisorySeverity {
   High = 'HIGH',
   Critical = 'CRITICAL',
 }
+
+export function getSecurityAdvisorySeverityWeight(severity: SecurityAdvisorySeverity): number {
+  const weights = {
+    [SecurityAdvisorySeverity.Low]: 0.0001,
+    [SecurityAdvisorySeverity.Moderate]: 0.001,
+    [SecurityAdvisorySeverity.High]: 0.01,
+    [SecurityAdvisorySeverity.Critical]: 0.1,
+  };
+  return weights[severity] || 0;
+}

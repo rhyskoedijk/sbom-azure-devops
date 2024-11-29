@@ -2,7 +2,6 @@ import * as Path from 'path';
 
 import { IJsonSheet } from 'json-as-xlsx';
 
-import { getSeverityByName } from '../models/securityAdvisory/Severities';
 import { ChecksumAlgorithm, getChecksum } from '../models/spdx/2.3/IChecksum';
 import { getCreatorOrganization, getCreatorTool } from '../models/spdx/2.3/ICreationInfo';
 import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../models/spdx/2.3/IDocument';
@@ -20,7 +19,11 @@ import { getPackageLicenseExpression, getPackageSupplierOrganization, IPackage }
 import { IRelationship } from '../models/spdx/2.3/IRelationship';
 
 import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../ghsa/ILicense';
-import { SecurityAdvisoryIdentifierType, SecurityAdvisorySeverity } from '../ghsa/ISecurityAdvisory';
+import {
+  getSecurityAdvisorySeverityWeight,
+  SecurityAdvisoryIdentifierType,
+  SecurityAdvisorySeverity,
+} from '../ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../ghsa/ISecurityVulnerability';
 
 import '../extensions/ArrayExtensions';
@@ -199,7 +202,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'URL', value: 'permalink' },
     ],
     content: securityAdvisories
-      .orderBy((vuln: ISecurityVulnerability) => getSeverityByName(vuln.advisory.severity)?.id, false)
+      .orderBy((vuln: ISecurityVulnerability) => getSecurityAdvisorySeverityWeight(vuln.advisory.severity), false)
       .map((vuln: ISecurityVulnerability) => {
         return {
           ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
