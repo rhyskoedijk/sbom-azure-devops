@@ -16,23 +16,19 @@ export interface ILicenseRisk {
 }
 
 export enum LicenseRiskSeverity {
-  Unknown = 'Unknown',
   Low = 'Low',
   Medium = 'Medium',
   High = 'High',
 }
 
-export function getLicenseRiskAssessment(licenseSpdxId: string): ILicenseRisk {
+export function getLicenseRiskAssessment(licenseSpdxId: string): ILicenseRisk | undefined {
   let severity = LicenseRiskSeverity.Low;
   let reasons: string[] = [];
 
   // Find the license
   const license = ghsaLicenseList.data.licenses.find((l) => l.spdxId === licenseSpdxId);
   if (!license) {
-    return {
-      severity: LicenseRiskSeverity.Unknown,
-      reasons: ['License not found'],
-    };
+    return undefined;
   }
 
   // Check if the licensed material can be used for commercial purposes

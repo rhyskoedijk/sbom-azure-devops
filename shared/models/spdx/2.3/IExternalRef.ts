@@ -37,6 +37,14 @@ export enum ExternalRefPersistentIdType {
   Gitoid = 'gitoid',
 }
 
+export function parseExternalRefAs<T>(
+  externalRef: IExternalRef,
+  category: ExternalRefCategory,
+  type: string,
+): T | undefined {
+  return parseExternalRefsAs<T>([externalRef], category, type)[0];
+}
+
 export function parseExternalRefsAs<T>(externalRefs: IExternalRef[], category: ExternalRefCategory, type: string): T[] {
   return externalRefs
     .filter(

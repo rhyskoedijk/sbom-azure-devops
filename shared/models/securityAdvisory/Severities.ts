@@ -9,3 +9,8 @@ export const SECURITY_ADVISORY_SEVERITIES: ISeverity[] = [
 ];
 
 export const DEFAULT_SECURITY_ADVISORY_SEVERITY: ISeverity = SECURITY_ADVISORY_SEVERITIES[0];
+
+export function getSeverityByName(name: string): ISeverity | undefined {
+  const normalizedName = name?.toUpperCase();
+  return SECURITY_ADVISORY_SEVERITIES.find((s) => s.name?.toUpperCase() === normalizedName);
+}

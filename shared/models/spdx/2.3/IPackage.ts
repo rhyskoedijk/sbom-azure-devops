@@ -18,7 +18,7 @@ export interface IPackage {
   hasFiles?: string[];
 }
 
-export function getPackageLicense(pkg: IPackage): string | undefined {
+export function getPackageLicenseExpression(pkg: IPackage): string | undefined {
   if (pkg.licenseConcluded && pkg.licenseConcluded !== NOASSERTION) {
     return pkg.licenseConcluded;
   }
