@@ -48,10 +48,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       ),
     )
     .filter((vuln): vuln is ISecurityVulnerability => !!vuln && !!vuln.package && !!vuln.advisory)
-    .distinctBy(
-      (vuln: ISecurityVulnerability) =>
-        vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value,
-    );
+    .distinctBy((vuln: ISecurityVulnerability) => vuln.advisory.permalink);
   const licenses = packages
     .map((pkg) => getPackageLicenseExpression(pkg))
     .distinct()
