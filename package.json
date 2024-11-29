@@ -47,7 +47,7 @@
     "@types/node": "^22.9.1",
     "@types/q": "^1.5.8",
     "husky": "^9.1.7",
-    "prettier": "3.3.3",
+    "prettier": "3.4.1",
     "prettier-plugin-organize-imports": "4.1.0",
     "pretty-quick": "^4.0.0"
   }
