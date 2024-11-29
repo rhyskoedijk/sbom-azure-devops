@@ -308,8 +308,9 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       relationshipsSheet,
     ],
     {
-      // https://docs.sheetjs.com/docs/api/write-options
+      extraLength: 10,
       writeOptions: {
+        // https://docs.sheetjs.com/docs/api/write-options
         type: 'buffer',
         bookType: 'xlsx',
         compression: true,
