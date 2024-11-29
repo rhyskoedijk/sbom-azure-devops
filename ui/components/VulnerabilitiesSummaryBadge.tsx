@@ -6,6 +6,7 @@ import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability
 import { ISeverity } from '../../shared/models/severity/ISeverity';
 import { DEFAULT_SEVERITY, SEVERITIES } from '../../shared/models/severity/Severities';
 
+import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import './VulnerabilitiesSummaryBadge.scss';
 
 interface Props {
@@ -52,16 +53,21 @@ export class VulnerabilitiesSummaryBadge extends React.Component<Props, State> {
           .sort((a, b) => b.severity.id - a.severity.id)
           .map((severitySummary, index) => (
             <div key={index}>
-              <Pill
-                className={`vulnerabilities-summary-badge`}
-                size={PillSize.compact}
-                variant={PillVariant.colored}
-                color={severitySummary.count > 0 ? severitySummary.severity.color : DEFAULT_SEVERITY.color}
+              <Tooltip
+                text={`${severitySummary.count} ${severitySummary.severity.name.toLowerCase()} ${severitySummary.count == 1 ? 'vulnerability' : 'vulnerabilities'}`}
               >
-                <span className="text-on-communication-background">
-                  {severitySummary.count} <span className="font-weight-heavy ">{severitySummary.severity.prefix}</span>
-                </span>
-              </Pill>
+                <Pill
+                  className={`vulnerabilities-summary-badge`}
+                  size={PillSize.compact}
+                  variant={PillVariant.colored}
+                  color={severitySummary.count > 0 ? severitySummary.severity.color : DEFAULT_SEVERITY.color}
+                >
+                  <span className="text-on-communication-background">
+                    {severitySummary.count}{' '}
+                    <span className="font-weight-heavy ">{severitySummary.severity.prefix}</span>
+                  </span>
+                </Pill>
+              </Tooltip>
             </div>
           ))}
       </div>
