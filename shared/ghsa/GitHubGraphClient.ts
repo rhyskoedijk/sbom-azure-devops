@@ -94,54 +94,59 @@ export class GitHubGraphClient {
           },
         );
         if (response.status < 200 || response.status > 299) {
-          throw new Error(
-            `GHSA GraphQL request failed querying 'securityVulnerabilities' with '${packageEcosystem}' '${pkg.name}'. Response: ${response.status} ${response.statusText}`,
-          );
+          throw new Error(`GHSA GraphQL request failed with response: ${response.status} ${response.statusText}`);
         }
+        const errors = response.data?.errors;
+        if (errors) {
+          throw new Error(`GHSA GraphQL request failed with errors: ${JSON.stringify(errors)}`);
+        }
+
         const vulnerabilities = response.data?.data?.securityVulnerabilities?.nodes;
-        return vulnerabilities?.map((v: any) => {
-          return {
-            ecosystem: packageEcosystem,
-            package: pkg,
-            advisory: {
-              identifiers: v.advisory.identifiers?.map((i: any) => {
-                return {
-                  type: i.type,
-                  value: i.value,
-                };
-              }),
-              severity: v.advisory.severity,
-              summary: v.advisory.summary,
-              description: v.advisory.description,
-              references: v.advisory.references?.map((r: any) => r.url),
-              cvss: !v.advisory.cvss
-                ? undefined
-                : {
-                    score: v.advisory.cvss.score,
-                    vectorString: v.advisory.cvss.vectorString,
-                  },
-              cwes: v.advisory.cwes?.nodes?.map((c: any) => {
-                return {
-                  id: c.cweId,
-                  name: c.name,
-                  description: c.description,
-                };
-              }),
-              epss: !v.advisory.epss
-                ? undefined
-                : {
-                    percentage: v.advisory.epss.percentage,
-                    percentile: v.advisory.epss.percentile,
-                  },
-              publishedAt: v.advisory.publishedAt,
-              updatedAt: v.advisory.updatedAt,
-              withdrawnAt: v.advisory.withdrawnAt,
-              permalink: v.advisory.permalink,
-            },
-            vulnerableVersionRange: v.vulnerableVersionRange,
-            firstPatchedVersion: v.firstPatchedVersion?.identifier,
-          };
-        });
+        return vulnerabilities
+          ?.filter((v: any) => v?.advisory)
+          ?.map((v: any) => {
+            return {
+              ecosystem: packageEcosystem,
+              package: pkg,
+              advisory: {
+                identifiers: v.advisory.identifiers?.map((i: any) => {
+                  return {
+                    type: i.type,
+                    value: i.value,
+                  };
+                }),
+                severity: v.advisory.severity,
+                summary: v.advisory.summary,
+                description: v.advisory.description,
+                references: v.advisory.references?.map((r: any) => r.url),
+                cvss: !v.advisory.cvss
+                  ? undefined
+                  : {
+                      score: v.advisory.cvss.score,
+                      vectorString: v.advisory.cvss.vectorString,
+                    },
+                cwes: v.advisory.cwes?.nodes?.map((c: any) => {
+                  return {
+                    id: c.cweId,
+                    name: c.name,
+                    description: c.description,
+                  };
+                }),
+                epss: !v.advisory.epss
+                  ? undefined
+                  : {
+                      percentage: v.advisory.epss.percentage,
+                      percentile: v.advisory.epss.percentile,
+                    },
+                publishedAt: v.advisory.publishedAt,
+                updatedAt: v.advisory.updatedAt,
+                withdrawnAt: v.advisory.withdrawnAt,
+                permalink: v.advisory.permalink,
+              },
+              vulnerableVersionRange: v.vulnerableVersionRange,
+              firstPatchedVersion: v.firstPatchedVersion?.identifier,
+            };
+          });
       },
     );
 
@@ -187,7 +192,7 @@ export class GitHubGraphClient {
             results.push(...batchResults.flat());
           }
         } catch (error) {
-          console.warn(`Graph batch [${i}-${i + batchSize}] failed, data may be incomplete`, error);
+          console.warn(`Request batch [${i}-${i + batchSize}] failed; The data may be incomplete. ${error}`);
         }
       }
     }
