@@ -29,6 +29,7 @@ import { SpdxLicenseTableCard } from './SpdxLicenseTableCard';
 import { SpdxPackageTableCard } from './SpdxPackageTableCard';
 import { SpdxRelationshipCard } from './SpdxRelationshipCard';
 import { SpdxSecurityTableCard } from './SpdxSecurityTableCard';
+import { SpdxSummaryCard } from './SpdxSummaryCard';
 import { SpdxSupplierTableCard } from './SpdxSupplierTableCard';
 
 interface Props {
@@ -144,7 +145,14 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                 case 'summary':
                   return (
                     <div className="page-content">
-                      <div>TODO...</div>
+                      <SpdxSummaryCard
+                        document={this.props.artifact.spdxDocument}
+                        files={this.state.files}
+                        packages={this.state.packages}
+                        securityAdvisories={this.state.securityAdvisories}
+                        licenses={this.state.licenses}
+                        suppliers={this.state.suppliers}
+                      />
                     </div>
                   );
                 case 'files':
