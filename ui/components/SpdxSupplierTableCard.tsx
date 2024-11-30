@@ -147,7 +147,10 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
 
     const filterTableItems = (keyword: string) => {
       const filteredItems = rawTableItems.filter(
-        (item) => !keyword || item.name?.toLowerCase()?.includes(keyword.toLowerCase()),
+        (item) =>
+          !keyword ||
+          item.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
+          item.packages?.some((p) => p.toLowerCase().includes(keyword.toLowerCase())),
       );
       tableItems.splice(0, tableItems.length, ...filteredItems);
     };

@@ -260,10 +260,11 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         (item) =>
           !keyword ||
           item.ghsaId?.toLowerCase()?.includes(keyword.toLowerCase()) ||
-          item.severity?.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
+          item.cveId?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.summary?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.package?.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
-          item.url?.toLowerCase()?.includes(keyword.toLowerCase()),
+          item.severity?.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
+          item.cwes?.some((cwe) => cwe.id.toLowerCase().includes(keyword.toLowerCase())),
       );
       tableItems.splice(0, tableItems.length, ...filteredItems);
     };
@@ -385,7 +386,7 @@ function renderAdvisorySummaryCell(
     line2: (
       <div className="flex-row rhythm-horizontal-8">
         <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
-          <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name} severity</span>
+          <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name} Severity</span>
         </Pill>
         <div className="secondary-text">Published on {tableItem.publishedAt.toLocaleString()}</div>
       </div>
