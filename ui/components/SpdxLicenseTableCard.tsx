@@ -208,6 +208,13 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
           columns={this.state.tableColumns}
           itemProvider={this.state.tableItems}
           behaviors={this.state.tableSorting ? [this.state.tableSorting] : undefined}
+          singleClickActivation={true}
+          selectRowOnClick={true}
+          onActivate={(event, tableRow) => {
+            if (tableRow?.data?.url) {
+              window.open(tableRow.data.url, '_blank');
+            }
+          }}
         />
       </Card>
     );
