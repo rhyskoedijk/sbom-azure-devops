@@ -9,7 +9,8 @@ import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../model
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
-  getExternalRefPackageManager,
+  getExternalRefPackageManagerName,
+  getExternalRefPackageManagerUrl,
   IExternalRef,
   parseExternalRefAs,
   parseExternalRefsAs,
@@ -125,7 +126,8 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'ID', value: 'id' },
       { label: 'Name', value: 'name' },
       { label: 'Version', value: 'version' },
-      { label: 'Source', value: 'packageManager' },
+      { label: 'Package Manager', value: 'packageManagerName' },
+      { label: 'Package URL', value: 'packageManagerUrl' },
       { label: 'Type', value: 'type' },
       { label: 'Introduced Through', value: 'introducedThrough' },
       { label: 'License', value: 'license' },
@@ -149,7 +151,8 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           id: pkg.SPDXID,
           name: pkg.name,
           version: pkg.versionInfo,
-          packageManager: getExternalRefPackageManager(pkg.externalRefs) || '',
+          packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
+          packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
           type: isPackageTopLevel(spdx, pkg.SPDXID) ? 'Top-Level' : 'Transitive',
           introducedThrough:
             getPackageDependsOnChain(spdx, pkg.SPDXID)

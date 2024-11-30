@@ -1,4 +1,6 @@
 import { Buffer } from 'buffer';
+import { PackageURL } from 'packageurl-js';
+
 import '../../../extensions/StringExtensions';
 
 export interface IExternalRef {
@@ -57,14 +59,50 @@ export function parseExternalRefsAs<T>(externalRefs: IExternalRef[], category: E
     .filter((x) => x);
 }
 
-export function getExternalRefPackageManager(externalRefs: IExternalRef[]): string | undefined {
-  return externalRefs
-    .find(
-      (ref) =>
-        ref.referenceCategory === ExternalRefCategory.PackageManager &&
-        ref.referenceType === ExternalRefPackageManagerType.PackageUrl,
-    )
-    ?.referenceLocator?.match(/^pkg\:([^\:]+)\//i)?.[1]
-    ?.toPascalCase()
-    ?.trim();
+export function getExternalRefPackageManagerName(externalRefs: IExternalRef[]): string | undefined {
+  const packageManager = externalRefs.find((ref) => ref.referenceCategory === ExternalRefCategory.PackageManager);
+  switch (packageManager?.referenceType) {
+    case ExternalRefPackageManagerType.MavenCentral:
+      return 'Maven Central';
+    case ExternalRefPackageManagerType.Npm:
+      return 'NPM';
+    case ExternalRefPackageManagerType.NuGet:
+      return 'NuGet';
+    case ExternalRefPackageManagerType.Bower:
+      return 'Bower';
+    case ExternalRefPackageManagerType.PackageUrl:
+      return PackageURL.fromString(packageManager.referenceLocator)?.type?.toPascalCase();
+    default:
+      return undefined;
+  }
+}
+
+export function getExternalRefPackageManagerUrl(externalRefs: IExternalRef[]): string | undefined {
+  const packageManager = externalRefs.find((ref) => ref.referenceCategory === ExternalRefCategory.PackageManager);
+  switch (packageManager?.referenceType) {
+    case ExternalRefPackageManagerType.MavenCentral:
+      return `https://search.maven.org/artifact/${packageManager.referenceLocator.replace(/\:/g, '/')}/pom`;
+    case ExternalRefPackageManagerType.Npm:
+      const npmPkg = packageManager.referenceLocator.split('@');
+      return `https://www.npmjs.com/package/${npmPkg[0]}/v/${npmPkg[1]}`;
+    case ExternalRefPackageManagerType.NuGet:
+      return `https://www.nuget.org/packages/${packageManager.referenceLocator}`;
+    case ExternalRefPackageManagerType.Bower:
+      const yarnPkg = packageManager.referenceLocator.split('#');
+      return `https://yarnpkg.com/package?name=${yarnPkg[0]}&version=${yarnPkg[1]}`;
+    case ExternalRefPackageManagerType.PackageUrl:
+      const purl = PackageURL.fromString(packageManager.referenceLocator);
+      if (!purl) return undefined;
+      // TODO: Add all supported types from https://github.com/package-url/purl-spec/blob/master/PURL-TYPES.rst
+      switch (purl.type) {
+        case 'npm':
+          return `https://www.npmjs.com/package/${purl.namespace ? purl.namespace + '/' : ''}${purl.name}/v/${purl.version}`;
+        case 'nuget':
+          return `https://www.nuget.org/packages/${purl.name}/${purl.version}`;
+        default:
+          return undefined;
+      }
+    default:
+      return undefined;
+  }
 }

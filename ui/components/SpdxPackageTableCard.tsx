@@ -21,7 +21,8 @@ import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../../sh
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
-  getExternalRefPackageManager,
+  getExternalRefPackageManagerName,
+  getExternalRefPackageManagerUrl,
   parseExternalRefsAs,
 } from '../../shared/models/spdx/2.3/IExternalRef';
 import {
@@ -36,7 +37,8 @@ interface IPackageTableItem {
   id: string;
   name: string;
   version: string;
-  packageManager: string;
+  packageManagerName: string;
+  packageManagerUrl: string;
   type: string;
   introducedThrough: string[];
   license: string;
@@ -86,7 +88,8 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             id: pkg.SPDXID,
             name: pkg.name,
             version: pkg.versionInfo,
-            packageManager: getExternalRefPackageManager(pkg.externalRefs) || '',
+            packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
+            packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
             type: isPackageTopLevel(props.document, pkg.SPDXID) ? 'Top-Level' : 'Transitive',
             introducedThrough: getPackageDependsOnChain(props.document, pkg.SPDXID).map((x) => x.name),
             license: getPackageLicenseExpression(pkg) || '',
@@ -131,12 +134,12 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
         width: new ObservableValue(-5),
       },
       {
-        id: 'packageManager',
-        name: 'Source',
+        id: 'packageManagerName',
+        name: 'Manager',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packageManager),
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packageManagerName),
         sortProps: {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
@@ -231,7 +234,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
               null,
               // Sort on package manager
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
-                return item1.packageManager!.localeCompare(item2.packageManager!);
+                return item1.packageManagerName!.localeCompare(item2.packageManagerName!);
               },
               // Sort on type
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
@@ -267,7 +270,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           !keyword ||
           item.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.version?.toLowerCase()?.includes(keyword.toLowerCase()) ||
-          item.packageManager?.toLowerCase()?.includes(keyword.toLowerCase()) ||
+          item.packageManagerName?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.type?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.license?.toLowerCase()?.includes(keyword.toLowerCase()) ||
           item.supplier?.toLowerCase()?.includes(keyword.toLowerCase()) ||
@@ -319,6 +322,13 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
           columns={this.state.tableColumns}
           itemProvider={this.state.tableItems}
           behaviors={this.state.tableSorting ? [this.state.tableSorting] : undefined}
+          singleClickActivation={true}
+          selectRowOnClick={true}
+          onActivate={(event, tableRow) => {
+            if (tableRow?.data?.packageManagerUrl) {
+              window.open(tableRow.data.packageManagerUrl, '_blank');
+            }
+          }}
         />
       </Card>
     );
