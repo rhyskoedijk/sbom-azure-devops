@@ -44,6 +44,7 @@ interface ISecurityAdvisoryTableItem {
     description: string;
   }[];
   publishedAt: Date;
+  ageInDays: number;
   url: string;
 }
 
@@ -101,6 +102,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             epssPercentile: (vuln.advisory.epss?.percentile || 0) * 100,
             cwes: vuln.advisory.cwes,
             publishedAt: new Date(vuln.advisory.publishedAt),
+            ageInDays: Math.floor((Date.now() - new Date(vuln.advisory.publishedAt).getTime()) / (1000 * 60 * 60 * 24)),
             url: vuln.advisory.permalink,
           };
         }) || [];
@@ -388,7 +390,9 @@ function renderAdvisorySummaryCell(
         <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
           <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name} Severity</span>
         </Pill>
-        <div className="secondary-text">Published on {tableItem.publishedAt.toLocaleString()}</div>
+        <div className="secondary-text">
+          Published on {tableItem.publishedAt.toLocaleString()}; {tableItem.ageInDays} days ago
+        </div>
       </div>
     ),
   });
