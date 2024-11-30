@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
+import { Icon, IconSize } from 'azure-devops-ui/Icon';
+import { Link } from 'azure-devops-ui/Link';
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
@@ -13,7 +15,6 @@ import {
   TableCell,
   TwoLineTableCell,
 } from 'azure-devops-ui/Table';
-import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
@@ -34,9 +35,14 @@ interface ISecurityAdvisoryTableItem {
   severity: ISeverity;
   cvssScore: number;
   cvssVector: string;
-  cweIds: string[];
+  cvssVersion: string;
   epssPercentage: number;
   epssPercentile: number;
+  cwes: {
+    id: string;
+    name: string;
+    description: string;
+  }[];
   publishedAt: Date;
   url: string;
 }
@@ -77,6 +83,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
       props.securityAdvisories
         ?.orderBy((vuln: ISecurityVulnerability) => getSeverityByName(vuln.advisory.severity).weight, false)
         ?.map((vuln: ISecurityVulnerability) => {
+          const cvssParts = vuln.advisory.cvss?.vectorString?.match(/^CVSS\:([\d]+\.[\d]+)\/(.*)$/i);
           return {
             ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
             cveId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Cve)?.value || '',
@@ -88,10 +95,11 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             introducedThrough: getPackageDependsOnChain(props.document, vuln.package.id).map((p) => p.name),
             severity: getSeverityByName(vuln.advisory.severity),
             cvssScore: vuln.advisory.cvss?.score,
-            cvssVector: vuln.advisory.cvss?.vectorString,
-            cweIds: vuln.advisory.cwes?.map((x) => x.id),
+            cvssVector: cvssParts?.[2]?.trim() || '',
+            cvssVersion: cvssParts?.[1]?.trim() || '',
             epssPercentage: (vuln.advisory.epss?.percentage || 0) * 100,
             epssPercentile: (vuln.advisory.epss?.percentile || 0) * 100,
+            cwes: vuln.advisory.cwes,
             publishedAt: new Date(vuln.advisory.publishedAt),
             url: vuln.advisory.permalink,
           };
@@ -107,6 +115,18 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
     };
     const tableColumns: ITableColumn<ISecurityAdvisoryTableItem>[] = [
       {
+        id: 'id',
+        name: 'ID',
+        onSize: tableColumnResize,
+        readonly: true,
+        renderCell: renderAdvisoryIdsCell,
+        sortProps: {
+          ariaLabelAscending: 'Sorted A to Z',
+          ariaLabelDescending: 'Sorted Z to A',
+        },
+        width: new ObservableValue(-10),
+      },
+      {
         id: 'advisory',
         name: 'Advisory',
         onSize: tableColumnResize,
@@ -116,7 +136,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
         },
-        width: new ObservableValue(-35),
+        width: new ObservableValue(-30),
       },
       {
         id: 'package',
@@ -128,7 +148,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
         },
-        width: new ObservableValue(-20),
+        width: new ObservableValue(-15),
       },
       {
         id: 'vulnerableVersionRange',
@@ -152,18 +172,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         id: 'cvss',
         name: 'CVSS',
         readonly: true,
-        renderCell: renderAdvisorCvssCell,
-        sortProps: {
-          ariaLabelAscending: 'Sorted low to high',
-          ariaLabelDescending: 'Sorted high to low',
-        },
-        width: new ObservableValue(-10),
-      },
-      {
-        id: 'cwes',
-        name: 'CWEs',
-        readonly: true,
-        renderCell: renderAdvisorCwesCell,
+        renderCell: renderAdvisoryCvssCell,
         sortProps: {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
@@ -174,7 +183,18 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
         id: 'epss',
         name: 'EPSS',
         readonly: true,
-        renderCell: renderAdvisorEpssCell,
+        renderCell: renderAdvisoryEpssCell,
+        sortProps: {
+          ariaLabelAscending: 'Sorted low to high',
+          ariaLabelDescending: 'Sorted high to low',
+        },
+        width: new ObservableValue(-10),
+      },
+      {
+        id: 'cwes',
+        name: 'Weaknesses',
+        readonly: true,
+        renderCell: renderAdvisoryCwesCell,
         sortProps: {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
@@ -200,6 +220,10 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             columnIndex,
             proposedSortOrder,
             [
+              // Sort on id
+              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
+                return item1.ghsaId!.localeCompare(item2.ghsaId!);
+              },
               // Sort on severity
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
                 return item1.severity.weight - item2.severity.weight;
@@ -215,13 +239,13 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
                 return item1.cvssScore - item2.cvssScore;
               },
-              // Sort on cwes
-              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
-                return item1.cweIds.length - item2.cweIds.length;
-              },
               // Sort on epss
               (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
                 return item1.epssPercentage - item2.epssPercentage;
+              },
+              // Sort on cwes
+              (item1: ISecurityAdvisoryTableItem, item2: ISecurityAdvisoryTableItem): number => {
+                return item1.cwes.length - item2.cwes.length;
               },
             ],
             tableColumns,
@@ -312,6 +336,41 @@ function renderSimpleValueCell(
   });
 }
 
+function renderAdvisoryIdsCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItem: ISecurityAdvisoryTableItem,
+): JSX.Element {
+  return TwoLineTableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    line1: (
+      <Link
+        tooltipProps={{ text: 'View this advisory in the GitHub Advisory (GHSA) Database' }}
+        className="bolt-table-link bolt-table-link-inline"
+        href={`https://github.com/advisories/${tableItem.ghsaId}`}
+        target="_blank"
+        excludeTabStop
+      >
+        {tableItem.ghsaId}
+      </Link>
+    ),
+    line2: tableItem.cveId ? (
+      <Link
+        tooltipProps={{ text: 'View this advisory in the Common Vulnerabilities and Exposures (CVE) Database' }}
+        className="bolt-table-link bolt-table-link-inline"
+        href={`https://www.cve.org/CVERecord?id=${tableItem.cveId}`}
+        target="_blank"
+        excludeTabStop
+      >
+        {tableItem.cveId}
+      </Link>
+    ) : null,
+  });
+}
+
 function renderAdvisorySummaryCell(
   rowIndex: number,
   columnIndex: number,
@@ -326,12 +385,9 @@ function renderAdvisorySummaryCell(
     line2: (
       <div className="flex-row rhythm-horizontal-8">
         <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
-          <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name}</span>
+          <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name} severity</span>
         </Pill>
-        <div className="secondary-text">
-          {tableItem.ghsaId}
-          {tableItem.cveId ? ', ' + tableItem.cveId : null}
-        </div>
+        <div className="secondary-text">Published on {tableItem.publishedAt.toLocaleString()}</div>
       </div>
     ),
   });
@@ -352,7 +408,7 @@ function renderAdvisoryPackageCell(
   });
 }
 
-function renderAdvisorCvssCell(
+function renderAdvisoryCvssCell(
   rowIndex: number,
   columnIndex: number,
   tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
@@ -362,17 +418,24 @@ function renderAdvisorCvssCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    children: (
-      <div className="bolt-table-cell-content">
-        <Tooltip text={tableItem.cvssVector}>
-          <span>{tableItem.cvssScore} / 10</span>
-        </Tooltip>
+    children: tableItem.cvssScore > 0 && tableItem.cvssVector && tableItem.cvssVersion && (
+      <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
+        <span>{tableItem.cvssScore} / 10</span>
+        <Link
+          tooltipProps={{ text: 'Learn more about how this score is calculated' }}
+          className="bolt-table-link bolt-table-link-icon"
+          href={`https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=${tableItem.cvssVector}&version=${tableItem.cvssVersion}`}
+          target="_blank"
+          excludeTabStop
+        >
+          <Icon size={IconSize.medium} iconName="Info" />
+        </Link>
       </div>
     ),
   });
 }
 
-function renderAdvisorCwesCell(
+function renderAdvisoryCwesCell(
   rowIndex: number,
   columnIndex: number,
   tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
@@ -384,17 +447,24 @@ function renderAdvisorCwesCell(
     tableColumn: tableColumn,
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
-        {tableItem.cweIds.map((cwe, index) => (
-          <div key={index} className="rhythm-horizontal-4">
-            <span>{cwe}; </span>
-          </div>
+        {tableItem.cwes.map((cwe, index) => (
+          <Link
+            key={index}
+            tooltipProps={{ text: `${cwe.name}; ${cwe.description}` }}
+            className="bolt-table-link bolt-table-link-inline"
+            href={`https://cwe.mitre.org/data/definitions/${cwe.id.match(/([0-9]+)/)?.[1]?.trim()}.html`}
+            target="_blank"
+            excludeTabStop
+          >
+            {cwe.id}
+          </Link>
         ))}
       </div>
     ),
   });
 }
 
-function renderAdvisorEpssCell(
+function renderAdvisoryEpssCell(
   rowIndex: number,
   columnIndex: number,
   tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
@@ -404,8 +474,21 @@ function renderAdvisorEpssCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    line1: <div className="primary-text">{tableItem.epssPercentage.toFixed(3)}%</div>,
-    line2: (
+    line1: tableItem.epssPercentage > 0 && (
+      <div className="primary-text">
+        <span>{tableItem.epssPercentage.toFixed(3)}%</span>
+        <Link
+          tooltipProps={{ text: 'Learn more about the Exploit Prediction Scoring System (EPSS)' }}
+          className="bolt-table-link bolt-table-link-icon"
+          href="https://www.first.org/epss/user-guide"
+          target="_blank"
+          excludeTabStop
+        >
+          <Icon size={IconSize.medium} iconName="Info" />
+        </Link>
+      </div>
+    ),
+    line2: tableItem.epssPercentile > 0 && (
       <div className="secondary-text">
         {tableItem.epssPercentile.toFixed(0)}
         {tableItem.epssPercentile.toOridinal()} percentile

@@ -11,15 +11,15 @@ export interface ISecurityAdvisory {
     score: number;
     vectorString: string;
   };
+  epss: {
+    percentage: number;
+    percentile: number;
+  };
   cwes: {
     id: string;
     name: string;
     description: string;
   }[];
-  epss: {
-    percentage: number;
-    percentile: number;
-  };
   publishedAt: string;
   updatedAt: string;
   withdrawnAt: string;

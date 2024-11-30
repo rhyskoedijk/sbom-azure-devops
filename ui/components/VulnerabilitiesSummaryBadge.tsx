@@ -54,7 +54,7 @@ export class VulnerabilitiesSummaryBadge extends React.Component<Props, State> {
           .map((severitySummary, index) => (
             <div key={index}>
               <Tooltip
-                text={`${severitySummary.count} ${severitySummary.severity.name.toLowerCase()} ${severitySummary.count == 1 ? 'vulnerability' : 'vulnerabilities'}`}
+                text={`${severitySummary.count} ${severitySummary.severity.name.toLowerCase()} severity ${severitySummary.count == 1 ? 'vulnerability' : 'vulnerabilities'}`}
               >
                 <Pill
                   className={`vulnerabilities-summary-badge`}

@@ -25,16 +25,16 @@ const GHSA_SECURITY_VULNERABILITIES_QUERY = `
             score
             vectorString
           }
+          epss {
+            percentage
+            percentile
+          }
           cwes (first: 100) {
             nodes {
               cweId
               name
               description
             }
-          }
-          epss {
-            percentage
-            percentile
           }
           publishedAt
           updatedAt
@@ -125,6 +125,12 @@ export class GitHubGraphClient {
                       score: v.advisory.cvss.score,
                       vectorString: v.advisory.cvss.vectorString,
                     },
+                epss: !v.advisory.epss
+                  ? undefined
+                  : {
+                      percentage: v.advisory.epss.percentage,
+                      percentile: v.advisory.epss.percentile,
+                    },
                 cwes: v.advisory.cwes?.nodes?.map((c: any) => {
                   return {
                     id: c.cweId,
@@ -132,12 +138,6 @@ export class GitHubGraphClient {
                     description: c.description,
                   };
                 }),
-                epss: !v.advisory.epss
-                  ? undefined
-                  : {
-                      percentage: v.advisory.epss.percentage,
-                      percentile: v.advisory.epss.percentile,
-                    },
                 publishedAt: v.advisory.publishedAt,
                 updatedAt: v.advisory.updatedAt,
                 withdrawnAt: v.advisory.withdrawnAt,
