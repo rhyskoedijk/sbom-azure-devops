@@ -1,6 +1,6 @@
 # SBOM Tool Azure DevOps Extension
 
-Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool). This extensions provides a task to execute sbom-tool in build and release pipelines. Generated manifest files are published to the build artifacts and can be viewed in a human-friendly format from the "SBOM" build result tab.
+Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool). Sbom-tool runs locally on your pipeline agent without the need for subscriptions, account sign-ups, or shipping your data to a third-party service; All generated manifest files are published directly to your build artifacts and can be viewed in a human-friendly format from the "SBOM" build result tab.
 
 Check referenced packages for known vulnerabilities against the [GitHub Advisory Database](https://github.com/advisories).
 
