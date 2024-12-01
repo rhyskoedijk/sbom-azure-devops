@@ -182,12 +182,10 @@ function uploadFile(type: string): Promise<File | undefined> {
     input.multiple = false;
     input.accept = type;
     input.onchange = () => {
-      debugger;
       const files = input.files ? Array.from(input.files) : [];
       resolve(files[0]);
     };
     input.oncancel = () => {
-      debugger;
       resolve(undefined);
     };
     input.click();
