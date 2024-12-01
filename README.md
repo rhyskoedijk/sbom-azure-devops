@@ -1,17 +1,22 @@
 # SBOM Tool Azure DevOps Extension
 
-Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool). Use this task to:
+Unofficial Azure DevOps extension for [microsoft/sbom-tool](https://github.com/microsoft/sbom-tool). This extensions provides a task to execute sbom-tool in build and release pipelines. Generated manifest files are published to the build artifacts and can be viewed in a human-friendly format from the "SBOM" build result tab.
 
-- Generate [SPDX 2.2](https://spdx.dev/) compatible SBOMs from Azure DevOps repository build artifacts;
-- Check package dependencies for known vulnerabilities against the [GitHub Advisory Database](https://github.com/advisories);
-- Graph manifest files, packages, dependencies, and security vulnerabilities as SVG image;
-- Export manifest files, packages, dependencies, and security vulnerabilities as XLSX spreadsheet;
+Check referenced packages for known vulnerabilities against the [GitHub Advisory Database](https://github.com/advisories).
 
-![example.build.tab.securityadvisories.png](images/example.build.tab.securityadvisories.png)
+![example.build.tab.security.png](images/example.build.tab.security.png)
+
+View referenced packages, including the package manager, type, dependency hierarchy, license, supplier, and vulnerability counts:
 
 ![example.build.tab.packages.png](images/example.build.tab.packages.png)
 
-![example.manifest.spdx.png](images/example.manifest.spdx.png)
+View manifest relationships as a network graph or export to SVG.
+
+![example.manifest.spdx.svg.png](images/example.manifest.spdx.svg.png)
+
+Export manifest objects to XLSX workbook.
+
+![example.manifest.spdx.xlsx.png](images/example.manifest.spdx.xlsx.png)
 
 ## Install
 
@@ -38,6 +43,8 @@ jobs:
           command: 'generate'
           buildSourcePath: '$(Build.SourcesDirectory)'
           buildArtifactPath: '$(Build.ArtifactStagingDirectory)'
+          enableManifestSpreadsheetGeneration: true
+          enableManifestGraphGeneration: true
           enablePackageMetadataParsing: true
           fetchLicenseInformation: true
           fetchSecurityAdvisories: true
@@ -54,11 +61,9 @@ jobs:
           publishLocation: 'Container'
 ```
 
-The SBOM manifest files will be uploaded to the `_manifest` folder of the build pipeline artifact container.
+The SBOM manifest files will be uploaded to the build artifacts, under the `_manifest` folder.
 
 ![example.build.artifacts.png](images/example.build.artifacts.png)
-
-The SBOM tab on the build result page provides a summary of key information within the manifest, including options to export files, dependencies, and security advisories to an SVG image or XLSX spreadsheet.
 
 ## Advanced
 
