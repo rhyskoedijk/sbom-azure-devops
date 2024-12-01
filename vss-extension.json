@@ -38,13 +38,16 @@
   },
   "screenshots": [
     {
-      "path": "images/example.build.tab.securityadvisories.png"
+      "path": "images/example.build.tab.security.png"
     },
     {
       "path": "images/example.build.tab.packages.png"
     },
     {
-      "path": "images/example.manifest.spdx.png"
+      "path": "images/example.manifest.spdx.svg.png"
+    },
+    {
+      "path": "images/example.manifest.spdx.xlsx.png"
     }
   ],
   "links": {
