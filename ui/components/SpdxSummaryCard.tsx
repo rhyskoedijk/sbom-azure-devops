@@ -5,6 +5,9 @@ import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { SecurityAdvisoryIdentifierType } from '../../shared/ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
+import { getHexStringFromColor } from '../../shared/models/severity/IColor';
+import { ISeverity } from '../../shared/models/severity/ISeverity';
+import { SEVERITIES } from '../../shared/models/severity/Severities';
 import { IDocument, isPackageTopLevel } from '../../shared/models/spdx/2.3/IDocument';
 import { ExternalRefCategory, getExternalRefPackageManagerName } from '../../shared/models/spdx/2.3/IExternalRef';
 import { IFile } from '../../shared/models/spdx/2.3/IFile';
@@ -16,6 +19,8 @@ import {
 } from '../../shared/models/spdx/2.3/IPackage';
 
 import { VulnerabilitiesSummaryBadge } from './VulnerabilitiesSummaryBadge';
+
+interface ChartData {}
 
 interface Props {
   document: IDocument;
@@ -40,6 +45,7 @@ interface State {
   };
   securityAdvisories?: {
     total: number;
+    chartBySeverity: ChartData;
     byAgeInDays: Record<string, number>;
     groupedBySeverity: Record<string, number>;
     groupedByPackageName: Record<string, number>;
@@ -135,6 +141,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
               },
               {} as { [name: string]: number },
             ),
+            chartBySeverity: SpdxSummaryCard.getChartBySeverity(props.securityAdvisories),
             groupedBySeverity: props.securityAdvisories.reduce(
               (acc, vuln) => {
                 const severity = vuln.advisory.severity?.toPascalCase();
@@ -193,6 +200,21 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
     };
   }
 
+  static getChartBySeverity(securityAdvisories: ISecurityVulnerability[]): ChartData {
+    const severities = SEVERITIES.filter((s: ISeverity) => s.id > 0)
+      .orderBy((s: ISeverity) => s.weight, false)
+      .map((s: ISeverity) => {
+        return {
+          name: s.name,
+          color: getHexStringFromColor(s.color),
+          count: securityAdvisories.filter((v) => v.advisory.severity.toUpperCase() === s.name.toUpperCase()).length,
+        };
+      });
+
+    // TODO: Implement chart data
+    return {};
+  }
+
   public componentDidUpdate(prevProps: Readonly<Props>): void {
     if (
       prevProps.document !== this.props.document ||
@@ -220,12 +242,20 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
     }
     return (
       <Card className="flex-grow flex-column bolt-card bolt-card-white">
-        <div className="flex-grow flex-column flex-gap-8">
-          {this.props.securityAdvisories.length > 0 && (
-            <VulnerabilitiesSummaryBadge vulnerabilities={this.props.securityAdvisories} />
-          )}
-          <span>TODO: Add pretty dashboard for:</span>
-          <pre>{JSON.stringify(this.state, null, 2)}</pre>
+        <div className="flex-grow flex-column flex-center flex-gap-8">
+          <div className="summary-row flex-row flex-grow flex-center flex-gap-8">
+            <div className="summary-column flex-column flex-grow">
+              {this.props.securityAdvisories.length > 0 && (
+                <VulnerabilitiesSummaryBadge vulnerabilities={this.props.securityAdvisories} />
+              )}
+            </div>
+          </div>
+          <div className="summary-row flex-row flex-grow flex-center flex-gap-8">
+            <div className="summary-column flex-column flex-grow">
+              <span>TODO: Add pretty dashboard for:</span>
+              <pre>{JSON.stringify(this.state, null, 2)}</pre>
+            </div>
+          </div>
         </div>
       </Card>
     );
