@@ -12,8 +12,7 @@ import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
-  IExternalRef,
-  parseExternalRefAs,
+  parseExternalRefsAs,
 } from '../../shared/models/spdx/2.3/IExternalRef';
 import { IFile } from '../../shared/models/spdx/2.3/IFile';
 import { getLicensesFromExpression, ILicense } from '../../shared/models/spdx/2.3/ILicense';
@@ -22,6 +21,7 @@ import {
   getPackageSupplierOrganization,
   IPackage,
 } from '../../shared/models/spdx/2.3/IPackage';
+import { parseSpdxSecurityAdvisoriesLegacy } from '../../shared/spdx/parseSpdxSecurityAdvisoriesLegacy';
 
 import { SbomDocumentHeader } from './SbomDocumentHeader';
 import { SpdxFileTableCard } from './SpdxFileTableCard';
@@ -64,13 +64,15 @@ export class SbomDocumentPage extends React.Component<Props, State> {
       return !rootPackageIds.includes(p.SPDXID);
     });
     const securityAdvisories = packages
-      .flatMap((pkg: IPackage) => pkg.externalRefs || [])
-      .map((externalRef: IExternalRef) =>
-        parseExternalRefAs<ISecurityVulnerability>(
-          externalRef,
-          ExternalRefCategory.Security,
-          ExternalRefSecurityType.Url,
-        ),
+      .flatMap(
+        (pkg: IPackage) =>
+          parseExternalRefsAs<ISecurityVulnerability>(
+            pkg.externalRefs || [],
+            ExternalRefCategory.Security,
+            ExternalRefSecurityType.Url,
+          ) ||
+          parseSpdxSecurityAdvisoriesLegacy(pkg) ||
+          [],
       )
       .filter((vuln): vuln is ISecurityVulnerability => !!vuln && !!vuln.package && !!vuln.advisory)
       .distinctBy((vuln: ISecurityVulnerability) => vuln.advisory.permalink);

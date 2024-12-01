@@ -39,24 +39,26 @@ export enum ExternalRefPersistentIdType {
   Gitoid = 'gitoid',
 }
 
-export function parseExternalRefAs<T>(
-  externalRef: IExternalRef,
+export function parseExternalRefsAs<T>(
+  externalRefs: IExternalRef[],
   category: ExternalRefCategory,
   type: string,
-): T | undefined {
-  return parseExternalRefsAs<T>([externalRef], category, type)[0];
-}
-
-export function parseExternalRefsAs<T>(externalRefs: IExternalRef[], category: ExternalRefCategory, type: string): T[] {
-  return externalRefs
-    .filter(
-      (ref) =>
-        ref.referenceCategory === category &&
-        ref.referenceType === type &&
-        ref.referenceLocator.match(/data\:text\/json\;base64/i),
-    )
-    .map((ref) => JSON.parse(Buffer.from(ref.referenceLocator?.split(',')[1] || '', 'base64').toString('utf-8')) as T)
-    .filter((x) => x);
+  customParser?: (ref: IExternalRef) => T,
+): T[] | undefined {
+  const securityRefs = externalRefs.filter(
+    (ref) =>
+      (ref.referenceCategory === category && ref.referenceType === type && customParser) ||
+      ref.referenceLocator.match(/data\:text\/json\;base64/i),
+  );
+  if (securityRefs.length) {
+    return securityRefs
+      .map((ref) =>
+        customParser
+          ? customParser(ref)
+          : (JSON.parse(Buffer.from(ref.referenceLocator?.split(',')[1] || '', 'base64').toString('utf-8')) as T),
+      )
+      .filter((x) => x);
+  }
 }
 
 export function getExternalRefPackageManagerName(externalRefs: IExternalRef[]): string | undefined {

@@ -11,14 +11,13 @@ import {
   ExternalRefSecurityType,
   getExternalRefPackageManagerName,
   getExternalRefPackageManagerUrl,
-  IExternalRef,
-  parseExternalRefAs,
   parseExternalRefsAs,
 } from '../models/spdx/2.3/IExternalRef';
 import { IFile } from '../models/spdx/2.3/IFile';
 import { getLicensesFromExpression, ILicense } from '../models/spdx/2.3/ILicense';
 import { getPackageLicenseExpression, getPackageSupplierOrganization, IPackage } from '../models/spdx/2.3/IPackage';
 import { IRelationship } from '../models/spdx/2.3/IRelationship';
+import { parseSpdxSecurityAdvisoriesLegacy } from './parseSpdxSecurityAdvisoriesLegacy';
 
 import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../ghsa/ILicense';
 import { SecurityAdvisoryIdentifierType, SecurityAdvisorySeverity } from '../ghsa/ISecurityAdvisory';
@@ -40,13 +39,15 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
     return !rootPackageIds.includes(p.SPDXID);
   });
   const securityAdvisories = packages
-    .flatMap((pkg: IPackage) => pkg.externalRefs || [])
-    .map((externalRef: IExternalRef) =>
-      parseExternalRefAs<ISecurityVulnerability>(
-        externalRef,
-        ExternalRefCategory.Security,
-        ExternalRefSecurityType.Url,
-      ),
+    .flatMap(
+      (pkg: IPackage) =>
+        parseExternalRefsAs<ISecurityVulnerability>(
+          pkg.externalRefs || [],
+          ExternalRefCategory.Security,
+          ExternalRefSecurityType.Url,
+        ) ||
+        parseSpdxSecurityAdvisoriesLegacy(pkg) ||
+        [],
     )
     .filter((vuln): vuln is ISecurityVulnerability => !!vuln && !!vuln.package && !!vuln.advisory)
     .distinctBy((vuln: ISecurityVulnerability) => vuln.advisory.permalink);
@@ -142,11 +143,14 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
     content: packages
       .orderBy((pkg: IPackage) => pkg.name)
       .map((pkg: IPackage) => {
-        const securityAdvisories = parseExternalRefsAs<ISecurityVulnerability>(
-          pkg.externalRefs || [],
-          ExternalRefCategory.Security,
-          ExternalRefSecurityType.Url,
-        );
+        const securityAdvisories =
+          parseExternalRefsAs<ISecurityVulnerability>(
+            pkg.externalRefs || [],
+            ExternalRefCategory.Security,
+            ExternalRefSecurityType.Url,
+          ) ||
+          parseSpdxSecurityAdvisoriesLegacy(pkg) ||
+          [];
         return {
           id: pkg.SPDXID,
           name: pkg.name,

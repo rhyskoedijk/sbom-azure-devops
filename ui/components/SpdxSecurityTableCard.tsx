@@ -390,9 +390,11 @@ function renderAdvisorySummaryCell(
         <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
           <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name} Severity</span>
         </Pill>
-        <div className="secondary-text">
-          Published on {tableItem.publishedAt.toLocaleString()}; {tableItem.ageInDays} days ago
-        </div>
+        {tableItem.publishedAt && tableItem.ageInDays > 0 && (
+          <div className="secondary-text">
+            Published on {tableItem.publishedAt.toLocaleString()}; {tableItem.ageInDays} days ago
+          </div>
+        )}
       </div>
     ),
   });

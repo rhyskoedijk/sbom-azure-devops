@@ -30,6 +30,7 @@ import {
   getPackageSupplierOrganization,
   IPackage,
 } from '../../shared/models/spdx/2.3/IPackage';
+import { parseSpdxSecurityAdvisoriesLegacy } from '../../shared/spdx/parseSpdxSecurityAdvisoriesLegacy';
 
 import { VulnerabilitiesSummaryBadge } from './VulnerabilitiesSummaryBadge';
 
@@ -79,11 +80,14 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
       props.packages
         ?.orderBy((pkg: IPackage) => pkg.name)
         ?.map((pkg: IPackage) => {
-          const securityAdvisories = parseExternalRefsAs<ISecurityVulnerability>(
-            pkg.externalRefs || [],
-            ExternalRefCategory.Security,
-            ExternalRefSecurityType.Url,
-          );
+          const securityAdvisories =
+            parseExternalRefsAs<ISecurityVulnerability>(
+              pkg.externalRefs || [],
+              ExternalRefCategory.Security,
+              ExternalRefSecurityType.Url,
+            ) ||
+            parseSpdxSecurityAdvisoriesLegacy(pkg) ||
+            [];
           return {
             id: pkg.SPDXID,
             name: pkg.name,
