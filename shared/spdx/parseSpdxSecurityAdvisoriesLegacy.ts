@@ -38,7 +38,7 @@ export function parseSpdxSecurityAdvisoriesLegacy(pkg: IPackage): ISecurityVulne
             { type: SecurityAdvisoryIdentifierType.Cve, value: ref.comment?.match(/CVE-[0-9-]+/i)?.[0] || '' },
           ],
           severity: (ref.comment?.match(/^\[(\w+)\]/)?.[1]?.toUpperCase() as SecurityAdvisorySeverity) || '',
-          summary: ref.comment?.match(/^\[(\w+)\](.*)$/)?.[2]?.trim() || '',
+          summary: ref.comment?.match(/^\[(\w+)\](.*);/)?.[2]?.trim() || '',
           description: '',
           references: [],
           cvss: { score: 0, vectorString: '' },
