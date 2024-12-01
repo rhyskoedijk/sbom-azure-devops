@@ -52,7 +52,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = SbomDocumentPage.getDerivedStateFromProps(props);
-    this.selectedTabId = new ObservableValue('summary');
+    this.selectedTabId = new ObservableValue('files');
     this.filter = new Filter();
   }
 
@@ -116,7 +116,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
           renderAdditionalContent={this.onRenderFilterBar}
           className="margin-vertical-16"
         >
-          <Tab id="summary" name="Summary" />
+          {window.location.hostname === 'localhost' ? <Tab id="summary" name="Summary" /> : null}
           <Tab id="files" name="Files" badgeCount={this.state.files.length} />
           {this.state.packages.length ? (
             <Tab id="packages" name="Packages" badgeCount={this.state.packages.length} />
