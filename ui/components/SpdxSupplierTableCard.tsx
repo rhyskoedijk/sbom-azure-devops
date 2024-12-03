@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
+import { Link } from 'azure-devops-ui/Link';
 import {
   ColumnSorting,
   ITableColumn,
@@ -15,13 +16,18 @@ import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { getExternalRefPackageManagerUrl } from '../../shared/models/spdx/2.3/IExternalRef';
 import { getPackageSupplierOrganization } from '../../shared/models/spdx/2.3/IPackage';
 
 interface ISupplierTableItem {
   id: string;
   name: string;
   packageCount: number;
-  packages: string[];
+  packages: {
+    name: string;
+    version: string;
+    url?: string;
+  }[];
 }
 
 interface Props {
@@ -58,8 +64,13 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         ?.map((supplier: string) => {
           const packagesFromSupplier = props.document.packages
             ?.filter((p) => getPackageSupplierOrganization(p) == supplier)
-            ?.map((p) => p.name || '')
-            ?.distinct();
+            ?.map((p) => {
+              return {
+                name: p.name || '',
+                version: p.versionInfo || '',
+                url: getExternalRefPackageManagerUrl(p.externalRefs),
+              };
+            });
           return {
             id: supplier || '',
             name: supplier || '',
@@ -150,7 +161,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         (item) =>
           !keyword ||
           item.name?.toLowerCase()?.includes(keyword.toLowerCase()) ||
-          item.packages?.some((p) => p.toLowerCase().includes(keyword.toLowerCase())),
+          item.packages?.some((p) => p.name.toLowerCase().includes(keyword.toLowerCase())),
       );
       tableItems.splice(0, tableItems.length, ...filteredItems);
     };
@@ -229,7 +240,15 @@ function renderPackagesCell(
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
         {tableItem.packages.map((pkg, index) => (
-          <span key={index}>{pkg}; </span>
+          <Link
+            key={index}
+            className="bolt-table-link bolt-table-link-inline"
+            href={pkg.url}
+            target={pkg.url ? '_blank' : undefined}
+            excludeTabStop
+          >
+            {pkg.name} <span className="secondary-text">{pkg.version}</span>
+          </Link>
         ))}
       </div>
     ),

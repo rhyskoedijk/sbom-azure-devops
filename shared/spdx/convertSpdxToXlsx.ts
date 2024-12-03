@@ -253,7 +253,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       .map((license: ILicense) => {
         const packagesWithLicense = packages
           .filter((p) => getPackageLicenseExpression(p)?.includes(license.licenseId))
-          .map((p) => p.name || '')
+          .map((p) => `${p.name || ''}@${p.versionInfo || ''}`)
           .distinct();
         const licenseRisk = getLicenseRiskAssessment(license.licenseId);
         return {
@@ -282,7 +282,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       .map((supplier: string) => {
         const packagesFromSupplier = packages
           .filter((p) => getPackageSupplierOrganization(p) == supplier)
-          .map((p) => p.name || '')
+          .map((p) => `${p.name || ''}@${p.versionInfo || ''}`)
           .distinct();
         return {
           name: supplier || '',
