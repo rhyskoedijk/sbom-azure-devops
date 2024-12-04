@@ -8,6 +8,7 @@ import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability
 import { getHexStringFromColor } from '../../shared/models/severity/IColor';
 import { ISeverity } from '../../shared/models/severity/ISeverity';
 import { SEVERITIES } from '../../shared/models/severity/Severities';
+import { spdxConstantsAreEqual } from '../../shared/models/spdx/2.3/Constants';
 import { IDocument, isPackageTopLevel } from '../../shared/models/spdx/2.3/IDocument';
 import { ExternalRefCategory, getExternalRefPackageManagerName } from '../../shared/models/spdx/2.3/IExternalRef';
 import { IFile } from '../../shared/models/spdx/2.3/IFile';
@@ -115,8 +116,8 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
             ),
             groupedByVulnerable: props.packages.reduce(
               (acc, p) => {
-                const hasVulnerabilities = p.externalRefs?.some(
-                  (ref) => ref.referenceCategory === ExternalRefCategory.Security,
+                const hasVulnerabilities = p.externalRefs?.some((ref) =>
+                  spdxConstantsAreEqual(ref.referenceCategory, ExternalRefCategory.Security),
                 );
                 const key = hasVulnerabilities ? 'Vulnerable' : 'Not Vulnerable';
                 acc[key] = (acc[key] || 0) + 1;

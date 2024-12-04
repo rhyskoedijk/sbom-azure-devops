@@ -1,6 +1,8 @@
 import { Buffer } from 'buffer';
 import { PackageURL } from 'packageurl-js';
 
+import { spdxConstantsAreEqual } from './Constants';
+
 import '../../../extensions/StringExtensions';
 
 export interface IExternalRef {
@@ -47,7 +49,9 @@ export function parseExternalRefsAs<T>(
 ): T[] | undefined {
   const securityRefs = externalRefs.filter(
     (ref) =>
-      (ref.referenceCategory === category && ref.referenceType === type && customParser) ||
+      (spdxConstantsAreEqual(ref.referenceCategory, category) &&
+        spdxConstantsAreEqual(ref.referenceType, type) &&
+        customParser) ||
       ref.referenceLocator.match(/data\:text\/json\;base64/i),
   );
   if (securityRefs.length) {
@@ -62,7 +66,9 @@ export function parseExternalRefsAs<T>(
 }
 
 export function getExternalRefPackageManagerName(externalRefs: IExternalRef[]): string | undefined {
-  const packageManager = externalRefs.find((ref) => ref.referenceCategory === ExternalRefCategory.PackageManager);
+  const packageManager = externalRefs.find((ref) =>
+    spdxConstantsAreEqual(ref.referenceCategory, ExternalRefCategory.PackageManager),
+  );
   switch (packageManager?.referenceType) {
     case ExternalRefPackageManagerType.MavenCentral:
       return 'Maven Central';
@@ -80,7 +86,9 @@ export function getExternalRefPackageManagerName(externalRefs: IExternalRef[]): 
 }
 
 export function getExternalRefPackageManagerUrl(externalRefs: IExternalRef[]): string | undefined {
-  const packageManager = externalRefs.find((ref) => ref.referenceCategory === ExternalRefCategory.PackageManager);
+  const packageManager = externalRefs.find((ref) =>
+    spdxConstantsAreEqual(ref.referenceCategory, ExternalRefCategory.PackageManager),
+  );
   switch (packageManager?.referenceType) {
     case ExternalRefPackageManagerType.MavenCentral:
       return `https://search.maven.org/artifact/${packageManager.referenceLocator.replace(/\:/g, '/')}/pom`;

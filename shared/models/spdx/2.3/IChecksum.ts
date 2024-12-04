@@ -1,3 +1,5 @@
+import { spdxConstantsAreEqual } from './Constants';
+
 export interface IChecksum {
   algorithm: ChecksumAlgorithm;
   checksumValue: string;
@@ -24,5 +26,5 @@ export enum ChecksumAlgorithm {
 }
 
 export function getChecksum(checksums: IChecksum[], algorithm: ChecksumAlgorithm): string | undefined {
-  return checksums.find((checksum) => checksum.algorithm === algorithm)?.checksumValue;
+  return checksums.find((checksum) => spdxConstantsAreEqual(checksum.algorithm, algorithm))?.checksumValue;
 }

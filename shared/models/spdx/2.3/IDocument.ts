@@ -1,3 +1,4 @@
+import { spdxConstantsAreEqual } from './Constants';
 import { ICreationInfo } from './ICreationInfo';
 import { IFile } from './IFile';
 import { IPackage } from './IPackage';
@@ -28,14 +29,16 @@ export enum DocumentVersion {
 export function isPackageTopLevel(document: IDocument, packageId: string): boolean {
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];
-  const dependsOnRelationships = relationships.filter((r) => r.relationshipType === RelationshipType.DependsOn);
+  const dependsOnRelationships = relationships.filter((r) =>
+    spdxConstantsAreEqual(r.relationshipType, RelationshipType.DependsOn),
+  );
   return (
     rootPackageIds.includes(packageId) ||
     dependsOnRelationships.some(
       (relationship) =>
         rootPackageIds.includes(relationship.spdxElementId) &&
         relationship.relatedSpdxElement === packageId &&
-        relationship.relationshipType === RelationshipType.DependsOn,
+        spdxConstantsAreEqual(relationship.relationshipType, RelationshipType.DependsOn),
     )
   );
 }
@@ -43,7 +46,9 @@ export function isPackageTopLevel(document: IDocument, packageId: string): boole
 export function getPackageDependsOnChain(document: IDocument, packageId: string): IPackage[] {
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];
-  const dependsOnRelationships = relationships.filter((r) => r.relationshipType === RelationshipType.DependsOn);
+  const dependsOnRelationships = relationships.filter((r) =>
+    spdxConstantsAreEqual(r.relationshipType, RelationshipType.DependsOn),
+  );
   const packages = (document.packages || []).filter((p) => {
     return !rootPackageIds.includes(p.SPDXID);
   });
