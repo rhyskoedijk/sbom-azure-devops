@@ -15,9 +15,9 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ChecksumAlgorithm, getChecksum } from '../../shared/models/spdx/2.3/IChecksum';
-import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
-import { IFile } from '../../shared/models/spdx/2.3/IFile';
+import { ChecksumAlgorithm, getChecksum } from '../../../shared/models/spdx/2.3/IChecksum';
+import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
+import { IFile } from '../../../shared/models/spdx/2.3/IFile';
 
 interface IFileTableItem extends ISimpleTableCell {
   id: string;

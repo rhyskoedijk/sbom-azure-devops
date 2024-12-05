@@ -10,6 +10,7 @@ import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAd
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { ISeverity } from '../../../shared/models/severity/ISeverity';
 import { DEFAULT_SEVERITY, getSeverityByName, SEVERITIES } from '../../../shared/models/severity/Severities';
+import { spdxConstantsAreEqual } from '../../../shared/models/spdx/2.3/Constants';
 import { IDocument, isPackageTopLevel } from '../../../shared/models/spdx/2.3/IDocument';
 import { ExternalRefCategory, getExternalRefPackageManagerName } from '../../../shared/models/spdx/2.3/IExternalRef';
 import { IFile } from '../../../shared/models/spdx/2.3/IFile';
@@ -88,7 +89,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         ? {
             total: props.packages.length,
             totalVulnerable: props.packages.filter((p) =>
-              p.externalRefs?.some((ref) => ref.referenceCategory === ExternalRefCategory.Security),
+              p.externalRefs?.some((ref) => spdxConstantsAreEqual(ref.referenceCategory, ExternalRefCategory.Security)),
             ).length,
             packageManagersChartData: reduceAsMap(
               props.packages,
