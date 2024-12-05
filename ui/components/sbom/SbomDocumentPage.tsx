@@ -7,21 +7,21 @@ import { Tab, TabBar, TabContent, TabSize } from 'azure-devops-ui/Tabs';
 import { InlineKeywordFilterBarItem } from 'azure-devops-ui/TextFilterBarItem';
 import { Filter, IFilter } from 'azure-devops-ui/Utilities/Filter';
 
-import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
-import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
+import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+import { ISbomBuildArtifact } from '../../../shared/models/ISbomBuildArtifact';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
   parseExternalRefsAs,
-} from '../../shared/models/spdx/2.3/IExternalRef';
-import { IFile } from '../../shared/models/spdx/2.3/IFile';
-import { getLicensesFromExpression, ILicense } from '../../shared/models/spdx/2.3/ILicense';
+} from '../../../shared/models/spdx/2.3/IExternalRef';
+import { IFile } from '../../../shared/models/spdx/2.3/IFile';
+import { getLicensesFromExpression, ILicense } from '../../../shared/models/spdx/2.3/ILicense';
 import {
   getPackageLicenseExpression,
   getPackageSupplierOrganization,
   IPackage,
-} from '../../shared/models/spdx/2.3/IPackage';
-import { parseSpdxSecurityAdvisoriesLegacy } from '../../shared/spdx/parseSpdxSecurityAdvisoriesLegacy';
+} from '../../../shared/models/spdx/2.3/IPackage';
+import { parseSpdxSecurityAdvisoriesLegacy } from '../../../shared/spdx/parseSpdxSecurityAdvisoriesLegacy';
 
 import { SbomDocumentHeader } from './SbomDocumentHeader';
 import { SpdxFileTableCard } from './SpdxFileTableCard';
@@ -52,7 +52,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = SbomDocumentPage.getDerivedStateFromProps(props);
-    this.selectedTabId = new ObservableValue('files');
+    this.selectedTabId = new ObservableValue('summary');
     this.filter = new Filter();
   }
 
@@ -118,7 +118,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
           renderAdditionalContent={this.onRenderFilterBar}
           className="margin-vertical-16"
         >
-          {window.location.hostname === 'localhost' ? <Tab id="summary" name="Summary" /> : null}
+          <Tab id="summary" name="Summary" />
           <Tab id="files" name="Files" badgeCount={this.state.files.length} />
           {this.state.packages.length ? (
             <Tab id="packages" name="Packages" badgeCount={this.state.packages.length} />

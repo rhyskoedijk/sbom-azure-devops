@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Link } from 'azure-devops-ui/Link';
+import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import {
   ColumnSorting,
   ITableColumn,
@@ -12,14 +13,19 @@ import {
   Table,
   TableCell,
 } from 'azure-devops-ui/Table';
+import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
-import { getExternalRefPackageManagerUrl } from '../../shared/models/spdx/2.3/IExternalRef';
-import { getPackageSupplierOrganization } from '../../shared/models/spdx/2.3/IPackage';
+import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../../../shared/ghsa/ILicense';
+import { ISeverity } from '../../../shared/models/severity/ISeverity';
+import { getSeverityByName } from '../../../shared/models/severity/Severities';
+import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
+import { getExternalRefPackageManagerUrl } from '../../../shared/models/spdx/2.3/IExternalRef';
+import { ILicense } from '../../../shared/models/spdx/2.3/ILicense';
+import { getPackageLicenseExpression } from '../../../shared/models/spdx/2.3/IPackage';
 
-interface ISupplierTableItem {
+interface ILicenseTableItem {
   id: string;
   name: string;
   packageCount: number;
@@ -28,27 +34,30 @@ interface ISupplierTableItem {
     version: string;
     url?: string;
   }[];
+  riskSeverity: ISeverity;
+  riskReasons: string[];
+  url: string;
 }
 
 interface Props {
   document: IDocument;
-  suppliers: string[];
+  licenses: ILicense[];
   filter: IFilter;
 }
 
 interface State {
-  tableColumns: ITableColumn<ISupplierTableItem>[] | undefined;
-  tableItems: ObservableArray<ISupplierTableItem | IReadonlyObservableValue<ISupplierTableItem | undefined>>;
-  tableSorting: ColumnSorting<ISupplierTableItem> | undefined;
+  tableColumns: ITableColumn<ILicenseTableItem>[] | undefined;
+  tableItems: ObservableArray<ILicenseTableItem | IReadonlyObservableValue<ILicenseTableItem | undefined>>;
+  tableSorting: ColumnSorting<ILicenseTableItem> | undefined;
   filterTableItems?: (keywords: string) => void;
 }
 
-export class SpdxSupplierTableCard extends React.Component<Props, State> {
+export class SpdxLicenseTableCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
       tableColumns: undefined,
-      tableItems: new ObservableArray<ISupplierTableItem | IReadonlyObservableValue<ISupplierTableItem | undefined>>(),
+      tableItems: new ObservableArray<ILicenseTableItem | IReadonlyObservableValue<ILicenseTableItem | undefined>>(),
       tableSorting: undefined,
     };
     this.props.filter?.subscribe(() => {
@@ -58,12 +67,15 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props: Props): State {
-    const rawTableItems: ISupplierTableItem[] =
-      props.suppliers
-        ?.orderBy((supplier: string) => supplier)
-        ?.map((supplier: string) => {
-          const packagesFromSupplier = props.document.packages
-            ?.filter((p) => getPackageSupplierOrganization(p) == supplier)
+    const licenses = Array.from(
+      new Set(props.document?.packages?.map((p) => p.licenseConcluded || p.licenseDeclared || '')),
+    );
+    const rawTableItems: ILicenseTableItem[] =
+      props.licenses
+        ?.orderBy((license: ILicense) => license.licenseId)
+        ?.map((license: ILicense) => {
+          const packagesWithLicense = props.document.packages
+            ?.filter((p) => getPackageLicenseExpression(p)?.includes(license.licenseId))
             ?.map((p) => {
               return {
                 name: p.name || '',
@@ -71,11 +83,15 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
                 url: getExternalRefPackageManagerUrl(p.externalRefs),
               };
             });
+          const licenseRisk = getLicenseRiskAssessment(license.licenseId);
           return {
-            id: supplier || '',
-            name: supplier || '',
-            packageCount: packagesFromSupplier.length,
-            packages: packagesFromSupplier,
+            id: license.licenseId,
+            name: license.name,
+            packageCount: packagesWithLicense.length,
+            packages: packagesWithLicense,
+            riskSeverity: getSeverityByName(licenseRisk?.severity || LicenseRiskSeverity.Low),
+            riskReasons: licenseRisk?.reasons || [],
+            url: license.reference,
           };
         }) || [];
 
@@ -83,18 +99,17 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
       event: MouseEvent | KeyboardEvent,
       columnIndex: number,
       width: number,
-      column: ITableColumn<ISupplierTableItem>,
+      column: ITableColumn<ILicenseTableItem>,
     ) {
       (column.width as ObservableValue<number>).value = width;
     };
-    const tableColumns: ITableColumn<ISupplierTableItem>[] = [
+    const tableColumns: ITableColumn<ILicenseTableItem>[] = [
       {
         id: 'name',
         name: 'Name',
         onSize: tableColumnResize,
         readonly: true,
-        renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.name),
+        renderCell: renderLicenseSummaryCell,
         sortProps: {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
@@ -122,11 +137,11 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
       },
     ];
 
-    const tableItems = new ObservableArray<
-      ISupplierTableItem | IReadonlyObservableValue<ISupplierTableItem | undefined>
-    >(rawTableItems.slice());
+    const tableItems = new ObservableArray<ILicenseTableItem | IReadonlyObservableValue<ILicenseTableItem | undefined>>(
+      rawTableItems.slice(),
+    );
 
-    const tableSorting = new ColumnSorting<ISupplierTableItem>(
+    const tableSorting = new ColumnSorting<ILicenseTableItem>(
       (
         columnIndex: number,
         proposedSortOrder: SortOrder,
@@ -135,16 +150,16 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         tableItems.splice(
           0,
           tableItems.length,
-          ...sortItems<ISupplierTableItem>(
+          ...sortItems<ILicenseTableItem>(
             columnIndex,
             proposedSortOrder,
             [
               // Sort on name
-              (item1: ISupplierTableItem, item2: ISupplierTableItem): number => {
+              (item1: ILicenseTableItem, item2: ILicenseTableItem): number => {
                 return item1.name!.localeCompare(item2.name!);
               },
               // Sort on package count
-              (item1: ISupplierTableItem, item2: ISupplierTableItem): number => {
+              (item1: ILicenseTableItem, item2: ILicenseTableItem): number => {
                 return item1.packageCount - item2.packageCount;
               },
               null,
@@ -175,8 +190,8 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (prevProps.document !== this.props.document || prevProps.suppliers !== this.props.suppliers) {
-      this.setState(SpdxSupplierTableCard.getDerivedStateFromProps(this.props));
+    if (prevProps.document !== this.props.document || prevProps.licenses !== this.props.licenses) {
+      this.setState(SpdxLicenseTableCard.getDerivedStateFromProps(this.props));
     }
   }
 
@@ -185,11 +200,11 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
       return (
         <ZeroData
           iconProps={{ iconName: 'Info' }}
-          primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Suppliers'}
+          primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No License'}
           secondaryText={
             this.props.filter.getFilterItemValue('keyword')
-              ? 'Filter does not match any suppliers.'
-              : 'Document does not contain any supplier information.'
+              ? 'Filter does not match any licenses.'
+              : 'Document does not contain any license information.'
           }
           imageAltText=""
           className="margin-vertical-20"
@@ -201,12 +216,19 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         className="flex-grow flex-column bolt-card bolt-table-card bolt-card-white"
         contentProps={{ contentPadding: false }}
       >
-        <Table<ISupplierTableItem>
+        <Table<ILicenseTableItem>
           role="table"
           containerClassName="h-scroll-auto"
           columns={this.state.tableColumns}
           itemProvider={this.state.tableItems}
           behaviors={this.state.tableSorting ? [this.state.tableSorting] : undefined}
+          singleClickActivation={true}
+          selectRowOnClick={true}
+          onActivate={(event, tableRow) => {
+            if (tableRow?.data?.url) {
+              window.open(tableRow.data.url, '_blank');
+            }
+          }}
         />
       </Card>
     );
@@ -216,7 +238,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
 function renderSimpleValueCell(
   rowIndex: number,
   columnIndex: number,
-  tableColumn: ITableColumn<ISupplierTableItem>,
+  tableColumn: ITableColumn<ILicenseTableItem>,
   tableItemValue: string,
 ): JSX.Element {
   return SimpleTableCell({
@@ -227,11 +249,38 @@ function renderSimpleValueCell(
   });
 }
 
+function renderLicenseSummaryCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ILicenseTableItem>,
+  tableItem: ILicenseTableItem,
+): JSX.Element {
+  return TableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    children: (
+      <div className="bolt-table-cell-content flex-row rhythm-horizontal-8">
+        <div className="primary-text">{tableItem.name}</div>
+        {tableItem.riskSeverity.id > 1 ? (
+          <Tooltip text={tableItem.riskReasons.join('; ')}>
+            <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.riskSeverity.color}>
+              <span className="font-weight-heavy text-on-communication-background">
+                {tableItem.riskSeverity.name} Risk
+              </span>
+            </Pill>
+          </Tooltip>
+        ) : null}
+      </div>
+    ),
+  });
+}
+
 function renderPackagesCell(
   rowIndex: number,
   columnIndex: number,
-  tableColumn: ITableColumn<ISupplierTableItem>,
-  tableItem: ISupplierTableItem,
+  tableColumn: ITableColumn<ILicenseTableItem>,
+  tableItem: ILicenseTableItem,
 ): JSX.Element {
   return TableCell({
     ariaRowIndex: rowIndex,

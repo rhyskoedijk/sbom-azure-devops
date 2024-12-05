@@ -18,12 +18,12 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { IPackage } from '../../shared/ghsa/IPackage';
-import { SecurityAdvisoryIdentifierType } from '../../shared/ghsa/ISecurityAdvisory';
-import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
-import { ISeverity } from '../../shared/models/severity/ISeverity';
-import { getSeverityByName } from '../../shared/models/severity/Severities';
-import { getPackageDependsOnChain, IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { IPackage } from '../../../shared/ghsa/IPackage';
+import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAdvisory';
+import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+import { ISeverity } from '../../../shared/models/severity/ISeverity';
+import { getSeverityByName } from '../../../shared/models/severity/Severities';
+import { getPackageDependsOnChain, IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 
 interface ISecurityAdvisoryTableItem {
   ghsaId: string;

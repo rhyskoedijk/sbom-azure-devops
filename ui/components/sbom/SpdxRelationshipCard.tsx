@@ -4,7 +4,7 @@ import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
+import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 
 interface Props {
   document: IDocument;

@@ -16,7 +16,6 @@ import { IPackage } from '../models/spdx/2.3/IPackage';
  * @returns
  */
 export function parseSpdxSecurityAdvisoriesLegacy(pkg: IPackage): ISecurityVulnerability[] | undefined {
-  console.info('Parsing security advisories from legacy SPDX document...');
   return parseExternalRefsAs<ISecurityVulnerability>(
     pkg.externalRefs || [],
     ExternalRefCategory.Security,

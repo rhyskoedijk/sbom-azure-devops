@@ -15,7 +15,7 @@ import '../shared/extensions/StringExtensions';
 import { ISbomBuildArtifact } from '../shared/models/ISbomBuildArtifact';
 import { IDocument } from '../shared/models/spdx/2.3/IDocument';
 import { BuildRestClient } from './clients/BuildRestClient';
-import { SbomDocumentPage } from './components/SbomDocumentPage';
+import { SbomDocumentPage } from './components/sbom/SbomDocumentPage';
 
 import './sbom-report-tab.scss';
 
