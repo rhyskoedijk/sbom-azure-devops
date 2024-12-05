@@ -12,10 +12,10 @@ import {
 import { HeaderCommandBar, IHeaderCommandBarItem } from 'azure-devops-ui/HeaderCommandBar';
 import { MenuItemType } from 'azure-devops-ui/Menu';
 
-import { ISbomBuildArtifact } from '../../shared/models/ISbomBuildArtifact';
-import { getCreatorOrganization, getCreatorTool } from '../../shared/models/spdx/2.3/ICreationInfo';
-import { convertSpdxToSvgAsync } from '../../shared/spdx/convertSpdxToSvg';
-import { convertSpdxToXlsxAsync } from '../../shared/spdx/convertSpdxToXlsx';
+import { ISbomBuildArtifact } from '../../../shared/models/ISbomBuildArtifact';
+import { getCreatorOrganization, getCreatorTool } from '../../../shared/models/spdx/2.3/ICreationInfo';
+import { convertSpdxToSvgAsync } from '../../../shared/spdx/convertSpdxToSvg';
+import { convertSpdxToXlsxAsync } from '../../../shared/spdx/convertSpdxToXlsx';
 
 interface Props {
   artifact: ISbomBuildArtifact;

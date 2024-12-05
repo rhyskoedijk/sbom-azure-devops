@@ -15,22 +15,22 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
-import { getSeverityByName } from '../../shared/models/severity/Severities';
-import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../../shared/models/spdx/2.3/IDocument';
+import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+import { getSeverityByName } from '../../../shared/models/severity/Severities';
+import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../../../shared/models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
   getExternalRefPackageManagerName,
   getExternalRefPackageManagerUrl,
   parseExternalRefsAs,
-} from '../../shared/models/spdx/2.3/IExternalRef';
+} from '../../../shared/models/spdx/2.3/IExternalRef';
 import {
   getPackageLicenseExpression,
   getPackageSupplierOrganization,
   IPackage,
-} from '../../shared/models/spdx/2.3/IPackage';
-import { parseSpdxSecurityAdvisoriesLegacy } from '../../shared/spdx/parseSpdxSecurityAdvisoriesLegacy';
+} from '../../../shared/models/spdx/2.3/IPackage';
+import { parseSpdxSecurityAdvisoriesLegacy } from '../../../shared/spdx/parseSpdxSecurityAdvisoriesLegacy';
 
 import { VulnerabilitiesSummaryBadge } from './VulnerabilitiesSummaryBadge';
 

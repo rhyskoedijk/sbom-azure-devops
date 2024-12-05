@@ -3,13 +3,14 @@ import * as React from 'react';
 import { Pill, PillSize, PillVariant } from 'azure-devops-ui/Pill';
 import { Tooltip } from 'azure-devops-ui/TooltipEx';
 
-import { ISecurityVulnerability } from '../../shared/ghsa/ISecurityVulnerability';
-import { ISeverity } from '../../shared/models/severity/ISeverity';
-import { DEFAULT_SEVERITY, SEVERITIES } from '../../shared/models/severity/Severities';
+import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+import { ISeverity } from '../../../shared/models/severity/ISeverity';
+import { DEFAULT_SEVERITY, SEVERITIES } from '../../../shared/models/severity/Severities';
 
 import './VulnerabilitiesSummaryBadge.scss';
 
 interface Props {
+  className?: string;
   vulnerabilities: ISecurityVulnerability[];
 }
 
@@ -48,7 +49,7 @@ export class VulnerabilitiesSummaryBadge extends React.Component<Props, State> {
 
   public render(): JSX.Element {
     return (
-      <div className="flex-row flex-wrap flex-gap-4">
+      <div className={'flex-row flex-wrap flex-gap-4 ' + (this.props.className || '')}>
         {this.state.severitySummary
           .sort((a, b) => b.severity.id - a.severity.id)
           .map((severitySummary, index) => (

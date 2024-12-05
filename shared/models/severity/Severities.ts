@@ -9,6 +9,10 @@ export const SEVERITIES: ISeverity[] = [
 ];
 
 export const DEFAULT_SEVERITY: ISeverity = SEVERITIES[0];
+export const LOW_SEVERITY: ISeverity = SEVERITIES[1];
+export const MODERATE_SEVERITY: ISeverity = SEVERITIES[2];
+export const HIGH_SEVERITY: ISeverity = SEVERITIES[3];
+export const CRITICAL_SEVERITY: ISeverity = SEVERITIES[4];
 
 export function getSeverityByName(name: string): ISeverity {
   const normalizedName = name?.toUpperCase();
