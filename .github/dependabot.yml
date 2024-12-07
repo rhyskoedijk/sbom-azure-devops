@@ -9,6 +9,7 @@ updates:
     target-branch: 'main'
     directories: 
       - '/'
+      - '/shared'
       - '/task'
       - '/ui'
     schedule:
