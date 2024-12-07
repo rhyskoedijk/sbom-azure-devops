@@ -1,7 +1,7 @@
 {
   "private": true,
   "dependencies": {
-    "@vizdom/vizdom-ts-node": "^0.1.17",
+    "@vizdom/vizdom-ts-node": "^0.1.18",
     "azure-pipelines-task-lib": "^4.17.3"
   },
   "devDependencies": {
