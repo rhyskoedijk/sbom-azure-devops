@@ -7,7 +7,10 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     target-branch: 'main'
-    directory: '/'
+    directories: 
+      - '/'
+      - '/task'
+      - '/ui'
     schedule:
       interval: 'weekly'
       day: 'saturday'
