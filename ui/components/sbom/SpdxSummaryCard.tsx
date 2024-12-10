@@ -6,7 +6,6 @@ import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { createTheme, Theme, ThemeProvider } from '@mui/material';
 
-import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAdvisory';
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { ISeverity } from '../../../shared/models/severity/ISeverity';
 import { DEFAULT_SEVERITY, getSeverityByName, SEVERITIES } from '../../../shared/models/severity/Severities';
@@ -20,6 +19,13 @@ import { IPackage } from '../../../shared/models/spdx/2.3/IPackage';
 import { BarChart, BarChartSeries } from '../charts/BarChart';
 import { PieChart, PieChartValue } from '../charts/PieChart';
 import { Tile } from '../charts/Tile';
+
+interface Recommendation {
+  severity: ISeverity;
+  title: string;
+  target: string;
+  action: string;
+}
 
 interface Props {
   document: IDocument;
@@ -39,26 +45,29 @@ interface State {
   packages?: {
     total: number;
     totalVulnerable: number;
-    packageManagersChartData: PieChartValue[];
     packageTypesChartData: PieChartValue[];
+    packageManagersChartData: PieChartValue[];
   };
   securityAdvisories?: {
     total: number;
     weaknesses: string[];
+    vulnPackageNames: string[];
     vulnHighestSeverity: ISeverity;
     vulnByPackageManagerChartData: BarChartSeries[];
+    vulnByPackageNameChartData: BarChartSeries[];
     vulnByWeaknessChartData: BarChartSeries[];
-    vulnAgeInDaysChartData?: PieChartValue[];
-    vulnPackagesChartData?: PieChartValue[];
-    vulnFixableChartData?: PieChartValue[];
-    vulnCvssScoresChartData?: PieChartValue[];
+    // vulnSeverityAndCvssHeatMapChartData: HeatMapValue[];
+    // vulnPublishedTimelineChartData: TimelineValue[];
   };
   licenses?: {
     total: number;
+    // licensesChartData: PieChartValue[];
   };
   suppliers?: {
     total: number;
+    // suppliersChartData: PieChartValue[];
   };
+  // recommendations?: Recommendation[];
 }
 
 export class SpdxSummaryCard extends React.Component<Props, State> {
@@ -74,6 +83,13 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
       (k, v) => k,
     )
       .orderBy((pm: string) => pm, false)
+      .distinct();
+    const vulnPackageNames = reduceAsMap(
+      props.securityAdvisories.map((v) => v.package),
+      (p) => p.name,
+      (k, v) => k,
+    )
+      .orderBy((pn: string) => pn, false)
       .distinct();
     const weaknesses = props.securityAdvisories
       .flatMap((v) => v.advisory.cwes || [])
@@ -91,14 +107,14 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
             totalVulnerable: props.packages.filter((p) =>
               p.externalRefs?.some((ref) => spdxConstantsAreEqual(ref.referenceCategory, ExternalRefCategory.Security)),
             ).length,
-            packageManagersChartData: reduceAsMap(
-              props.packages,
-              (p) => getExternalRefPackageManagerName(p.externalRefs) || 'Other',
-              (k, v) => ({ label: k, value: v }),
-            ),
             packageTypesChartData: reduceAsMap(
               props.packages,
               (p) => (isPackageTopLevel(props.document, p.SPDXID) ? 'Top Level' : 'Transitive'),
+              (k, v) => ({ label: k, value: v }),
+            ),
+            packageManagersChartData: reduceAsMap(
+              props.packages,
+              (p) => getExternalRefPackageManagerName(p.externalRefs) || 'Other',
               (k, v) => ({ label: k, value: v }),
             ),
           }
@@ -107,6 +123,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         ? {
             total: props.securityAdvisories.length,
             weaknesses: weaknesses,
+            vulnPackageNames: vulnPackageNames,
             vulnHighestSeverity: props.securityAdvisories
               .map((s) => getSeverityByName(s.advisory.severity))
               .reduce((max, s) => (s.weight > max.weight ? s : max), DEFAULT_SEVERITY),
@@ -115,31 +132,14 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
               packageManagers,
               props.securityAdvisories,
             ),
+            vulnByPackageNameChartData: SpdxSummaryCard.getVulnerabilitiesByPackageNameChartData(
+              props.packages,
+              vulnPackageNames,
+              props.securityAdvisories,
+            ),
             vulnByWeaknessChartData: SpdxSummaryCard.getVulnerabiilityWeaknessesChartData(
               weaknesses,
               props.securityAdvisories,
-            ),
-            vulnAgeInDaysChartData: summariseAsMap(
-              props.securityAdvisories,
-              (v) =>
-                v.advisory.identifiers?.find((id) => id.type == SecurityAdvisoryIdentifierType.Ghsa)?.value ||
-                'Unknown',
-              (v) => Math.floor((Date.now() - new Date(v.advisory.publishedAt).getTime()) / (1000 * 60 * 60 * 24)),
-            ),
-            vulnPackagesChartData: reduceAsMap(
-              props.securityAdvisories,
-              (v) => v.package.name,
-              (k, v) => ({ label: k, value: v }),
-            ),
-            vulnFixableChartData: reduceAsMap(
-              props.securityAdvisories,
-              (v) => (v.firstPatchedVersion ? 'Fixable' : 'Not Fixable'),
-              (k, v) => ({ label: k, value: v }),
-            ),
-            vulnCvssScoresChartData: reduceAsMap(
-              props.securityAdvisories,
-              (v) => Math.floor(v.advisory.cvss?.score || 0).toString(),
-              (k, v) => ({ label: k, value: v }),
             ),
           }
         : undefined,
@@ -173,6 +173,29 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
                   getExternalRefPackageManagerName(pkg.externalRefs) == pm &&
                   v.advisory.severity.toUpperCase() === s.name.toUpperCase()
                 );
+              }).length,
+          ),
+          stack: 'severity',
+        };
+      });
+  }
+
+  static getVulnerabilitiesByPackageNameChartData(
+    packages: IPackage[],
+    packageNames: string[],
+    securityAdvisories: ISecurityVulnerability[],
+  ): BarChartSeries[] {
+    return SEVERITIES.filter((s: ISeverity) => s.id > 0)
+      .orderBy((s: ISeverity) => s.weight, false)
+      .map((s: ISeverity) => {
+        return {
+          color: rgbToHex(s.color),
+          label: s.name,
+          data: packageNames.map(
+            (pn) =>
+              securityAdvisories.filter((v) => {
+                const pkg = packages.find((p) => p.name == v.package.name);
+                return pkg && pkg.name == pn && v.advisory.severity.toUpperCase() === s.name.toUpperCase();
               }).length,
           ),
           stack: 'severity',
@@ -222,6 +245,24 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         <ThemeProvider theme={this.state.theme}>
           <div className="flex-column flex-gap-24">
             <div className="summary-row flex-row flex-wrap flex-gap-24">
+              <Tile color={DEFAULT_SEVERITY.color} value={this.state.files?.total?.toString() || '0'} title="Files" />
+              <Tile
+                color={DEFAULT_SEVERITY.color}
+                value={this.state.packages?.total?.toString() || '0'}
+                title="Packages"
+              />
+              <Tile
+                color={DEFAULT_SEVERITY.color}
+                value={this.state.licenses?.total?.toString() || '0'}
+                title="Licenses"
+              />
+              <Tile
+                color={DEFAULT_SEVERITY.color}
+                value={this.state.suppliers?.total?.toString() || '0'}
+                title="Suppliers"
+              />
+            </div>
+            <div className="summary-row flex-row flex-wrap flex-gap-24">
               <Tile
                 color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
                 value={
@@ -231,20 +272,25 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
                 }
                 title="Vulnerable Packages"
                 header={`${this.state.packages?.totalVulnerable || 0} of ${this.state.packages?.total || 0} packages are vulnerable`}
-                size={200}
               />
               <Tile
                 color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
                 value={(this.state.securityAdvisories?.total || 0).toString()}
                 title="Total Vulnerabilities"
-                size={200}
               />
               <BarChart
                 bands={this.state.packageManagers}
                 data={this.state.securityAdvisories?.vulnByPackageManagerChartData || []}
                 layout="horizontal"
                 title="Vulnerabilities by Package Manager"
-                height={120 + this.state.packageManagers.length * 30}
+                height={100 + this.state.packageManagers.length * 30}
+              />
+              <BarChart
+                bands={this.state.securityAdvisories?.vulnPackageNames}
+                data={this.state.securityAdvisories?.vulnByPackageNameChartData || []}
+                layout="vertical"
+                title="Vulnerabilities by Package Name"
+                width={100 + (this.state.securityAdvisories?.vulnPackageNames?.length || 0) * 30}
               />
             </div>
             <div className="summary-row flex-row flex-wrap flex-gap-24">
@@ -255,7 +301,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
                 data={this.state.securityAdvisories?.vulnByWeaknessChartData || []}
                 layout="horizontal"
                 title="Weaknesses"
-                height={120 + (this.state.securityAdvisories?.weaknesses?.length || 0) * 30}
+                height={100 + (this.state.securityAdvisories?.weaknesses?.length || 0) * 30}
               />
             </div>
           </div>
