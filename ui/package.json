@@ -4,7 +4,7 @@
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
     "@mui/material": "^6.1.10",
-    "@mui/x-charts": "^7.23.1",
+    "@mui/x-charts": "^7.23.2",
     "azure-devops-extension-api": "^4.245.1",
     "azure-devops-extension-sdk": "^4.0.2",
     "azure-devops-ui": "^2.246.0",
