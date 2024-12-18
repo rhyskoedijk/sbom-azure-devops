@@ -15,6 +15,7 @@ import {
   TableCell,
   TwoLineTableCell,
 } from 'azure-devops-ui/Table';
+import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
@@ -32,6 +33,7 @@ interface ISecurityAdvisoryTableItem {
   package: IPackage;
   vulnerableVersionRange: string;
   firstPatchedVersion: string;
+  introducedThrough: string[];
   severity: ISeverity;
   cvssScore: number;
   cvssVector: string;
@@ -84,6 +86,9 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
       props.securityAdvisories
         ?.orderBy((vuln: ISecurityVulnerability) => getSeverityByName(vuln.advisory.severity).weight, false)
         ?.map((vuln: ISecurityVulnerability) => {
+          const packageSpdxId = props.document.packages?.find(
+            (p) => p.name == vuln.package.name && p.versionInfo == vuln.package.version,
+          )?.SPDXID;
           const cvssParts = vuln.advisory.cvss?.vectorString?.match(/^CVSS\:([\d]+\.[\d]+)\/(.*)$/i);
           return {
             ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
@@ -93,7 +98,8 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             vulnerableVersionRange: vuln.vulnerableVersionRange,
             fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
             firstPatchedVersion: vuln.firstPatchedVersion,
-            introducedThrough: getPackageDependsOnChain(props.document, vuln.package.id).map((p) => p.name),
+            introducedThrough:
+              (packageSpdxId && getPackageDependsOnChain(props.document, packageSpdxId).map((p) => p.name)) || [],
             severity: getSeverityByName(vuln.advisory.severity),
             cvssScore: vuln.advisory.cvss?.score,
             cvssVector: cvssParts?.[2]?.trim() || '',
@@ -410,7 +416,17 @@ function renderAdvisoryPackageCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    line1: <div className="primary-text">{tableItem.package?.name}</div>,
+    line1: (
+      <Tooltip
+        text={
+          tableItem.introducedThrough?.length
+            ? `Transitive dependency introduced through:\n${tableItem.introducedThrough?.join('\n > ')}\n > ${tableItem.package?.name}`
+            : 'Direct dependency'
+        }
+      >
+        <div className="primary-text">{tableItem.package?.name}</div>
+      </Tooltip>
+    ),
     line2: <div className="secondary-text">{tableItem.package?.version}</div>,
   });
 }

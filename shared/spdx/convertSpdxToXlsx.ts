@@ -210,6 +210,9 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
     content: securityAdvisories
       .orderBy((vuln: ISecurityVulnerability) => getSeverityByName(vuln.advisory.severity).weight, false)
       .map((vuln: ISecurityVulnerability) => {
+        const packageSpdxId = packages?.find(
+          (p) => p.name == vuln.package.name && p.versionInfo == vuln.package.version,
+        )?.SPDXID;
         return {
           ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
           cveId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Cve)?.value || '',
@@ -219,9 +222,11 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
           firstPatchedVersion: vuln.firstPatchedVersion,
           introducedThrough:
-            getPackageDependsOnChain(spdx, vuln.package.id)
-              .map((p) => p.name)
-              .join(' > ') || '',
+            (packageSpdxId &&
+              getPackageDependsOnChain(spdx, packageSpdxId)
+                .map((p) => p.name)
+                .join(' > ')) ||
+            '',
           severity: vuln.advisory.severity?.toPascalCase(),
           cvssScore: vuln.advisory.cvss?.score || '',
           cvssVector: vuln.advisory.cvss?.vectorString || '',
