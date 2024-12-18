@@ -82,7 +82,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
       .filter((licenseExpression): licenseExpression is string => !!licenseExpression)
       .flatMap((licenseExpression: string) => getLicensesFromExpression(licenseExpression))
       .filter((license): license is ILicense => !!license)
-      .distinctBy((license: ILicense) => license.licenseId);
+      .distinctBy((license: ILicense) => license.id);
     const suppliers = packages
       .map((pkg) => getPackageSupplierOrganization(pkg))
       .filter((supplier): supplier is string => !!supplier)

@@ -1,15 +1,9 @@
-import * as spdxLicenseList from './licenses.json';
+import * as spdxLicenseList from 'spdx-license-list';
 
 export interface ILicense {
-  reference: string;
-  isDeprecatedLicenseId: boolean;
-  detailsUrl: string;
-  referenceNumber: number;
+  id: string;
   name: string;
-  licenseId: string;
-  seeAlso: string[];
-  isOsiApproved: boolean;
-  isFsfLibre?: boolean;
+  url: string;
 }
 
 /**
@@ -19,5 +13,16 @@ export interface ILicense {
  * @returns The licenses
  */
 export function getLicensesFromExpression(licenseExpression: string): ILicense[] | undefined {
-  return spdxLicenseList.licenses.filter((x: { licenseId: string }) => licenseExpression.includes(x.licenseId));
+  return Object.keys(spdxLicenseList)
+    .filter((id) =>
+      licenseExpression
+        .split(/\s+/)
+        .filter((word) => word.length > 0)
+        .includes(id),
+    )
+    .map((id) => ({
+      id,
+      name: spdxLicenseList[id].name,
+      url: spdxLicenseList[id].url,
+    }));
 }

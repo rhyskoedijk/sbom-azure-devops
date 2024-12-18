@@ -28,6 +28,11 @@ export function getPackageLicenseExpression(pkg: IPackage): string | undefined {
   return undefined;
 }
 
+export function getPackageLicenseReferences(pkg: IPackage): string[] {
+  const expression = getPackageLicenseExpression(pkg) || '';
+  return expression.split(/\s+/).filter((word) => word.length > 0);
+}
+
 export function getPackageSupplierOrganization(pkg: IPackage): string | undefined {
   if (pkg.supplier === NOASSERTION) {
     return undefined;

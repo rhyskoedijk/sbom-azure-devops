@@ -25,7 +25,7 @@ import { getSeverityByName } from '../../../shared/models/severity/Severities';
 import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 import { getExternalRefPackageManagerUrl } from '../../../shared/models/spdx/2.3/IExternalRef';
 import { ILicense } from '../../../shared/models/spdx/2.3/ILicense';
-import { getPackageLicenseExpression } from '../../../shared/models/spdx/2.3/IPackage';
+import { getPackageLicenseReferences } from '../../../shared/models/spdx/2.3/IPackage';
 
 const MAX_PACKAGES_VISIBLE = 3;
 
@@ -77,10 +77,10 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
     );
     const rawTableItems: ILicenseTableItem[] =
       props.licenses
-        ?.orderBy((license: ILicense) => license.licenseId)
+        ?.orderBy((license: ILicense) => license.id)
         ?.map((license: ILicense) => {
           const packagesWithLicense = props.document.packages
-            ?.filter((p) => getPackageLicenseExpression(p)?.includes(license.licenseId))
+            ?.filter((p) => getPackageLicenseReferences(p)?.includes(license.id))
             ?.map((p) => {
               return {
                 name: p.name || '',
@@ -88,16 +88,16 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
                 url: getExternalRefPackageManagerUrl(p.externalRefs),
               };
             });
-          const licenseRisk = getLicenseRiskAssessment(license.licenseId);
+          const licenseRisk = getLicenseRiskAssessment(license.id);
           return {
-            id: license.licenseId,
+            id: license.id,
             name: license.name,
             packagesTotal: packagesWithLicense.length,
             packagesVisible: new ObservableValue<number>(MAX_PACKAGES_VISIBLE),
             packages: packagesWithLicense,
             riskSeverity: getSeverityByName(licenseRisk?.severity || LicenseRiskSeverity.Low),
             riskReasons: licenseRisk?.reasons || [],
-            url: license.reference,
+            url: license.url || '',
           };
         }) || [];
 

@@ -15,7 +15,12 @@ import {
 } from '../models/spdx/2.3/IExternalRef';
 import { IFile } from '../models/spdx/2.3/IFile';
 import { getLicensesFromExpression, ILicense } from '../models/spdx/2.3/ILicense';
-import { getPackageLicenseExpression, getPackageSupplierOrganization, IPackage } from '../models/spdx/2.3/IPackage';
+import {
+  getPackageLicenseExpression,
+  getPackageLicenseReferences,
+  getPackageSupplierOrganization,
+  IPackage,
+} from '../models/spdx/2.3/IPackage';
 import { IRelationship } from '../models/spdx/2.3/IRelationship';
 import { parseSpdxSecurityAdvisoriesLegacy } from './parseSpdxSecurityAdvisoriesLegacy';
 
@@ -57,7 +62,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
     .filter((licenseExpression): licenseExpression is string => !!licenseExpression)
     .flatMap((licenseExpression: string) => getLicensesFromExpression(licenseExpression))
     .filter((license): license is ILicense => !!license)
-    .distinctBy((license: ILicense) => license.licenseId);
+    .distinctBy((license: ILicense) => license.id);
   const suppliers = packages
     .map((pkg) => getPackageSupplierOrganization(pkg))
     .filter((supplier): supplier is string => !!supplier)
@@ -254,20 +259,20 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'Risk Reason', value: 'riskReasons' },
     ],
     content: licenses
-      .orderBy((license: ILicense) => license.licenseId)
+      .orderBy((license: ILicense) => license.id)
       .map((license: ILicense) => {
         const packagesWithLicense = packages
-          .filter((p) => getPackageLicenseExpression(p)?.includes(license.licenseId))
+          .filter((p) => getPackageLicenseReferences(p).includes(license.id))
           .map((p) => `${p.name || ''}@${p.versionInfo || ''}`)
           .distinct();
-        const licenseRisk = getLicenseRiskAssessment(license.licenseId);
+        const licenseRisk = getLicenseRiskAssessment(license.id);
         return {
-          id: license.licenseId,
+          id: license.id,
           name: license.name,
           packages: packagesWithLicense.length,
           riskSeverity: (licenseRisk?.severity || LicenseRiskSeverity.Low).toPascalCase(),
           riskReasons: licenseRisk?.reasons?.join('; ') || '',
-          url: license.reference,
+          url: license.url || '',
         };
       }),
   };
