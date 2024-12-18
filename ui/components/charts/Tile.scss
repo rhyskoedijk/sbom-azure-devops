@@ -2,7 +2,17 @@
   border: solid 1px var(--border-subtle-color);
 }
 
-.tile .title {
-  margin-top: 4px;
-  margin-bottom: 4px;
+.tile .value {
+  font-size: 3.5rem;
+  font-weight: 300;
+  text-align: center;
+}
+
+.tile .title,
+.tile .subtitle {
+  font-size: 1rem;
+  font-weight: normal;
+  text-align: center;
+  margin: 0 0 10px;
+  width: 100%;
 }

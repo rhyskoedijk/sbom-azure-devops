@@ -245,39 +245,38 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         <ThemeProvider theme={this.state.theme}>
           <div className="flex-column flex-gap-24">
             <div className="summary-row flex-row flex-wrap flex-gap-24">
-              <Tile color={DEFAULT_SEVERITY.color} value={this.state.files?.total?.toString() || '0'} title="Files" />
+              <Tile
+                color={DEFAULT_SEVERITY.color}
+                value={this.state.files?.total?.toString() || '0'}
+                title="Total Files"
+              />
               <Tile
                 color={DEFAULT_SEVERITY.color}
                 value={this.state.packages?.total?.toString() || '0'}
-                title="Packages"
+                title="Total Packages"
               />
-              <Tile
-                color={DEFAULT_SEVERITY.color}
-                value={this.state.licenses?.total?.toString() || '0'}
-                title="Licenses"
-              />
-              <Tile
-                color={DEFAULT_SEVERITY.color}
-                value={this.state.suppliers?.total?.toString() || '0'}
-                title="Suppliers"
-              />
-            </div>
-            <div className="summary-row flex-row flex-wrap flex-gap-24">
               <Tile
                 color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
-                value={
-                  (this.state.packages!.totalVulnerable > 0 && this.state.packages!.total > 0
-                    ? ((this.state.packages!.totalVulnerable / this.state.packages!.total) * 100).toFixed(2)
-                    : 0) + '%'
-                }
+                value={this.state.packages?.totalVulnerable?.toString() || '0'}
                 title="Vulnerable Packages"
-                header={`${this.state.packages?.totalVulnerable || 0} of ${this.state.packages?.total || 0} packages are vulnerable`}
               />
               <Tile
                 color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
                 value={(this.state.securityAdvisories?.total || 0).toString()}
                 title="Total Vulnerabilities"
               />
+              <Tile
+                color={DEFAULT_SEVERITY.color}
+                value={this.state.licenses?.total?.toString() || '0'}
+                title="Unique Licenses"
+              />
+              <Tile
+                color={DEFAULT_SEVERITY.color}
+                value={this.state.suppliers?.total?.toString() || '0'}
+                title="Unique Suppliers"
+              />
+            </div>
+            <div className="summary-row flex-row flex-wrap flex-gap-24">
               <BarChart
                 bands={this.state.packageManagers}
                 data={this.state.securityAdvisories?.vulnByPackageManagerChartData || []}

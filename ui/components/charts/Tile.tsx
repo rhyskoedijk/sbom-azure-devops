@@ -8,11 +8,10 @@ import './Tile.scss';
 interface Props {
   className?: string;
   color?: IColor;
+  size?: number;
   value: string;
   title?: string;
-  header?: string;
-  footer?: string;
-  size?: number;
+  subtitle?: string;
 }
 
 interface State {}
@@ -37,21 +36,20 @@ export class Tile extends React.Component<Props, State> {
     return (
       <div
         className={
-          'tile text-on-communication-background flex-column flex-center flex-grow flex-gap-4 padding-16 ' +
-          (this.props.className || '')
+          'tile text-on-communication-background flex-column flex-center padding-8' + (this.props.className || '')
         }
         style={{
           backgroundColor: this.props.color ? rgbToHex(this.props.color) : undefined,
-          width: this.props.size,
-          height: this.props.size,
+          width: this.props.size || 160,
+          height: this.props.size || 160,
         }}
+        title={`${this.props.title}: ${this.props.value}`}
       >
-        {this.props.title && <h3 className="title">{this.props.title}</h3>}
-        <div className="value flex-grow" style={{ fontSize: this.props.header || this.props.footer ? '3rem' : '5rem' }}>
-          {this.props.value}
+        {this.props.title && <h2 className="title text-ellipsis">{this.props.title}</h2>}
+        <div className="flex-column flex-center flex-grow">
+          <div className="value">{this.props.value.substring(0, 5)}</div>
         </div>
-        {this.props.header && <div className="header text-center">{this.props.header}</div>}
-        {this.props.footer && <div className="footer text-center">{this.props.footer}</div>}
+        {this.props.subtitle && <div className="subtitle text-ellipsis">{this.props.subtitle}</div>}
       </div>
     );
   }
