@@ -445,7 +445,9 @@ function renderAdvisoryCvssCell(
       <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
         <span>{tableItem.cvssScore} / 10</span>
         <Link
-          tooltipProps={{ text: 'Learn more about how this score is calculated' }}
+          tooltipProps={{
+            text: 'Learn more about the Common Vulnerability Scoring System (CVSS) and how this score was calculated',
+          }}
           className="bolt-table-link bolt-table-link-icon"
           href={`https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=${tableItem.cvssVector}&version=${tableItem.cvssVersion}`}
           target="_blank"

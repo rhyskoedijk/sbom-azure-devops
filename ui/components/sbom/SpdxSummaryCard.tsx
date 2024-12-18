@@ -330,25 +330,3 @@ function reduceAsMap<T, K extends keyof any, M>(
   ) as [K, number][];
   return reduced.sort().map(([k, v]) => mapper(k, v));
 }
-
-function summariseAsMap<T, K extends keyof any, V extends keyof any, M>(
-  array: T[],
-  keySelector: (item: T) => K | K[],
-  valueSelector: (item: T) => V,
-  mapper?: (key: K, value: V) => M,
-) {
-  const summarised = Object.entries(
-    array.reduce(
-      (acc, item) => {
-        const key = keySelector(item);
-        const keys = Array.isArray(key) ? key : [key];
-        keys.forEach((k) => {
-          acc[k] = valueSelector(item);
-        });
-        return acc;
-      },
-      {} as Record<K, V>,
-    ),
-  ) as [K, V][];
-  return summarised.sort().map(([k, v]) => (mapper ? mapper(k, v) : { label: k, value: v }));
-}

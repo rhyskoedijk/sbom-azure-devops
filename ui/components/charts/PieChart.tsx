@@ -44,7 +44,9 @@ export class PieChart extends React.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    return (
+    return !this.state.total ? (
+      <div />
+    ) : (
       <div className={'pie-chart flex-column flex-center flex-grow ' + (this.props.className || '')}>
         {this.props.title && <h3 className="title">{this.props.title}</h3>}
         <MuiPieChart

@@ -25,6 +25,7 @@ interface Props {
 
 interface State {
   series: MakeOptional<BarSeriesType, 'type'>[];
+  total: number;
 }
 
 export class BarChart extends React.Component<Props, State> {
@@ -43,6 +44,7 @@ export class BarChart extends React.Component<Props, State> {
         stack: d.stack,
         ...(d.color ? { color: d.color } : {}),
       })),
+      total: props.data.reduce((accX, itemX) => accX + itemX.data.reduce((accY, itemY) => accY + itemY, 0), 0),
     };
   }
 
@@ -53,7 +55,9 @@ export class BarChart extends React.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    return (
+    return !this.state.total ? (
+      <div />
+    ) : (
       <div className={'bar-chart flex-column flex-center flex-grow ' + (this.props.className || '')}>
         {this.props.title && <h3 className="title">{this.props.title}</h3>}
         <MuiBarChart
