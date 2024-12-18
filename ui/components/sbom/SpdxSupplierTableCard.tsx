@@ -69,7 +69,6 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         ?.map((supplier: string) => {
           const packagesFromSupplier = props.document.packages
             ?.filter((p) => getPackageSupplierOrganization(p) == supplier)
-            ?.sort((p) => p.name.localeCompare(p.name))
             ?.map((p) => {
               return {
                 name: p.name || '',

@@ -81,7 +81,6 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
         ?.map((license: ILicense) => {
           const packagesWithLicense = props.document.packages
             ?.filter((p) => getPackageLicenseExpression(p)?.includes(license.licenseId))
-            ?.sort((p) => p.name.localeCompare(p.name))
             ?.map((p) => {
               return {
                 name: p.name || '',
