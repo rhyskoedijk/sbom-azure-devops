@@ -1,8 +1,10 @@
 import * as React from 'react';
 
+import { Button } from 'azure-devops-ui/Button';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Link } from 'azure-devops-ui/Link';
+import { Observer } from 'azure-devops-ui/Observer';
 import {
   ColumnSorting,
   ITableColumn,
@@ -19,10 +21,13 @@ import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 import { getExternalRefPackageManagerUrl } from '../../../shared/models/spdx/2.3/IExternalRef';
 import { getPackageSupplierOrganization } from '../../../shared/models/spdx/2.3/IPackage';
 
+const MAX_PACKAGES_VISIBLE = 3;
+
 interface ISupplierTableItem {
   id: string;
   name: string;
-  packageCount: number;
+  packagesTotal: number;
+  packagesVisible: ObservableValue<number>;
   packages: {
     name: string;
     version: string;
@@ -64,6 +69,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         ?.map((supplier: string) => {
           const packagesFromSupplier = props.document.packages
             ?.filter((p) => getPackageSupplierOrganization(p) == supplier)
+            ?.sort((p) => p.name.localeCompare(p.name))
             ?.map((p) => {
               return {
                 name: p.name || '',
@@ -74,7 +80,8 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
           return {
             id: supplier || '',
             name: supplier || '',
-            packageCount: packagesFromSupplier.length,
+            packagesTotal: packagesFromSupplier.length,
+            packagesVisible: new ObservableValue<number>(MAX_PACKAGES_VISIBLE),
             packages: packagesFromSupplier,
           };
         }) || [];
@@ -106,7 +113,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         name: 'Count',
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packageCount.toString()),
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packagesTotal.toString()),
         sortProps: {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
@@ -145,7 +152,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
               },
               // Sort on package count
               (item1: ISupplierTableItem, item2: ISupplierTableItem): number => {
-                return item1.packageCount - item2.packageCount;
+                return item1.packagesTotal - item2.packagesTotal;
               },
               null,
             ],
@@ -238,19 +245,41 @@ function renderPackagesCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     children: (
-      <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
-        {tableItem.packages.map((pkg, index) => (
-          <Link
-            key={index}
-            className="bolt-table-link bolt-table-link-inline"
-            href={pkg.url}
-            target={pkg.url ? '_blank' : undefined}
-            excludeTabStop
-          >
-            {pkg.name} <span className="secondary-text">{pkg.version}</span>
-          </Link>
-        ))}
-      </div>
+      <Observer packagesVisible={tableItem.packagesVisible}>
+        {(props: { packagesVisible: number }) => (
+          <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
+            {tableItem.packages.slice(0, props.packagesVisible).map((pkg, index) => (
+              <Link
+                key={index}
+                className="bolt-table-link bolt-table-link-inline flex-row flex-center"
+                href={pkg.url}
+                target={pkg.url ? '_blank' : undefined}
+                excludeTabStop
+              >
+                <span>
+                  {pkg.name} <span className="secondary-text">{pkg.version}</span>
+                </span>
+              </Link>
+            ))}
+            {tableItem.packagesTotal > MAX_PACKAGES_VISIBLE && (
+              <Button
+                onClick={(e) => {
+                  tableItem.packagesVisible.value =
+                    props.packagesVisible !== tableItem.packagesTotal ? tableItem.packagesTotal : MAX_PACKAGES_VISIBLE;
+                  e.stopPropagation();
+                }}
+                iconProps={{
+                  iconName: props.packagesVisible !== tableItem.packagesTotal ? 'ChevronRight' : 'ChevronLeft',
+                }}
+                tooltipProps={{
+                  text: props.packagesVisible !== tableItem.packagesTotal ? 'Show more packages' : 'Show less packages',
+                }}
+                text={props.packagesVisible !== tableItem.packagesTotal ? 'More' : 'Less'}
+              />
+            )}
+          </div>
+        )}
+      </Observer>
     ),
   });
 }
