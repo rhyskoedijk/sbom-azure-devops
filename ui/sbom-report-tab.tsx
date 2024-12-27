@@ -20,7 +20,6 @@ import { SbomDocumentPage } from './components/sbom/SbomDocumentPage';
 import './sbom-report-tab.scss';
 
 const SPDX_JSON_ATTACHMENT_TYPE = 'spdx.json';
-const SPDX_XLSX_ATTACHMENT_TYPE = 'spdx.xlsx';
 const SPDX_SVG_ATTACHMENT_TYPE = 'spdx.svg';
 
 interface State {
@@ -75,27 +74,27 @@ export class Root extends React.Component<{}, State> {
         throw new Error('Unable to access the current build data');
       }
 
-      // Get the SBOM artifact attachments for the current build
+      // Get all SPDX JSON artifact attachments for the current build
       const buildClient = getClient(BuildRestClient);
-      const sbomAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_JSON_ATTACHMENT_TYPE);
-      console.info(`Detected ${sbomAttachments.length} SBOM artifact attachment(s) for build ${buildId}`);
+      const spdxJsonAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_JSON_ATTACHMENT_TYPE);
+      console.info(`Detected ${spdxJsonAttachments.length} SBOM artifact attachment(s) for build ${buildId}`);
 
       // Download and process each SBOM artifact attachment
       const sbomArtifacts: ISbomBuildArtifact[] = [];
-      for (const sbomAttachment of sbomAttachments) {
+      for (const spdxJsonAttachment of spdxJsonAttachments) {
         try {
           // Extract the attachment identifiers from the url
           // Format: `/{projectId}/_apis/build/builds/{buildId}/{timelineId}/{timelineRecordId}/attachments/{attachmentType}/{attachmentName}`
           // TODO: Change this if/when the DevOps API provides a better way to get the attachment stream
-          const spdxUrl = sbomAttachment._links?.self?.href;
+          const spdxUrl = spdxJsonAttachment._links?.self?.href;
           if (!spdxUrl) {
-            throw new Error(`Attachment url not found for '${sbomAttachment.name}'`);
+            throw new Error(`Attachment url not found for '${spdxJsonAttachment.name}'`);
           }
           const spdxUrlMatch = spdxUrl.match(
             /([a-f-0-9]*)\/_apis\/build\/builds\/([a-f-0-9]*)\/([a-f-0-9]*)\/([a-f-0-9]*)\/attachments\//i,
           );
           if (!spdxUrlMatch) {
-            throw new Error(`Attachment url format not recognized for '${sbomAttachment.name}'`);
+            throw new Error(`Attachment url format not recognized for '${spdxJsonAttachment.name}'`);
           }
 
           // Download the SPDX document
@@ -105,34 +104,20 @@ export class Root extends React.Component<{}, State> {
             spdxUrlMatch[3],
             spdxUrlMatch[4],
             SPDX_JSON_ATTACHMENT_TYPE,
-            sbomAttachment.name,
+            spdxJsonAttachment.name,
           );
           if (!spdxStream) {
-            throw new Error(`Attachment stream '${sbomAttachment.name}' could not be retrieved`);
+            throw new Error(`Attachment stream '${spdxJsonAttachment.name}' could not be retrieved`);
           }
 
           // Parse the SPDX document JSON
           const spdxDocument = JSON.parse(new TextDecoder().decode(spdxStream)) as IDocument;
           if (!spdxDocument) {
-            throw new Error(`Attachment stream '${sbomAttachment.name}' could not be parsed as JSON`);
-          }
-
-          // Attempt to download the SPDX document XLSX spreadsheet, if available
-          let spdxXlsxDocumentStream: ArrayBuffer | undefined;
-          try {
-            spdxXlsxDocumentStream = await buildClient.getAttachment(
-              spdxUrlMatch[1],
-              spdxUrlMatch[2],
-              spdxUrlMatch[3],
-              spdxUrlMatch[4],
-              SPDX_XLSX_ATTACHMENT_TYPE,
-              sbomAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_XLSX_ATTACHMENT_TYPE),
-            );
-          } catch (error) {
-            console.warn(`Unable find SPDX XLSX artifact for '${sbomAttachment.name}'. ${error}`);
+            throw new Error(`Attachment stream '${spdxJsonAttachment.name}' could not be parsed as JSON`);
           }
 
           // Attempt to download the SPDX document SVG graph, if available
+          // TODO: Remove this once web browser SPDX to SVG generation is implemented
           let spdxSvgDocumentStream: ArrayBuffer | undefined;
           try {
             spdxSvgDocumentStream = await buildClient.getAttachment(
@@ -141,19 +126,18 @@ export class Root extends React.Component<{}, State> {
               spdxUrlMatch[3],
               spdxUrlMatch[4],
               SPDX_SVG_ATTACHMENT_TYPE,
-              sbomAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
+              spdxJsonAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
             );
           } catch (error) {
-            console.warn(`Unable find SPDX SVG artifact for '${sbomAttachment.name}'. ${error}`);
+            console.warn(`Unable find SPDX SVG artifact for '${spdxJsonAttachment.name}'. ${error}`);
           }
 
           sbomArtifacts.push({
             spdxDocument: spdxDocument,
-            xlsxDocument: spdxXlsxDocumentStream,
             svgDocument: spdxSvgDocumentStream,
           });
         } catch (error) {
-          throw new Error(`Unable to parse build attachment '${sbomAttachment.name}'. ${error}`.trim());
+          throw new Error(`Unable to parse build attachment '${spdxJsonAttachment.name}'. ${error}`.trim());
         }
       }
 

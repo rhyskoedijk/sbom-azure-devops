@@ -144,7 +144,6 @@ export class SbomToolRunner {
       if (xlsx) {
         const xlsxPath = path.format({ ...path.parse(spdxPath), base: '', ext: '.xlsx' });
         await fs.writeFile(xlsxPath, xlsx);
-        addAttachment(`${MANIFEST_FORMAT}.xlsx`, path.basename(xlsxPath), xlsxPath);
       }
     }
 
@@ -155,6 +154,7 @@ export class SbomToolRunner {
       if (svg) {
         const svgPath = path.format({ ...path.parse(spdxPath), base: '', ext: '.svg' });
         await fs.writeFile(svgPath, svg);
+        // TODO: Remove this attachment once web browser SPDX to SVG generation is implemented
         addAttachment(`${MANIFEST_FORMAT}.svg`, path.basename(svgPath), svgPath);
       }
     }
