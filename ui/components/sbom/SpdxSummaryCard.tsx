@@ -18,14 +18,13 @@ import { BarChart, ChartBar as BarChartBar, ChartSeries as BarChartSeries } from
 import { PieChart, ChartSlice as PieChartSlice } from '../charts/PieChart';
 import { Tile } from '../charts/Tile';
 
-interface Recommendation {
-  severity: ISeverity;
-  title: string;
-  target: string;
-  action: string;
+interface PieChartData {
+  colors?: string[];
+  data: PieChartSlice[];
 }
 
 interface BarChartData {
+  colors?: string[];
   bars: BarChartBar[];
   data: BarChartSeries[];
 }
@@ -47,8 +46,8 @@ interface State {
   packages?: {
     total: number;
     totalVulnerable: number;
-    packageTypesChartData: PieChartSlice[];
-    packageManagersChartData: PieChartSlice[];
+    packageTypesChartData: PieChartData;
+    packageManagersChartData: PieChartData;
   };
   securityAdvisories?: {
     total: number;
@@ -58,18 +57,13 @@ interface State {
     vulnByPackageManagerChartData: BarChartData;
     vulnByPackageNameChartData: BarChartData;
     vulnByWeaknessChartData: BarChartData;
-    // vulnSeverityAndCvssHeatMapChartData: HeatMapValue[];
-    // vulnPublishedTimelineChartData: TimelineValue[];
   };
   licenses?: {
     total: number;
-    // licensesChartData: PieChartSlice[];
   };
   suppliers?: {
     total: number;
-    // suppliersChartData: PieChartSlice[];
   };
-  // recommendations?: Recommendation[];
 }
 
 export class SpdxSummaryCard extends React.Component<Props, State> {
@@ -108,16 +102,8 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
             totalVulnerable: props.packages.filter((p) =>
               p.externalRefs?.some((ref) => spdxConstantsAreEqual(ref.referenceCategory, ExternalRefCategory.Security)),
             ).length,
-            packageTypesChartData: reduceAsMap(
-              props.packages,
-              (p) => (isPackageTopLevel(props.document, p.SPDXID) ? 'Top Level' : 'Transitive'),
-              (k, v) => ({ name: k, value: v }),
-            ),
-            packageManagersChartData: reduceAsMap(
-              props.packages,
-              (p) => getExternalRefPackageManagerName(p.externalRefs) || 'Other',
-              (k, v) => ({ name: k, value: v }),
-            ),
+            packageTypesChartData: SpdxSummaryCard.getPackageTypesChartData(props.document, props.packages),
+            packageManagersChartData: SpdxSummaryCard.getPackageManagersChartData(packageManagers, props.packages),
           }
         : undefined,
       securityAdvisories: props.securityAdvisories
@@ -146,6 +132,28 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
         : undefined,
       licenses: props.licenses ? { total: props.licenses.length } : undefined,
       suppliers: props.suppliers ? { total: props.suppliers.length } : undefined,
+    };
+  }
+
+  static getPackageManagersChartData(packageManagers: string[], packages: IPackage[]): PieChartData {
+    return {
+      colors: packageManagers.map((pm) => packageManagerTypeColours[pm.toLowerCase()] || '#7F7F7F'),
+      data: reduceAsMap(
+        packages,
+        (p) => getExternalRefPackageManagerName(p.externalRefs) || 'Other',
+        (k, v) => ({ name: k, value: v }),
+      ),
+    };
+  }
+
+  static getPackageTypesChartData(document: IDocument, packages: IPackage[]): PieChartData {
+    return {
+      colors: ['#7F7F7F', '#CCCCCC'],
+      data: reduceAsMap(
+        packages,
+        (p) => (isPackageTopLevel(document, p.SPDXID) ? 'Top Level' : 'Transitive'),
+        (k, v) => ({ name: k, value: v }),
+      ),
     };
   }
 
@@ -219,7 +227,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
     securityAdvisories: ISecurityVulnerability[],
   ): BarChartData {
     return {
-      bars: [{ name: 'Weaknesses', color: '#FF0000', stack: 'weakness' }],
+      bars: [{ name: 'Weaknesses', color: '#CD4A45', stack: 'weakness' }],
       data: weaknesses.map((weakness) => ({
         name: weakness,
         values: { Weaknesses: securityAdvisories.filter((v) => v.advisory.cwes?.some((c) => c.id == weakness)).length },
@@ -289,36 +297,47 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
           </div>
           <div className="summary-row flex-row flex-wrap flex-gap-24">
             <PieChart
-              data={this.state.packages?.packageManagersChartData || []}
+              colors={this.state.packages?.packageTypesChartData.colors}
+              data={this.state.packages?.packageTypesChartData.data || []}
+              title="Package Types"
+              width={250}
+              height={250}
+            />
+            <PieChart
+              colors={this.state.packages?.packageManagersChartData.colors}
+              data={this.state.packages?.packageManagersChartData.data || []}
               title="Package Managers"
               width={250}
               height={250}
             />
             <BarChart
+              className="flex-grow"
               title="Vulnerabilities by Package Manager"
+              layout="vertical"
+              colors={this.state.securityAdvisories?.vulnByPackageManagerChartData.colors}
               bars={this.state.securityAdvisories?.vulnByPackageManagerChartData.bars || []}
               data={this.state.securityAdvisories?.vulnByPackageManagerChartData.data || []}
-              width={100 + 50 * (this.state.securityAdvisories?.vulnByPackageManagerChartData.data.length || 0)}
+              height={80 * (this.state.securityAdvisories?.vulnByPackageManagerChartData.data.length || 0)}
             />
           </div>
           <div className="summary-row flex-row flex-wrap flex-gap-24">
-            <PieChart
-              data={this.state.packages?.packageTypesChartData || []}
-              title="Package Types"
-              width={250}
-              height={250}
-            />
             <BarChart
-              title="Vulnerabilities by Package Name"
-              bars={this.state.securityAdvisories?.vulnByPackageNameChartData.bars || []}
-              data={this.state.securityAdvisories?.vulnByPackageNameChartData.data || []}
-              width={100 + 50 * (this.state.securityAdvisories?.vulnByPackageNameChartData.data.length || 0)}
-            />
-            <BarChart
+              className="flex-grow"
               title="Weaknesses"
+              layout="vertical"
+              colors={this.state.securityAdvisories?.vulnByWeaknessChartData.colors}
               bars={this.state.securityAdvisories?.vulnByWeaknessChartData.bars || []}
               data={this.state.securityAdvisories?.vulnByWeaknessChartData.data || []}
-              width={100 + 50 * (this.state.securityAdvisories?.vulnByPackageNameChartData.data.length || 0)}
+              height={40 * (this.state.securityAdvisories?.vulnByPackageNameChartData.data.length || 0)}
+            />
+            <BarChart
+              className="flex-grow"
+              title="Vulnerabilities by Package Name"
+              colors={this.state.securityAdvisories?.vulnByPackageNameChartData.colors}
+              bars={this.state.securityAdvisories?.vulnByPackageNameChartData.bars || []}
+              data={this.state.securityAdvisories?.vulnByPackageNameChartData.data || []}
+              layout="vertical"
+              height={40 * (this.state.securityAdvisories?.vulnByPackageNameChartData.data.length || 0)}
             />
           </div>
         </div>
@@ -345,5 +364,44 @@ function reduceAsMap<T, K extends keyof any, M>(
       {} as Record<K, number>,
     ),
   ) as [K, number][];
-  return reduced.sort().map(([k, v]) => mapper(k, v));
+  return reduced.sort((a, b) => a[0].toString().localeCompare(b[0].toString())).map(([k, v]) => mapper(k, v));
 }
+
+const packageManagerTypeColours: Record<string, string> = {
+  alpm: '#E03C31',
+  apk: '#5CB8DB',
+  bitbucket: '#2684FF',
+  bitnami: '#FF6D00',
+  cargo: '#dea584',
+  cocoapods: '#FA2A02',
+  composer: '#885630',
+  conan: '#00B2A9',
+  conda: '#44A833',
+  cpan: '#1A1E1C',
+  cran: '#7A2483',
+  deb: '#A80030',
+  docker: '#2496ED',
+  gem: '#701516',
+  generic: '#808080',
+  git: '#F05032',
+  github: '#181717',
+  gitlab: '#FC6D26',
+  golang: '#00ADD8',
+  hackage: '#A67241',
+  hex: '#6E4A7E',
+  hg: '#FF4500',
+  huggingface: '#FFC0CB',
+  luarocks: '#2C2D72',
+  maven: '#C71A36',
+  mlflow: '#000000',
+  npm: '#CB3837',
+  nuget: '#004880',
+  qpkg: '#8CC84B',
+  oci: '#00A6D6',
+  pub: '#0175C2',
+  pypi: '#3775A9',
+  rpm: '#F1502F',
+  swid: '#FFA500',
+  swift: '#FA7343',
+  vscode: '#007ACC',
+};

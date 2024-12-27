@@ -50,9 +50,12 @@ export class PieChart extends React.Component<Props, State> {
     return !this.state.total ? (
       <div />
     ) : (
-      <div className={'pie-chart flex-column flex-center ' + (this.props.className || '')}>
+      <div
+        className={'pie-chart flex-column flex-center ' + (this.props.className || '')}
+        style={{ minWidth: 250, minHeight: 250 }}
+      >
         {this.props.title && <h3 className="title">{this.props.title}</h3>}
-        <ResponsiveContainer width={this.props.width || '100%'} height={this.props.height || '100%'} debounce={300}>
+        <ResponsiveContainer width={this.props.width || '100%'} height={this.props.height || '100%'} debounce={200}>
           <RePieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
             <Legend
               iconType="circle"
