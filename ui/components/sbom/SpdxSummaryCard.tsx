@@ -299,7 +299,7 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
             <PieChart
               colors={this.state.packages?.packageTypesChartData.colors}
               data={this.state.packages?.packageTypesChartData.data || []}
-              title="Package Types"
+              title="Package References"
               width={250}
               height={250}
             />

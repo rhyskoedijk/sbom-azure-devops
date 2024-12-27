@@ -4,8 +4,11 @@ import * as ReactDOM from 'react-dom';
 
 import { CommonServiceIds, getClient, IProjectPageService } from 'azure-devops-extension-api';
 import { BuildServiceIds, IBuildPageDataService } from 'azure-devops-extension-api/Build';
+import { ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { MessageCard, MessageCardSeverity } from 'azure-devops-ui/MessageCard';
+import { Observer } from 'azure-devops-ui/Observer';
 import { Spinner } from 'azure-devops-ui/Spinner';
+import { Tab, TabBar, TabContent, TabSize } from 'azure-devops-ui/Tabs';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import '../shared/extensions/ArrayExtensions';
@@ -28,9 +31,12 @@ interface State {
 }
 
 export class Root extends React.Component<{}, State> {
+  private selectedArtifactId: ObservableValue<string>;
+
   constructor(props: {}) {
     super(props);
     this.state = { artifacts: undefined, loadError: undefined };
+    this.selectedArtifactId = new ObservableValue<string>('');
   }
 
   public componentDidMount() {
@@ -133,6 +139,7 @@ export class Root extends React.Component<{}, State> {
           }
 
           sbomArtifacts.push({
+            id: spdxDocument.documentNamespace,
             spdxDocument: spdxDocument,
             svgDocument: spdxSvgDocumentStream,
           });
@@ -142,6 +149,7 @@ export class Root extends React.Component<{}, State> {
       }
 
       console.info(`Loaded ${Object.keys(sbomArtifacts).length} SBOM artifact(s) for build ${buildId}`);
+      this.selectedArtifactId.value = sbomArtifacts[0]?.spdxDocument?.documentNamespace || '';
       this.setState({ artifacts: sbomArtifacts, loadError: undefined });
     } catch (error) {
       console.error(error);
@@ -162,12 +170,21 @@ export class Root extends React.Component<{}, State> {
       }
 
       console.info(`Loaded SBOM artifact from '${file.name}'`);
-      this.setState({ artifacts: [{ spdxDocument: spdxDocument }], loadError: undefined });
+      const newArtifact: ISbomBuildArtifact = { id: spdxDocument.documentNamespace, spdxDocument: spdxDocument };
+      this.selectedArtifactId.value = newArtifact.id;
+      this.setState({
+        artifacts: [...(this.state.artifacts || []), newArtifact],
+        loadError: undefined,
+      });
     } catch (error) {
       console.error(error);
-      this.setState({ artifacts: undefined, loadError: error });
+      this.setState({ artifacts: this.state.artifacts, loadError: error });
     }
   }
+
+  private onSelectedArtifactTabChanged = (newSpdxId: string) => {
+    this.selectedArtifactId.value = newSpdxId;
+  };
 
   public render(): JSX.Element {
     return (
@@ -178,19 +195,51 @@ export class Root extends React.Component<{}, State> {
           </MessageCard>
         ) : !this.state.artifacts ? (
           <Spinner label="Loading SBOM build artifacts..." />
-        ) : !this.state.artifacts[0] ? (
+        ) : this.state.artifacts.length == 0 ? (
           <ZeroData
             iconProps={{ iconName: 'Certificate' }}
             primaryText="Empty"
             secondaryText="Unable to find any SBOM artifacts for this build."
             imageAltText=""
           />
-        ) : (
-          // TODO: Add support for viewing multiple artifacts in a single build?
+        ) : this.state.artifacts.length == 1 ? (
           <SbomDocumentPage
             artifact={this.state.artifacts[0]}
             onLoadArtifact={(file) => this.loadSbomArtifactFromFileUpload(file)}
           />
+        ) : (
+          <div className="flex flex-column">
+            <TabBar
+              onSelectedTabChanged={this.onSelectedArtifactTabChanged}
+              selectedTabId={this.selectedArtifactId}
+              tabSize={TabSize.Compact}
+              className="bolt-tabbar-grey margin-bottom-16"
+            >
+              {this.state.artifacts.map((artifact, index) => (
+                <Tab key={index} id={artifact.id} name={artifact.spdxDocument.name} />
+              ))}
+            </TabBar>
+            <TabContent>
+              <Observer selectedArtifactId={this.selectedArtifactId}>
+                {(props: { selectedArtifactId: string }) =>
+                  props.selectedArtifactId &&
+                  this.state.artifacts?.find((artifact) => artifact.id === props.selectedArtifactId) ? (
+                    <SbomDocumentPage
+                      artifact={this.state.artifacts?.find((artifact) => artifact.id === props.selectedArtifactId)!}
+                      onLoadArtifact={(file) => this.loadSbomArtifactFromFileUpload(file)}
+                    />
+                  ) : (
+                    <ZeroData
+                      iconProps={{ iconName: 'Certificate' }}
+                      primaryText="No document selected"
+                      secondaryText="Please select an SBOM build artifact to view its details."
+                      imageAltText=""
+                    />
+                  )
+                }
+              </Observer>
+            </TabContent>
+          </div>
         )}
       </div>
     );
