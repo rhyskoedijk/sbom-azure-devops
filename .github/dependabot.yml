@@ -20,6 +20,6 @@ updates:
     ignore:
       # Don't update react until azure-devops-ui supports new versions
       - dependency-name: '*react'
-        versions: ['>=18.0.0']
+        versions: ['>=17.0.0']
       - dependency-name: '*react-dom'
-        versions: ['>=18.0.0']
+        versions: ['>=17.0.0']
