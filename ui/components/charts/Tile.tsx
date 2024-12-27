@@ -38,7 +38,7 @@ export class Tile extends React.Component<Props, State> {
       <Tooltip text={`${this.props.title}: ${this.props.value}`}>
         <div
           className={
-            'tile text-on-communication-background flex-column flex-center padding-8' + (this.props.className || '')
+            'tile text-on-communication-background flex-column flex-center padding-8 ' + (this.props.className || '')
           }
           style={{
             backgroundColor: this.props.color ? rgbToHex(this.props.color) : undefined,

@@ -1,26 +1,28 @@
 import * as React from 'react';
 
-import { cheerfulFiestaPalette, PieChart as MuiPieChart, PieValueType as MuiPieChartValue } from '@mui/x-charts';
-import { MakeOptional } from '@mui/x-charts/internals';
+import { Cell, Legend, Pie, PieChart as RePieChart, ResponsiveContainer } from 'recharts';
+
+import { DEFAULT_COLORS } from './Colours';
 
 import './PieChart.scss';
 
-export interface PieChartValue {
-  label: string;
+export interface ChartSlice {
+  name: string;
   value: number;
 }
 
 interface Props {
   className?: string;
   colors?: string[];
-  data: PieChartValue[];
+  data: ChartSlice[];
   title?: string;
   width?: number;
   height?: number;
 }
 
 interface State {
-  data: MakeOptional<MuiPieChartValue, 'id'>[];
+  colors: string[];
+  slices: ChartSlice[];
   total: number;
 }
 
@@ -32,7 +34,8 @@ export class PieChart extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     return {
-      data: props.data,
+      slices: props.data,
+      colors: props.colors?.length ? props.colors : DEFAULT_COLORS,
       total: props.data.reduce((acc, item) => acc + item.value, 0),
     };
   }
@@ -47,39 +50,33 @@ export class PieChart extends React.Component<Props, State> {
     return !this.state.total ? (
       <div />
     ) : (
-      <div className={'pie-chart flex-column flex-center flex-grow ' + (this.props.className || '')}>
+      <div className={'pie-chart flex-column flex-center ' + (this.props.className || '')}>
         {this.props.title && <h3 className="title">{this.props.title}</h3>}
-        <MuiPieChart
-          margin={{ top: 10, left: 10, right: 10, bottom: 10 }}
-          colors={this.props.colors || cheerfulFiestaPalette}
-          series={[
-            {
-              arcLabel: (item) => `${item.label?.substring(0, 20)}`,
-              arcLabelMinAngle: 30,
-              innerRadius: '50%',
-              highlightScope: { fade: 'global', highlight: 'item' },
-              faded: { color: 'gray', additionalRadius: -10, innerRadius: 60 },
-              data: this.state.data || [],
-            },
-          ]}
-          slotProps={{
-            legend: {
-              hidden: true,
-              direction: 'column',
-              position: {
-                horizontal: 'middle',
-                vertical: 'bottom',
-              },
-              labelStyle: {
-                fill: 'var(--text-primary-color)',
-                fontSize: '0.8em',
-              },
-            },
-          }}
-          width={this.props.width || 250}
-          height={this.props.height || 250}
-        />
+        <ResponsiveContainer width={this.props.width || '100%'} height={this.props.height || '100%'} debounce={300}>
+          <RePieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+            <Legend
+              iconType="circle"
+              layout="vertical"
+              verticalAlign="bottom"
+              iconSize={10}
+              formatter={renderLegendText}
+            />
+            <Pie data={this.state.slices} dataKey="value" innerRadius={60} outerRadius={100}>
+              {this.state.slices.map((cell, index) => (
+                <Cell key={`cell-${index}`} fill={this.state.colors[index % this.state.colors.length]} />
+              ))}
+            </Pie>
+          </RePieChart>
+        </ResponsiveContainer>
       </div>
     );
   }
 }
+
+const renderLegendText = (value: string, entry: any) => {
+  return (
+    <span className="secondary-text padding-8" style={{ fontWeight: 500 }}>
+      {value} ({entry.payload.value})
+    </span>
+  );
+};

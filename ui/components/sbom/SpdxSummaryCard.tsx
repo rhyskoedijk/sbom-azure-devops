@@ -4,8 +4,6 @@ import { Card } from 'azure-devops-ui/Card';
 import { rgbToHex } from 'azure-devops-ui/Utilities/Color';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { createTheme, Theme, ThemeProvider } from '@mui/material';
-
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { ISeverity } from '../../../shared/models/severity/ISeverity';
 import { DEFAULT_SEVERITY, getSeverityByName, SEVERITIES } from '../../../shared/models/severity/Severities';
@@ -16,8 +14,8 @@ import { IFile } from '../../../shared/models/spdx/2.3/IFile';
 import { ILicense } from '../../../shared/models/spdx/2.3/ILicense';
 import { IPackage } from '../../../shared/models/spdx/2.3/IPackage';
 
-import { BarChart, BarChartSeries } from '../charts/BarChart';
-import { PieChart, PieChartValue } from '../charts/PieChart';
+import { BarChart, ChartBar as BarChartBar, ChartSeries as BarChartSeries } from '../charts/BarChart';
+import { PieChart, ChartSlice as PieChartSlice } from '../charts/PieChart';
 import { Tile } from '../charts/Tile';
 
 interface Recommendation {
@@ -25,6 +23,11 @@ interface Recommendation {
   title: string;
   target: string;
   action: string;
+}
+
+interface BarChartData {
+  bars: BarChartBar[];
+  data: BarChartSeries[];
 }
 
 interface Props {
@@ -37,7 +40,6 @@ interface Props {
 }
 
 interface State {
-  theme: Theme;
   files?: {
     total: number;
   };
@@ -45,27 +47,27 @@ interface State {
   packages?: {
     total: number;
     totalVulnerable: number;
-    packageTypesChartData: PieChartValue[];
-    packageManagersChartData: PieChartValue[];
+    packageTypesChartData: PieChartSlice[];
+    packageManagersChartData: PieChartSlice[];
   };
   securityAdvisories?: {
     total: number;
     weaknesses: string[];
     vulnPackageNames: string[];
     vulnHighestSeverity: ISeverity;
-    vulnByPackageManagerChartData: BarChartSeries[];
-    vulnByPackageNameChartData: BarChartSeries[];
-    vulnByWeaknessChartData: BarChartSeries[];
+    vulnByPackageManagerChartData: BarChartData;
+    vulnByPackageNameChartData: BarChartData;
+    vulnByWeaknessChartData: BarChartData;
     // vulnSeverityAndCvssHeatMapChartData: HeatMapValue[];
     // vulnPublishedTimelineChartData: TimelineValue[];
   };
   licenses?: {
     total: number;
-    // licensesChartData: PieChartValue[];
+    // licensesChartData: PieChartSlice[];
   };
   suppliers?: {
     total: number;
-    // suppliersChartData: PieChartValue[];
+    // suppliersChartData: PieChartSlice[];
   };
   // recommendations?: Recommendation[];
 }
@@ -73,7 +75,7 @@ interface State {
 export class SpdxSummaryCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { theme: SpdxSummaryCard.getChartTheme(), packageManagers: [] };
+    this.state = { packageManagers: [] };
   }
 
   static getDerivedStateFromProps(props: Props): State {
@@ -98,7 +100,6 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
       .distinct();
 
     return {
-      theme: SpdxSummaryCard.getChartTheme(),
       files: props.files ? { total: props.files.length } : undefined,
       packageManagers: packageManagers,
       packages: props.packages
@@ -110,12 +111,12 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
             packageTypesChartData: reduceAsMap(
               props.packages,
               (p) => (isPackageTopLevel(props.document, p.SPDXID) ? 'Top Level' : 'Transitive'),
-              (k, v) => ({ label: k, value: v }),
+              (k, v) => ({ name: k, value: v }),
             ),
             packageManagersChartData: reduceAsMap(
               props.packages,
               (p) => getExternalRefPackageManagerName(p.externalRefs) || 'Other',
-              (k, v) => ({ label: k, value: v }),
+              (k, v) => ({ name: k, value: v }),
             ),
           }
         : undefined,
@@ -148,71 +149,82 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
     };
   }
 
-  static getChartTheme(): Theme {
-    return createTheme({ palette: { mode: 'dark' } });
-  }
-
   static getVulnerabilitiesByPackageManagerChartData(
     packages: IPackage[],
     packageManagers: string[],
     securityAdvisories: ISecurityVulnerability[],
-  ): BarChartSeries[] {
-    return SEVERITIES.filter((s: ISeverity) => s.id > 0)
-      .orderBy((s: ISeverity) => s.weight, false)
-      .map((s: ISeverity) => {
+  ): BarChartData {
+    const severities = SEVERITIES.filter((s: ISeverity) => s.id > 0).orderBy((s: ISeverity) => s.weight, false);
+    return {
+      bars: severities.map((s: ISeverity) => {
         return {
+          name: s.name,
           color: rgbToHex(s.color),
-          label: s.name,
-          data: packageManagers.map(
-            (pm) =>
-              securityAdvisories.filter((v) => {
-                const pkg = packages.find((p) => p.name == v.package.name);
-                return (
-                  pkg &&
-                  pkg.externalRefs &&
-                  getExternalRefPackageManagerName(pkg.externalRefs) == pm &&
-                  v.advisory.severity.toUpperCase() === s.name.toUpperCase()
-                );
-              }).length,
-          ),
           stack: 'severity',
         };
-      });
+      }),
+      data: packageManagers.map((name) => ({
+        name: name,
+        values: severities.reduce(
+          (acc, s) => ({
+            ...acc,
+            [s.name]: securityAdvisories.filter((v) => {
+              const pkg = packages.find((p) => p.name == v.package.name);
+              return (
+                pkg &&
+                pkg.externalRefs &&
+                getExternalRefPackageManagerName(pkg.externalRefs) == name &&
+                v.advisory.severity.toUpperCase() === s.name.toUpperCase()
+              );
+            }).length,
+          }),
+          {} as Record<string, number>,
+        ),
+      })),
+    };
   }
 
   static getVulnerabilitiesByPackageNameChartData(
     packages: IPackage[],
     packageNames: string[],
     securityAdvisories: ISecurityVulnerability[],
-  ): BarChartSeries[] {
-    return SEVERITIES.filter((s: ISeverity) => s.id > 0)
-      .orderBy((s: ISeverity) => s.weight, false)
-      .map((s: ISeverity) => {
+  ): BarChartData {
+    const severities = SEVERITIES.filter((s: ISeverity) => s.id > 0).orderBy((s: ISeverity) => s.weight, false);
+    return {
+      bars: severities.map((s: ISeverity) => {
         return {
+          name: s.name,
           color: rgbToHex(s.color),
-          label: s.name,
-          data: packageNames.map(
-            (pn) =>
-              securityAdvisories.filter((v) => {
-                const pkg = packages.find((p) => p.name == v.package.name);
-                return pkg && pkg.name == pn && v.advisory.severity.toUpperCase() === s.name.toUpperCase();
-              }).length,
-          ),
           stack: 'severity',
         };
-      });
+      }),
+      data: packageNames.map((name) => ({
+        name: name,
+        values: severities.reduce(
+          (acc, s) => ({
+            ...acc,
+            [s.name]: securityAdvisories.filter((v) => {
+              const pkg = packages.find((p) => p.name == v.package.name);
+              return pkg && pkg.name == name && v.advisory.severity.toUpperCase() === s.name.toUpperCase();
+            }).length,
+          }),
+          {} as Record<string, number>,
+        ),
+      })),
+    };
   }
 
   static getVulnerabiilityWeaknessesChartData(
     weaknesses: string[],
     securityAdvisories: ISecurityVulnerability[],
-  ): BarChartSeries[] {
-    return [
-      {
-        label: 'Vulnerabilities',
-        data: weaknesses.map((w) => securityAdvisories.filter((v) => v.advisory.cwes?.some((c) => c.id == w)).length),
-      },
-    ];
+  ): BarChartData {
+    return {
+      bars: [{ name: 'Weaknesses', color: '#FF0000', stack: 'weakness' }],
+      data: weaknesses.map((weakness) => ({
+        name: weakness,
+        values: { Weaknesses: securityAdvisories.filter((v) => v.advisory.cwes?.some((c) => c.id == weakness)).length },
+      })),
+    };
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
@@ -242,69 +254,74 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
     }
     return (
       <Card className="flex-grow flex-column bolt-card bolt-card-white">
-        <ThemeProvider theme={this.state.theme}>
-          <div className="flex-column flex-gap-24">
-            <div className="summary-row flex-row flex-wrap flex-gap-24">
-              <Tile
-                color={DEFAULT_SEVERITY.color}
-                value={this.state.files?.total?.toString() || '0'}
-                title="Total Files"
-              />
-              <Tile
-                color={DEFAULT_SEVERITY.color}
-                value={this.state.packages?.total?.toString() || '0'}
-                title="Total Packages"
-              />
-              <Tile
-                color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
-                value={this.state.packages?.totalVulnerable?.toString() || '0'}
-                title="Vulnerable Packages"
-              />
-              <Tile
-                color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
-                value={(this.state.securityAdvisories?.total || 0).toString()}
-                title="Total Vulnerabilities"
-              />
-              <Tile
-                color={DEFAULT_SEVERITY.color}
-                value={this.state.licenses?.total?.toString() || '0'}
-                title="Unique Licenses"
-              />
-              <Tile
-                color={DEFAULT_SEVERITY.color}
-                value={this.state.suppliers?.total?.toString() || '0'}
-                title="Unique Suppliers"
-              />
-            </div>
-            <div className="summary-row flex-row flex-wrap flex-gap-24">
-              <BarChart
-                bands={this.state.packageManagers}
-                data={this.state.securityAdvisories?.vulnByPackageManagerChartData || []}
-                layout="horizontal"
-                title="Vulnerabilities by Package Manager"
-                height={100 + this.state.packageManagers.length * 30}
-              />
-              <BarChart
-                bands={this.state.securityAdvisories?.vulnPackageNames}
-                data={this.state.securityAdvisories?.vulnByPackageNameChartData || []}
-                layout="vertical"
-                title="Vulnerabilities by Package Name"
-                width={100 + (this.state.securityAdvisories?.vulnPackageNames?.length || 0) * 30}
-              />
-            </div>
-            <div className="summary-row flex-row flex-wrap flex-gap-24">
-              <PieChart data={this.state.packages?.packageManagersChartData || []} title="Package Managers" />
-              <PieChart data={this.state.packages?.packageTypesChartData || []} title="Package Types" />
-              <BarChart
-                bands={this.state.securityAdvisories?.weaknesses || []}
-                data={this.state.securityAdvisories?.vulnByWeaknessChartData || []}
-                layout="horizontal"
-                title="Weaknesses"
-                height={100 + (this.state.securityAdvisories?.weaknesses?.length || 0) * 30}
-              />
-            </div>
+        <div className="flex-column flex-gap-24">
+          <div className="summary-row flex-row flex-wrap flex-gap-24">
+            <Tile
+              color={DEFAULT_SEVERITY.color}
+              value={this.state.files?.total?.toString() || '0'}
+              title="Total Files"
+            />
+            <Tile
+              color={DEFAULT_SEVERITY.color}
+              value={this.state.packages?.total?.toString() || '0'}
+              title="Total Packages"
+            />
+            <Tile
+              color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
+              value={this.state.packages?.totalVulnerable?.toString() || '0'}
+              title="Vulnerable Packages"
+            />
+            <Tile
+              color={this.state.securityAdvisories?.vulnHighestSeverity?.color}
+              value={(this.state.securityAdvisories?.total || 0).toString()}
+              title="Total Vulnerabilities"
+            />
+            <Tile
+              color={DEFAULT_SEVERITY.color}
+              value={this.state.licenses?.total?.toString() || '0'}
+              title="Unique Licenses"
+            />
+            <Tile
+              color={DEFAULT_SEVERITY.color}
+              value={this.state.suppliers?.total?.toString() || '0'}
+              title="Unique Suppliers"
+            />
           </div>
-        </ThemeProvider>
+          <div className="summary-row flex-row flex-wrap flex-gap-24">
+            <PieChart
+              data={this.state.packages?.packageManagersChartData || []}
+              title="Package Managers"
+              width={250}
+              height={250}
+            />
+            <BarChart
+              title="Vulnerabilities by Package Manager"
+              bars={this.state.securityAdvisories?.vulnByPackageManagerChartData.bars || []}
+              data={this.state.securityAdvisories?.vulnByPackageManagerChartData.data || []}
+              width={100 + 50 * (this.state.securityAdvisories?.vulnByPackageManagerChartData.data.length || 0)}
+            />
+          </div>
+          <div className="summary-row flex-row flex-wrap flex-gap-24">
+            <PieChart
+              data={this.state.packages?.packageTypesChartData || []}
+              title="Package Types"
+              width={250}
+              height={250}
+            />
+            <BarChart
+              title="Vulnerabilities by Package Name"
+              bars={this.state.securityAdvisories?.vulnByPackageNameChartData.bars || []}
+              data={this.state.securityAdvisories?.vulnByPackageNameChartData.data || []}
+              width={100 + 50 * (this.state.securityAdvisories?.vulnByPackageNameChartData.data.length || 0)}
+            />
+            <BarChart
+              title="Weaknesses"
+              bars={this.state.securityAdvisories?.vulnByWeaknessChartData.bars || []}
+              data={this.state.securityAdvisories?.vulnByWeaknessChartData.data || []}
+              width={100 + 50 * (this.state.securityAdvisories?.vulnByPackageNameChartData.data.length || 0)}
+            />
+          </div>
+        </div>
       </Card>
     );
   }

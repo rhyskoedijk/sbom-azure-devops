@@ -1,30 +1,45 @@
 import * as React from 'react';
 
-import { BarSeriesType, cheerfulFiestaPalette, BarChart as MuiBarChart } from '@mui/x-charts';
-import { MakeOptional } from '@mui/x-charts/internals';
+import {
+  Bar,
+  CartesianGrid,
+  Legend,
+  BarChart as ReBarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+
+import { DEFAULT_COLORS } from './Colours';
 
 import './BarChart.scss';
 
-export interface BarChartSeries {
+export interface ChartSeries {
+  name: string;
+  values: Record<string, number>;
+}
+
+export interface ChartBar {
+  name: string;
   color?: string;
-  label: string;
-  data: number[];
   stack?: string;
 }
 
 interface Props {
   className?: string;
   colors?: string[];
-  bands?: string[];
-  data: BarChartSeries[];
-  layout: 'horizontal' | 'vertical';
+  bars: ChartBar[];
+  data: ChartSeries[];
   title?: string;
   width?: number;
   height?: number;
 }
 
 interface State {
-  series: MakeOptional<BarSeriesType, 'type'>[];
+  colors: string[];
+  bars: ChartBar[];
+  data: ChartSeries[];
   total: number;
 }
 
@@ -35,16 +50,15 @@ export class BarChart extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props: Props): State {
+    console.log(props.bars, props.data);
     return {
-      series: props.data.map((d) => ({
-        type: 'bar',
-        layout: props.layout,
-        label: d.label,
-        data: d.data,
-        stack: d.stack,
-        ...(d.color ? { color: d.color } : {}),
-      })),
-      total: props.data.reduce((accX, itemX) => accX + itemX.data.reduce((accY, itemY) => accY + itemY, 0), 0),
+      colors: props.colors?.length ? props.colors : DEFAULT_COLORS,
+      bars: props.bars,
+      data: props.data,
+      total: props.data.reduce(
+        (accX, itemX) => accX + Object.values(itemX.values).reduce((accY, itemY) => accY + itemY, 0),
+        0,
+      ),
     };
   }
 
@@ -58,31 +72,26 @@ export class BarChart extends React.Component<Props, State> {
     return !this.state.total ? (
       <div />
     ) : (
-      <div className={'bar-chart flex-column flex-center flex-grow ' + (this.props.className || '')}>
+      <div className={'bar-chart flex-column flex-center ' + (this.props.className || '')}>
         {this.props.title && <h3 className="title">{this.props.title}</h3>}
-        <MuiBarChart
-          barLabel="value"
-          colors={this.props.colors || cheerfulFiestaPalette}
-          series={this.state.series}
-          layout={this.props.layout}
-          {...(this.props.layout === 'vertical'
-            ? { xAxis: [{ scaleType: 'band', data: this.props.bands || [] }] }
-            : {})}
-          {...(this.props.layout === 'horizontal'
-            ? { yAxis: [{ scaleType: 'band', data: this.props.bands || [] }] }
-            : {})}
-          slotProps={{
-            legend: {
-              labelStyle: {
-                fill: 'var(--text-primary-color)',
-                fontSize: '0.8em',
-              },
-            },
-          }}
-          margin={{ left: 75 }}
-          width={this.props.width || 600}
-          height={this.props.height || 200}
-        />
+        <ResponsiveContainer width={this.props.width || '100%'} height={this.props.height || '100%'} debounce={300}>
+          <ReBarChart data={this.state.data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }} reverseStackOrder={true}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            {this.state.bars.map((bar, index) => (
+              <Bar
+                key={`bar-${index}`}
+                label={bar.name}
+                dataKey={(series: ChartSeries) => series.values[bar.name] || 0}
+                stackId={bar.stack}
+                fill={bar.color || this.state.colors[index % this.state.colors.length]}
+              />
+            ))}
+          </ReBarChart>
+        </ResponsiveContainer>
       </div>
     );
   }
