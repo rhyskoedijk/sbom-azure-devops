@@ -6,7 +6,7 @@
     "azure-devops-ui": "^2.246.0",
     "path-browserify": "^1.0.1",
     "react-zoom-pan-pinch": "^3.6.1",
-    "recharts": "^2.14.1"
+    "recharts": "^2.15.0"
   },
   "devDependencies": {
     "@types/react": "~16.8.2",
