@@ -44,15 +44,16 @@ export class SbomToolRunner {
   private agentOperatingSystem: string;
   private agentArchitecture: string;
   private agentToolsDirectory: string;
+  private toolPath?: string;
+  private toolVersion?: string;
   private debug: boolean;
-  private version?: string;
 
   constructor(version?: string) {
     this.agentOperatingSystem = getVariable('Agent.OS') || 'Linux';
     this.agentArchitecture = getVariable('Agent.OSArchitecture') || 'x64';
     this.agentToolsDirectory = getVariable('Agent.ToolsDirectory') || __dirname;
+    this.toolVersion = version;
     this.debug = getVariable('System.Debug')?.toLocaleLowerCase() == 'true';
-    this.version = version;
   }
 
   // Run `sbom-tool generate` command
@@ -205,45 +206,52 @@ export class SbomToolRunner {
 
   // Get sbom-tool path, install if missing
   private async getToolPathAsync(installIfMissing: boolean = true): Promise<string> {
-    let toolPath: string | undefined = which('sbom-tool', false);
-    if (toolPath) {
-      return toolPath;
+    if (this.toolPath) {
+      return this.toolPath;
+    }
+
+    // Check if sbom-tool is already installed
+    this.toolPath = which('sbom-tool', false);
+    if (this.toolPath) {
+      return this.toolPath;
     }
     if (!installIfMissing) {
       throw new Error('SBOM Tool install not found');
     }
 
+    // Install sbom-tool
     console.info('SBOM Tool install was not found, attempting to install now...');
     section("Installing 'sbom-tool'");
     switch (this.agentOperatingSystem) {
       case 'Darwin':
       case 'Linux':
-        toolPath = await installToolLinuxAsync(this.agentToolsDirectory, this.agentArchitecture, this.version);
+        this.toolPath = await installToolLinuxAsync(this.agentToolsDirectory, this.agentArchitecture, this.toolVersion);
         break;
       case 'Windows_NT':
-        toolPath = await installToolWindowsAsync(this.agentToolsDirectory, this.agentArchitecture, this.version);
+        this.toolPath = await installToolWindowsAsync(
+          this.agentToolsDirectory,
+          this.agentArchitecture,
+          this.toolVersion,
+        );
         break;
       default:
         throw new Error(`Unable to install SBOM Tool, unsupported agent OS '${this.agentOperatingSystem}'`);
     }
 
-    return toolPath || which('sbom-tool', true);
+    return this.toolPath;
   }
 }
 
 /**
  * Install sbom-tool using Brew (if available), or manual download via Bash
  */
-async function installToolLinuxAsync(
-  directory: string,
-  architecture?: string,
-  version?: string,
-): Promise<string | undefined> {
+async function installToolLinuxAsync(directory: string, architecture?: string, version?: string): Promise<string> {
   const brewToolPath = which('brew', false);
   if (brewToolPath) {
     await tool(brewToolPath)
       .arg(['install', version ? `sbom-tool@${version}` : 'sbom-tool'])
       .execAsync();
+    return which('sbom-tool', true);
   } else {
     const toolPath = path.join(directory, 'sbom-tool');
     await tool(which('bash', true))
@@ -259,16 +267,13 @@ async function installToolLinuxAsync(
 /**
  * Install sbom-tool using WinGet (if available), or manual download via PowerShell
  */
-async function installToolWindowsAsync(
-  directory: string,
-  architecture?: string,
-  version?: string,
-): Promise<string | undefined> {
+async function installToolWindowsAsync(directory: string, architecture?: string, version?: string): Promise<string> {
   const wingetToolPath = which('winget', false);
   if (wingetToolPath) {
     await tool(wingetToolPath)
       .arg(['install', 'Microsoft.SbomTool'].concat(version ? ['--version', version] : []))
       .execAsync();
+    return which('sbom-tool', true);
   } else {
     const toolPath = path.join(directory, 'sbom-tool.exe');
     await tool(which('powershell', true))
