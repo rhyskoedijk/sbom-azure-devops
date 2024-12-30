@@ -44,34 +44,25 @@
     },
     {
       "name": "buildSourcePath",
-      "type": "string",
-      "label": "Build Source Path",
+      "type": "multiLine",
+      "label": "Build Source Paths",
       "defaultValue": "$(Build.SourcesDirectory)",
       "required": true,
-      "helpMarkDown": "The directory containing build source files to be scanned for package dependencies. Defaults to the source repository root.",
+      "helpMarkDown": "The list of source code directories (one per line) to be scanned for package dependencies. [Glob patterns](https://globster.xyz/) are supported. Each directory will generates its own set of SBOM manifest files. Defaults to the build repository root directory, which will result in a single SBOM for the entire repository.",
       "visibleRule": "command=generate"
     },
     {
       "name": "buildArtifactPath",
-      "type": "string",
-      "label": "Build Artifact Path",
+      "type": "multiLine",
+      "label": "Build Artifact Paths",
       "defaultValue": "$(Build.ArtifactStagingDirectory)",
       "required": true,
-      "helpMarkDown": "The directory containing (published) build artifact files for which the SBOM file will describe. Defaults to the build artifact staging directory.",
-      "visibleRule": "command=generate"
-    },
-    {
-      "name": "buildFileList",
-      "type": "multiLine",
-      "label": "Build File List",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "The list of file paths (one per line) for which the SBOM file will describe. If specified, this overrides `buildArtifactPath`, only files listed here will be included in the generated SBOM.",
+      "helpMarkDown": "The list of directories or files (one per line) to be included as build artifact files in the SBOM. [Glob patterns](https://globster.xyz/) are supported. Relative paths will be resolved from the source code directory. Defaults to the build artifact staging directory.",
       "visibleRule": "command=generate"
     },
     {
       "name": "buildDockerImagesToScan",
-      "type": "string",
+      "type": "multiLine",
       "label": "Build Docker Images To Scan",
       "defaultValue": "",
       "required": false,
@@ -84,7 +75,7 @@
       "label": "Manifest Output Path",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The directory where the generated SBOM files will be placed. A subdirectory named '_manifest' will be created at this location, where all generated SBOMs will be placed. Defaults to `buildArtifactPath`.",
+      "helpMarkDown": "The directory where the generated SBOM manifest files will be written. A subdirectory named '_manifest' will be created at this location. Defaults to `buildArtifactPath`.",
       "visibleRule": "command=generate"
     },
     {
@@ -93,7 +84,7 @@
       "label": "Enable Manifest XLSX Spreadsheet Generation",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to `true`, a XLSX spreadsheet representation of the SBOM content will be generated in the manifest directory.",
+      "helpMarkDown": "If set to `true`, a XLSX spreadsheet representation of the SBOM contents will be generated in the manifest directory.",
       "visibleRule": "command=generate"
     },
     {
@@ -102,7 +93,7 @@
       "label": "Enable Manifest SVG Graph Generation",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to `true`, a SVG graph diagram of the SBOM content will be generated in the manifest directory.",
+      "helpMarkDown": "If set to `true`, a SVG graph diagram of the SBOM contents will be generated in the manifest directory.",
       "visibleRule": "command=generate"
     },
     {
@@ -111,7 +102,7 @@
       "label": "Enable Package Metadata Parsing",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to `true`, we will attempt to parse license and supplier info from the packages metadata file (RubyGems, NuGet, Maven, Npm).",
+      "helpMarkDown": "If set to `true`, we will attempt to parse license and supplier info from the packages metadata file.",
       "visibleRule": "command=generate"
     },
     {
@@ -120,7 +111,7 @@
       "label": "Fetch License Information",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to true, we will attempt to fetch license information of packages detected in the SBOM from [ClearlyDefined](https://clearlydefined.io/).",
+      "helpMarkDown": "If set to true, we will attempt to fetch license information for all packages using [ClearlyDefined](https://clearlydefined.io/).",
       "visibleRule": "command=generate"
     },
     {
@@ -129,7 +120,7 @@
       "label": "Fetch Security Advisory Information",
       "defaultValue": false,
       "required": false,
-      "helpMarkDown": "If set to true, we will attempt to fetch security advisory information of packages detected in the SBOM from the [GitHub Advisory Database](https://github.com/advisories). If enabled, one of `gitHubAccessToken` or `gitHubServiceConnection` must be configured to access the GHSA database. If any security advisories are found, the SPDX document version will be upgraded to 2.3, the minimum version that supports security advisory references.",
+      "helpMarkDown": "If set to true, we will attempt to fetch security advisory information for all packages using the [GitHub Advisory Database](https://github.com/advisories). If enabled, one of `gitHubAccessToken` or `gitHubServiceConnection` must be configured to access the GHSA database. If any security advisories are found, the SPDX document version will be upgraded to 2.3, which is the minimum version that supports security advisory references.",
       "visibleRule": "command=generate"
     },
     {
@@ -155,9 +146,9 @@
       "name": "packageName",
       "type": "string",
       "label": "Package Name",
-      "defaultValue": "$(System.TeamProject)",
-      "required": true,
-      "helpMarkDown": "The name of the package this SBOM represents. Defaults to the parent project name. If this is empty, we will try to infer this name from the build that generated this package.",
+      "defaultValue": "$(Build.Repository.Name)",
+      "required": false,
+      "helpMarkDown": "The name of the package that this SBOM will describe. Defaults to the build repository name if `buildSourcePath` is a single directory; Defaults to the parent directory name when `buildSourcePath` is a glob pattern.",
       "visibleRule": "command=generate"
     },
     {
@@ -166,8 +157,8 @@
       "type": "string",
       "label": "Package Version",
       "defaultValue": "$(Build.BuildNumber)",
-      "required": true,
-      "helpMarkDown": "The version of the package this SBOM represents. Default to the pipeline build number. If this is empty, we will try to infer the version from the build that generated this package.",
+      "required": false,
+      "helpMarkDown": "The version of the package that this SBOM will describe. Defaults to the build pipeline version number. ",
       "visibleRule": "command=generate"
     },
     {
@@ -176,8 +167,8 @@
       "type": "string",
       "label": "Package Supplier",
       "defaultValue": "$(System.CollectionId)",
-      "required": true,
-      "helpMarkDown": "The supplier of the package that this SBOM represents. Defaults to the parent collection GUID.",
+      "required": false,
+      "helpMarkDown": "The supplier name of the package that this SBOM will describe. Defaults to the parent collection GUID.",
       "visibleRule": "command=generate"
     },
     {
@@ -187,7 +178,7 @@
       "label": "Package Namespace URI Base",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The base path of the SBOM namespace URI. Defaults to `https://{packageSupplier}.com`. For example, a URI base of `https://companyName.com/teamName` will create the (unique) namespace `https://companyName.com/teamName/{packageName}/{packageVersion}/{newGuid}`.",
+      "helpMarkDown": "The base path of the SPDX namespace URI that this SBOM will describe. Defaults to `https://{packageSupplier}.com`. For example, a base path of `https://companyName.com/teamName` will create the (unique) namespace URI `https://companyName.com/teamName/{packageName}/{packageVersion}/{newGuid}`.",
       "visibleRule": "command=generate"
     },
     {
@@ -197,7 +188,7 @@
       "label": "Package Namespace URI Unique Part",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "A unique valid URI part that will be appended to the SBOM namespace URI. If specified, this value should be globally unique.",
+      "helpMarkDown": "A unique valid URI part that will be appended to the SPDX namespace URI. If specified, this value should be globally unique.",
       "visibleRule": "command=generate"
     },
     {
@@ -217,7 +208,7 @@
       "label": "External Document Reference List",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "A list of external SBOMs (one per line) that will be included as external document references in the SBOM. Referenced files must be in SPDX 2.2 format.",
+      "helpMarkDown": "A list of external SBOMs (one per line) that will be included as external document references in the SBOM. Referenced files must be in SPDX 2.X format.",
       "visibleRule": "command=generate"
     }
   ],

@@ -1,10 +1,11 @@
-import { addAttachment, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'path';
 
-import { section } from './azureDevOps/formatCommands';
+import { addAttachment, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
+
+import { endgroup, group, section } from './azureDevOps/formatCommands';
 
 import { IDocument } from '../../shared/models/spdx/2.3/IDocument';
 
@@ -19,10 +20,11 @@ const MANIFEST_VERSION = '2.2';
 
 export interface SbomGenerateArgs {
   buildSourcePath: string;
-  buildArtifactPath: string;
-  buildFileList?: string;
+  buildArtifactPath?: string;
+  buildFileList?: string[];
   buildDockerImagesToScan?: string;
   manifestOutputPath?: string;
+  manifestFileNamePrefix?: string;
   enableManifestSpreadsheetGeneration?: boolean;
   enableManifestGraphGeneration?: boolean;
   enablePackageMetadataParsing?: boolean;
@@ -39,16 +41,18 @@ export interface SbomGenerateArgs {
 }
 
 export class SbomToolRunner {
-  private toolsDirectory: string;
-  private toolArchitecture: string;
-  private toolVersion?: string;
+  private agentOperatingSystem: string;
+  private agentArchitecture: string;
+  private agentToolsDirectory: string;
   private debug: boolean;
+  private version?: string;
 
   constructor(version?: string) {
-    this.toolsDirectory = getVariable('Agent.ToolsDirectory') || __dirname;
-    this.toolArchitecture = getVariable('Agent.OSArchitecture') || 'x64';
-    this.toolVersion = version;
+    this.agentOperatingSystem = getVariable('Agent.OS') || 'Linux';
+    this.agentArchitecture = getVariable('Agent.OSArchitecture') || 'x64';
+    this.agentToolsDirectory = getVariable('Agent.ToolsDirectory') || __dirname;
     this.debug = getVariable('System.Debug')?.toLocaleLowerCase() == 'true';
+    this.version = version;
   }
 
   // Run `sbom-tool generate` command
@@ -57,106 +61,145 @@ export class SbomToolRunner {
     // Find the sbom-tool path, or install it if missing
     const sbomToolPath = await this.getToolPathAsync();
 
-    // Build sbom-tool arguments
-    // See: https://github.com/microsoft/sbom-tool/blob/main/docs/sbom-tool-arguments.md
-    let sbomToolArguments = ['generate'];
-    sbomToolArguments.push('-bc', args.buildSourcePath);
-    sbomToolArguments.push('-b', args.buildArtifactPath);
-    if (args.buildFileList) {
-      sbomToolArguments.push('-bl', await createTemporaryFileAsync('build-file-list', args.buildFileList));
-    }
-    if (args.buildDockerImagesToScan) {
-      sbomToolArguments.push('-di', args.buildDockerImagesToScan);
-    }
-    if (args.manifestOutputPath) {
-      sbomToolArguments.push('-m', args.manifestOutputPath);
-    }
-    sbomToolArguments.push('-D', 'true');
-    if (args.enablePackageMetadataParsing) {
-      sbomToolArguments.push('-pm', 'true');
-    }
-    if (args.fetchLicenseInformation) {
-      sbomToolArguments.push('-li', 'true');
-    }
-    sbomToolArguments.push('-pn', args.packageName);
-    sbomToolArguments.push('-pv', args.packageVersion);
-    sbomToolArguments.push('-ps', args.packageSupplier);
-    if (args.packageNamespaceUriBase) {
-      sbomToolArguments.push('-nsb', args.packageNamespaceUriBase);
-    } else {
-      // No base namespace provided, so generate one from the supplier name
-      // To get a valid URI hostname, replace spaces with dashes, strip all other special characters, convert to lowercase
-      const supplierHostname = args.packageSupplier
-        .replace(/\s+/g, '-')
-        .replace(/[^a-zA-Z0-9 ]/g, '')
-        .toLowerCase();
-      sbomToolArguments.push('-nsb', `https://${supplierHostname}.com`);
-    }
-    if (args.packageNamespaceUriUniquePart) {
-      sbomToolArguments.push('-nsu', args.packageNamespaceUriUniquePart);
-    }
-    if (args.additionalComponentDetectorArgs) {
-      sbomToolArguments.push('-cd', args.additionalComponentDetectorArgs);
-    }
-    if (args.externalDocumentReferenceListFile) {
-      sbomToolArguments.push(
-        '-er',
-        await createTemporaryFileAsync('external-doc-refs-list', args.externalDocumentReferenceListFile),
+    group(`SBOM generate '${args.packageName}' in ${args.buildSourcePath}`);
+    try {
+      // Sanity check
+      if (!args.buildArtifactPath && !args.buildFileList) {
+        throw new Error('Either `buildArtifactPath` or `buildFileList` must be provided');
+      }
+
+      // Build sbom-tool arguments
+      // See: https://github.com/microsoft/sbom-tool/blob/main/docs/sbom-tool-arguments.md
+      let sbomToolArguments = ['generate'];
+      sbomToolArguments.push('-bc', args.buildSourcePath);
+      if (args.buildArtifactPath) {
+        sbomToolArguments.push('-b', args.buildArtifactPath);
+      }
+      if (args.buildFileList) {
+        sbomToolArguments.push('-bl', await createTemporaryFileAsync('build-file-list', args.buildFileList.join('\n')));
+      }
+      if (args.buildDockerImagesToScan) {
+        sbomToolArguments.push('-di', args.buildDockerImagesToScan);
+      }
+      if (args.manifestOutputPath) {
+        sbomToolArguments.push('-m', args.manifestOutputPath);
+      }
+      sbomToolArguments.push('-D', 'true');
+      if (args.enablePackageMetadataParsing) {
+        sbomToolArguments.push('-pm', 'true');
+      }
+      if (args.fetchLicenseInformation) {
+        sbomToolArguments.push('-li', 'true');
+      }
+      sbomToolArguments.push('-pn', args.packageName);
+      sbomToolArguments.push('-pv', args.packageVersion);
+      sbomToolArguments.push('-ps', args.packageSupplier);
+      if (args.packageNamespaceUriBase) {
+        sbomToolArguments.push('-nsb', args.packageNamespaceUriBase);
+      } else {
+        // No base namespace provided, so generate one from the supplier name
+        // To get a valid URI hostname, replace spaces with dashes, strip all other special characters, convert to lowercase
+        const supplierHostname = args.packageSupplier
+          .replace(/\s+/g, '-')
+          .replace(/[^a-zA-Z0-9 ]/g, '')
+          .toLowerCase();
+        sbomToolArguments.push('-nsb', `https://${supplierHostname}.com`);
+      }
+      if (args.packageNamespaceUriUniquePart) {
+        sbomToolArguments.push('-nsu', args.packageNamespaceUriUniquePart);
+      }
+      if (args.additionalComponentDetectorArgs) {
+        sbomToolArguments.push('-cd', args.additionalComponentDetectorArgs);
+      }
+      if (args.externalDocumentReferenceListFile) {
+        sbomToolArguments.push(
+          '-er',
+          await createTemporaryFileAsync('external-doc-refs-list', args.externalDocumentReferenceListFile),
+        );
+      }
+      sbomToolArguments.push('-V', this.debug ? 'Debug' : 'Information');
+
+      // Run sbom-tool
+      section(`Running 'sbom-tool generate'`);
+      const sbomTool = tool(sbomToolPath).arg(sbomToolArguments);
+      const sbomToolResultCode = await sbomTool.execAsync({
+        failOnStdErr: false,
+        ignoreReturnCode: true,
+      });
+      if (sbomToolResultCode != 0) {
+        throw new Error(`SBOM Tool failed with exit code ${sbomToolResultCode}`);
+      }
+
+      const manifestOutputPath = path.join(
+        args.manifestOutputPath || args.buildArtifactPath || __dirname,
+        MANIFEST_DIR_NAME,
+        `${MANIFEST_FORMAT}_${MANIFEST_VERSION}`,
       );
-    }
-    sbomToolArguments.push('-V', this.debug ? 'Debug' : 'Information');
 
-    // Run sbom-tool
-    section(`Running 'sbom-tool generate'`);
-    const sbomTool = tool(sbomToolPath).arg(sbomToolArguments);
-    const sbomToolResultCode = await sbomTool.execAsync({
-      failOnStdErr: false,
-      ignoreReturnCode: true,
-    });
-    if (sbomToolResultCode != 0) {
-      throw new Error(`SBOM Tool failed with exit code ${sbomToolResultCode}`);
-    }
-    const spdxPath = path.join(
-      args.manifestOutputPath || args.buildArtifactPath || __dirname,
-      MANIFEST_DIR_NAME,
-      `${MANIFEST_FORMAT}_${MANIFEST_VERSION}`,
-      `manifest.${MANIFEST_FORMAT}.json`,
-    );
-    if (!fileExistsSync(spdxPath)) {
-      throw new Error(`SBOM Tool did not generate SPDX file: '${spdxPath}'`);
-    }
-
-    // Check packages for security advisories
-    if (args.fetchSecurityAdvisories && args.gitHubAccessToken) {
-      section('Checking package security advisories');
-      await addSpdxPackageSecurityAdvisoryExternalRefsAsync(spdxPath, args.gitHubAccessToken);
-    }
-
-    // Attach the SPDX file to the build timeline; This is used by the SBOM report tab.
-    addAttachment(`${MANIFEST_FORMAT}.json`, path.basename(spdxPath), spdxPath);
-    const spdxContent = await fs.readFile(spdxPath, 'utf8');
-    const spdx = JSON.parse(spdxContent) as IDocument;
-
-    // Generate a XLSX spreadsheet of the SPDX file, if configured
-    if (args.enableManifestSpreadsheetGeneration && spdxContent) {
-      section(`Generating XLSX spreadsheet`);
-      const xlsx = await convertSpdxToXlsxAsync(spdx);
-      if (xlsx) {
-        const xlsxPath = path.format({ ...path.parse(spdxPath), base: '', ext: '.xlsx' });
-        await fs.writeFile(xlsxPath, xlsx);
+      // Rename all SPDX files in the manifest directory if a file name prefix is provided
+      if (args.manifestFileNamePrefix) {
+        const manifestFiles = await fs.readdir(manifestOutputPath);
+        if (manifestFiles) {
+          for (const manifestFileName of manifestFiles) {
+            if (manifestFileName.startsWith('manifest')) {
+              const newManifestFileName = args.manifestFileNamePrefix + manifestFileName;
+              await fs.rename(
+                path.join(manifestOutputPath, manifestFileName),
+                path.join(manifestOutputPath, newManifestFileName),
+              );
+            }
+          }
+        }
       }
-    }
 
-    // Generate a SVG graph diagram of the SPDX file
-    if (args.enableManifestGraphGeneration && spdxContent) {
-      section(`Generating SVG graph diagram`);
-      const svg = await convertSpdxToSvgAsync(spdx);
-      if (svg) {
-        const svgPath = path.format({ ...path.parse(spdxPath), base: '', ext: '.svg' });
-        await fs.writeFile(svgPath, svg);
-        // TODO: Remove this attachment once web browser SPDX to SVG generation is implemented
-        addAttachment(`${MANIFEST_FORMAT}.svg`, path.basename(svgPath), svgPath);
+      // Check for the generated SPDX json file
+      const spdxJsonPath = path.join(
+        manifestOutputPath,
+        `${args.manifestFileNamePrefix || ''}manifest.${MANIFEST_FORMAT}.json`,
+      );
+      if (!fileExistsSync(spdxJsonPath)) {
+        throw new Error(`SBOM Tool did not generate SPDX file: '${spdxJsonPath}'`);
       }
+
+      // Add security advisories to the SPDX file, if configured
+      if (args.fetchSecurityAdvisories && args.gitHubAccessToken) {
+        section('Checking packages for security advisories');
+        await addSpdxPackageSecurityAdvisoryExternalRefsAsync(spdxJsonPath, args.gitHubAccessToken);
+      }
+
+      // Attach the SPDX file to the build timeline so we can view it in the SBOM build result tab.
+      const spdxJsonContent = await fs.readFile(spdxJsonPath, 'utf8');
+      addAttachment(`${MANIFEST_FORMAT}.json`, path.basename(spdxJsonPath), spdxJsonPath);
+
+      // Regenerate the SHA-256 hash of the SPDX file, in case it was modified
+      section('Generating SHA-256 hash file');
+      // TODO: writeSha265HashFileAsync(spdxJsonPath);
+
+      // Generate a XLSX spreadsheet of the SPDX file, if configured
+      if (args.enableManifestSpreadsheetGeneration && spdxJsonContent) {
+        section(`Generating XLSX spreadsheet`);
+        const xlsx = await convertSpdxToXlsxAsync(JSON.parse(spdxJsonContent) as IDocument);
+        if (xlsx) {
+          const xlsxPath = path.format({ ...path.parse(spdxJsonPath), base: '', ext: '.xlsx' });
+          await fs.writeFile(xlsxPath, xlsx);
+          // TODO: writeSha265HashFileAsync(xlsxPath);
+        }
+      }
+
+      // Generate a SVG graph diagram of the SPDX file
+      if (args.enableManifestGraphGeneration && spdxJsonContent) {
+        section(`Generating SVG graph diagram`);
+        const svg = await convertSpdxToSvgAsync(JSON.parse(spdxJsonContent) as IDocument);
+        if (svg) {
+          const svgPath = path.format({ ...path.parse(spdxJsonPath), base: '', ext: '.svg' });
+          await fs.writeFile(svgPath, svg);
+          // TODO: writeSha265HashFileAsync(svgPath);
+          // TODO: Remove this attachment once web browser SPDX to SVG generation is implemented
+          addAttachment(`${MANIFEST_FORMAT}.svg`, path.basename(svgPath), svgPath);
+        }
+      }
+    } finally {
+      endgroup();
     }
   }
 
@@ -172,16 +215,16 @@ export class SbomToolRunner {
 
     console.info('SBOM Tool install was not found, attempting to install now...');
     section("Installing 'sbom-tool'");
-    switch (getVariable('Agent.OS')) {
+    switch (this.agentOperatingSystem) {
       case 'Darwin':
       case 'Linux':
-        toolPath = await installToolLinuxAsync(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
+        toolPath = await installToolLinuxAsync(this.agentToolsDirectory, this.agentArchitecture, this.version);
         break;
       case 'Windows_NT':
-        toolPath = await installToolWindowsAsync(this.toolsDirectory, this.toolArchitecture, this.toolVersion);
+        toolPath = await installToolWindowsAsync(this.agentToolsDirectory, this.agentArchitecture, this.version);
         break;
       default:
-        throw new Error(`Unable to install SBOM Tool, unsupported agent OS '${getVariable('Agent.OS')}'`);
+        throw new Error(`Unable to install SBOM Tool, unsupported agent OS '${this.agentOperatingSystem}'`);
     }
 
     return toolPath || which('sbom-tool', true);
