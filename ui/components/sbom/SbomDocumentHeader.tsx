@@ -116,9 +116,11 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
               },
               important: false,
               onActivate: () => {
-                uploadFile('.spdx.json').then((file) => {
-                  if (file) {
-                    onLoadArtifact(file);
+                uploadFile('.spdx.json').then((files) => {
+                  if (files) {
+                    for (const file of files) {
+                      onLoadArtifact(file);
+                    }
                   }
                 });
               },
@@ -175,15 +177,15 @@ function downloadFile(name: string, type: string, dataBuilder: () => Promise<Arr
   });
 }
 
-function uploadFile(type: string): Promise<File | undefined> {
+function uploadFile(type: string): Promise<File[] | undefined> {
   return new Promise((resolve) => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.multiple = false;
+    input.multiple = true;
     input.accept = type;
     input.onchange = () => {
       const files = input.files ? Array.from(input.files) : [];
-      resolve(files[0]);
+      resolve(files);
     };
     input.oncancel = () => {
       resolve(undefined);
