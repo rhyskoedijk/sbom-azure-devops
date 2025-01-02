@@ -26,6 +26,14 @@ export enum DocumentVersion {
   SPDX_2_3 = 'SPDX-2.3',
 }
 
+export function getDisplayNameForDocument(document: IDocument): string {
+  const describesIds = document.documentDescribes;
+  return document.packages
+    ?.filter((p) => describesIds.includes(p.SPDXID))
+    ?.map((p) => p.name)
+    ?.join(' & ');
+}
+
 export function isPackageTopLevel(document: IDocument, packageId: string): boolean {
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];

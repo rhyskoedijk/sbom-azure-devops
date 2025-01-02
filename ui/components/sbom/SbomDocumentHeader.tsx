@@ -67,9 +67,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
         },
         important: true,
         onActivate: () =>
-          downloadFile(`${artifact.spdxDocument.name}.spdx.json`, `text/json`, async () =>
-            new TextEncoder().encode(JSON.stringify(artifact.spdxDocument, null, 2)),
-          ),
+          downloadFile(`${artifact.spdxDocument.name}.spdx.json`, `text/json`, async () => artifact.jsonDocument),
       },
       {
         id: 'exportXlsx',
@@ -82,8 +80,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
           downloadFile(
             `${artifact.spdxDocument.name}.spdx.xlsx`,
             `application/octet-stream`,
-            async () =>
-              artifact.xlsxDocument || (await convertSpdxToXlsxAsync(artifact.spdxDocument)) || new ArrayBuffer(0),
+            async () => await convertSpdxToXlsxAsync(artifact.spdxDocument),
           ),
       },
       {
@@ -98,8 +95,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
           downloadFile(
             `${artifact.spdxDocument.name}.spdx.svg`,
             `image/svg+xml`,
-            async () =>
-              artifact.svgDocument || (await convertSpdxToSvgAsync(artifact.spdxDocument)) || new ArrayBuffer(0),
+            async () => artifact.svgDocument || (await convertSpdxToSvgAsync(artifact.spdxDocument)),
           ),
       },
       ...(onLoadArtifact

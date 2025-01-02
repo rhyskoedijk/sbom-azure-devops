@@ -16,7 +16,7 @@ import '../shared/extensions/NumberExtensions';
 import '../shared/extensions/StringExtensions';
 
 import { ISbomBuildArtifact } from '../shared/models/ISbomBuildArtifact';
-import { IDocument } from '../shared/models/spdx/2.3/IDocument';
+import { getDisplayNameForDocument, IDocument } from '../shared/models/spdx/2.3/IDocument';
 import { BuildRestClient } from './clients/BuildRestClient';
 import { SbomDocumentPage } from './components/sbom/SbomDocumentPage';
 
@@ -104,7 +104,7 @@ export class Root extends React.Component<{}, State> {
           }
 
           // Download the SPDX document
-          const spdxStream = await buildClient.getAttachment(
+          const spdxJsonStream = await buildClient.getAttachment(
             spdxUrlMatch[1],
             spdxUrlMatch[2],
             spdxUrlMatch[3],
@@ -112,21 +112,21 @@ export class Root extends React.Component<{}, State> {
             SPDX_JSON_ATTACHMENT_TYPE,
             spdxJsonAttachment.name,
           );
-          if (!spdxStream) {
+          if (!spdxJsonStream) {
             throw new Error(`Attachment stream '${spdxJsonAttachment.name}' could not be retrieved`);
           }
 
           // Parse the SPDX document JSON
-          const spdxDocument = JSON.parse(new TextDecoder().decode(spdxStream)) as IDocument;
+          const spdxDocument = JSON.parse(new TextDecoder().decode(spdxJsonStream)) as IDocument;
           if (!spdxDocument) {
             throw new Error(`Attachment stream '${spdxJsonAttachment.name}' could not be parsed as JSON`);
           }
 
           // Attempt to download the SPDX document SVG graph, if available
           // TODO: Remove this once web browser SPDX to SVG generation is implemented
-          let spdxSvgDocumentStream: ArrayBuffer | undefined;
+          let spdxSvgStream: ArrayBuffer | undefined;
           try {
-            spdxSvgDocumentStream = await buildClient.getAttachment(
+            spdxSvgStream = await buildClient.getAttachment(
               spdxUrlMatch[1],
               spdxUrlMatch[2],
               spdxUrlMatch[3],
@@ -141,7 +141,8 @@ export class Root extends React.Component<{}, State> {
           sbomArtifacts.push({
             id: spdxDocument.documentNamespace,
             spdxDocument: spdxDocument,
-            svgDocument: spdxSvgDocumentStream,
+            jsonDocument: spdxJsonStream,
+            svgDocument: spdxSvgStream,
           });
         } catch (error) {
           throw new Error(`Unable to parse build attachment '${spdxJsonAttachment.name}'. ${error}`.trim());
@@ -170,7 +171,11 @@ export class Root extends React.Component<{}, State> {
       }
 
       console.info(`Loaded SBOM artifact from '${file.name}'`);
-      const newArtifact: ISbomBuildArtifact = { id: spdxDocument.documentNamespace, spdxDocument: spdxDocument };
+      const newArtifact: ISbomBuildArtifact = {
+        id: spdxDocument.documentNamespace,
+        spdxDocument: spdxDocument,
+        jsonDocument: await file.arrayBuffer(),
+      };
       this.selectedArtifactId.value = newArtifact.id;
       this.setState({
         artifacts: [...(this.state.artifacts || []), newArtifact],
@@ -214,9 +219,11 @@ export class Root extends React.Component<{}, State> {
               selectedTabId={this.selectedArtifactId}
               tabSize={TabSize.Compact}
               className="bolt-tabbar-grey margin-bottom-16"
+              tabsClassName="flex-wrap flex-shrink"
+              disableSticky={true}
             >
               {this.state.artifacts.map((artifact, index) => (
-                <Tab key={index} id={artifact.id} name={artifact.spdxDocument.name} />
+                <Tab key={index} id={artifact.id} name={getDisplayNameForDocument(artifact.spdxDocument)} />
               ))}
             </TabBar>
             <TabContent>
