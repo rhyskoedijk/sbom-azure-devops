@@ -16,13 +16,13 @@ jobs:
           fetch-depth: 0 # Fetch all history so that GitVersion can calculate the version
 
       - name: Use GitVersion 6.x
-        uses: gittools/actions/gitversion/setup@v3.0.0
+        uses: gittools/actions/gitversion/setup@v3
         with:
           versionSpec: '6.0.x'
 
       - name: Determine version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.0.0
+        uses: gittools/actions/gitversion/execute@v3
         with:
           useConfigFile: true
 
