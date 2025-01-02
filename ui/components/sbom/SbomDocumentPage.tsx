@@ -132,7 +132,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
           {this.state.suppliers.length ? (
             <Tab id="suppliers" name="Suppliers" badgeCount={this.state.suppliers.length} />
           ) : null}
-          {this.props.artifact.svgDocument ? (
+          {this.props.artifact.loadSvgDocumentAsync ? (
             <Tab
               id="relationships"
               name="Relationship View"
@@ -211,7 +211,9 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                   return (
                     <SpdxRelationshipCard
                       document={this.props.artifact.spdxDocument}
-                      documentGraphSvg={this.props.artifact.svgDocument}
+                      loadSvgDocumentAsync={
+                        this.props.artifact.loadSvgDocumentAsync || (() => Promise.resolve(new ArrayBuffer(0)))
+                      }
                     />
                   );
               }

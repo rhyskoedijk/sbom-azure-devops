@@ -67,7 +67,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
         },
         important: true,
         onActivate: () =>
-          downloadFile(`${artifact.spdxDocument.name}.spdx.json`, `text/json`, async () => artifact.jsonDocument),
+          downloadFile(`${artifact.spdxDocument.name}.spdx.json`, `text/json`, async () => artifact.spdxJsonDocument),
       },
       {
         id: 'exportXlsx',
@@ -90,12 +90,14 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
           iconName: 'BranchFork2',
         },
         important: false,
-        disabled: artifact.svgDocument === undefined,
+        disabled: artifact.loadSvgDocumentAsync === undefined,
         onActivate: () =>
           downloadFile(
             `${artifact.spdxDocument.name}.spdx.svg`,
             `image/svg+xml`,
-            async () => artifact.svgDocument || (await convertSpdxToSvgAsync(artifact.spdxDocument)),
+            async () =>
+              (artifact.loadSvgDocumentAsync && (await artifact.loadSvgDocumentAsync())) ||
+              (await convertSpdxToSvgAsync(artifact.spdxDocument)),
           ),
       },
       ...(onLoadArtifact

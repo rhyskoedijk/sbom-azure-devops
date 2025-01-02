@@ -83,6 +83,7 @@ export class Root extends React.Component<{}, State> {
       // Get all SPDX JSON artifact attachments for the current build
       const buildClient = getClient(BuildRestClient);
       const spdxJsonAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_JSON_ATTACHMENT_TYPE);
+      const spdxSvgAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_SVG_ATTACHMENT_TYPE);
       console.info(`Detected ${spdxJsonAttachments.length} SBOM artifact attachment(s) for build ${buildId}`);
 
       // Download and process each SBOM artifact attachment
@@ -122,27 +123,27 @@ export class Root extends React.Component<{}, State> {
             throw new Error(`Attachment stream '${spdxJsonAttachment.name}' could not be parsed as JSON`);
           }
 
-          // Attempt to download the SPDX document SVG graph, if available
-          // TODO: Remove this once web browser SPDX to SVG generation is implemented
-          let spdxSvgStream: ArrayBuffer | undefined;
-          try {
-            spdxSvgStream = await buildClient.getAttachment(
-              spdxUrlMatch[1],
-              spdxUrlMatch[2],
-              spdxUrlMatch[3],
-              spdxUrlMatch[4],
-              SPDX_SVG_ATTACHMENT_TYPE,
-              spdxJsonAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
-            );
-          } catch (error) {
-            console.warn(`Unable find SPDX SVG artifact for '${spdxJsonAttachment.name}'. ${error}`);
-          }
-
+          const hasSvgAttachment = spdxSvgAttachments.find(
+            (a) => a.name === spdxJsonAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
+          );
           sbomArtifacts.push({
             id: spdxDocument.documentNamespace,
             spdxDocument: spdxDocument,
-            jsonDocument: spdxJsonStream,
-            svgDocument: spdxSvgStream,
+            spdxJsonDocument: spdxJsonStream,
+            loadSvgDocumentAsync: hasSvgAttachment
+              ? async () => {
+                  // Attempt to download the SPDX document SVG graph, if available
+                  // TODO: Remove this once web browser SPDX to SVG generation is implemented
+                  return await buildClient.getAttachment(
+                    spdxUrlMatch[1],
+                    spdxUrlMatch[2],
+                    spdxUrlMatch[3],
+                    spdxUrlMatch[4],
+                    SPDX_SVG_ATTACHMENT_TYPE,
+                    spdxJsonAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
+                  );
+                }
+              : undefined,
           });
         } catch (error) {
           throw new Error(`Unable to parse build attachment '${spdxJsonAttachment.name}'. ${error}`.trim());
@@ -174,7 +175,7 @@ export class Root extends React.Component<{}, State> {
       const newArtifact: ISbomBuildArtifact = {
         id: spdxDocument.documentNamespace,
         spdxDocument: spdxDocument,
-        jsonDocument: await file.arrayBuffer(),
+        spdxJsonDocument: await file.arrayBuffer(),
       };
       this.selectedArtifactId.value = newArtifact.id;
       this.setState({
