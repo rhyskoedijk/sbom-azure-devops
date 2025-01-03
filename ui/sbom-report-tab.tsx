@@ -13,6 +13,7 @@ import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISbomBuildArtifact } from '../shared/models/ISbomBuildArtifact';
 import { getDisplayNameForDocument, IDocument } from '../shared/models/spdx/2.3/IDocument';
+import { mergeSpdxDocuments } from '../shared/spdx/mergeSpdxDocuments';
 import { BuildRestClient } from './clients/BuildRestClient';
 import { SbomDocumentPage } from './components/sbom/SbomDocumentPage';
 
@@ -26,7 +27,13 @@ const SPDX_JSON_ATTACHMENT_TYPE = 'spdx.json';
 const SPDX_SVG_ATTACHMENT_TYPE = 'spdx.svg';
 
 interface State {
+  build?: {
+    id: number;
+    name?: string;
+    number?: string;
+  };
   artifacts?: ISbomBuildArtifact[];
+  summaryArtifact?: ISbomBuildArtifact;
   loadingMessage?: string;
   loadError?: any;
 }
@@ -81,6 +88,13 @@ export class Root extends React.Component<{}, State> {
       if (!buildId) {
         throw new Error('Unable to access the current build data');
       }
+      this.setState({
+        build: {
+          id: buildId,
+          name: (buildPageData.build as any)?.name || buildPageData.definition?.name,
+          number: (buildPageData.build as any)?.number || buildPageData.build?.buildNumber,
+        },
+      });
 
       // Get all SPDX JSON artifact attachments for the current build
       const buildClient = getClient(BuildRestClient);
@@ -158,6 +172,10 @@ export class Root extends React.Component<{}, State> {
         }
       }
 
+      // Generate a summary SBOM artifact if multiple artifacts were loaded
+      this.generateSbomSummaryArtifact();
+
+      // Update the state with the loaded SBOM artifacts
       console.info(`Loaded ${Object.keys(sbomArtifacts).length} SBOM artifact(s) for build ${buildId}`);
       this.selectedArtifactId.value = sbomArtifacts[0]?.spdxDocument?.documentNamespace || '';
       this.setState({
@@ -178,6 +196,7 @@ export class Root extends React.Component<{}, State> {
   private async loadSbomArtifactsFromFileUpload(files: File[]): Promise<void> {
     for (const file of files) {
       try {
+        // Load the SPDX JSON file
         console.info(`Loading SBOM artifact from file upload '${file.name}'...`);
         const spdxJsonStream = await file.arrayBuffer();
         const spdxJsonDocument = JSON.parse(new TextDecoder().decode(spdxJsonStream)) as IDocument;
@@ -192,16 +211,42 @@ export class Root extends React.Component<{}, State> {
           spdxJsonDocument: spdxJsonStream,
         };
 
+        // Update the state with the new SBOM artifact
         this.selectedArtifactId.value = newArtifact.id;
         this.setState({
           artifacts: [...(this.state.artifacts || []), newArtifact],
           loadingMessage: undefined,
           loadError: undefined,
         });
+
+        // Generate a summary SBOM artifact if multiple artifacts were loaded
+        this.generateSbomSummaryArtifact();
       } catch (error) {
         console.error(error);
         this.setState({ loadError: error });
         return;
+      }
+    }
+  }
+
+  /**
+   * Merge all SBOM artifacts into a single summary artifact
+   */
+  private generateSbomSummaryArtifact() {
+    if (this.state?.artifacts) {
+      if (this.state.artifacts.length > 1) {
+        const mergedDocument = mergeSpdxDocuments(
+          this.state.build?.name,
+          this.state.build?.number,
+          this.state.artifacts.map((a) => a.spdxDocument),
+        );
+        this.setState({
+          summaryArtifact: {
+            id: mergedDocument.documentNamespace,
+            spdxDocument: mergedDocument,
+            spdxJsonDocument: new TextEncoder().encode(JSON.stringify(mergedDocument, null, 2)).buffer,
+          },
+        });
       }
     }
   }
@@ -245,6 +290,13 @@ export class Root extends React.Component<{}, State> {
                 className="bolt-tabbar-grey bolt-tabbar-compact flex-shrink"
                 tabGroups={[{ id: 'manifests', name: 'Manifests' }]}
               >
+                {this.state.summaryArtifact && (
+                  <Tab
+                    id={this.state.summaryArtifact.id}
+                    name="Summary"
+                    iconProps={{ iconName: 'ViewDashboard', className: 'margin-right-4' }}
+                  />
+                )}
                 {this.state.artifacts.map((artifact, index) => (
                   <Tab
                     key={index}
@@ -258,8 +310,12 @@ export class Root extends React.Component<{}, State> {
               <TabContent>
                 <Observer selectedArtifactId={this.selectedArtifactId}>
                   {(props: { selectedArtifactId: string }) =>
-                    props.selectedArtifactId &&
-                    this.state.artifacts?.find((artifact) => artifact.id === props.selectedArtifactId) ? (
+                    props.selectedArtifactId && this.state.summaryArtifact?.id === props.selectedArtifactId ? (
+                      <SbomDocumentPage
+                        artifact={this.state.summaryArtifact}
+                        onLoadArtifacts={(files) => this.loadSbomArtifactsFromFileUpload(files)}
+                      />
+                    ) : this.state.artifacts?.find((artifact) => artifact.id === props.selectedArtifactId) ? (
                       <SbomDocumentPage
                         artifact={this.state.artifacts?.find((artifact) => artifact.id === props.selectedArtifactId)!}
                         onLoadArtifacts={(files) => this.loadSbomArtifactsFromFileUpload(files)}
