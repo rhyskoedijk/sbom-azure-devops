@@ -40,9 +40,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   const rootPackageIds = spdx.documentDescribes;
   const relationships = spdx.relationships || [];
   const files = spdx.files || [];
-  const packages = (spdx.packages || []).filter((p) => {
-    return !rootPackageIds.includes(p.SPDXID);
-  });
+  const packages = spdx.packages || [];
   const securityAdvisories = packages
     .flatMap(
       (pkg: IPackage) =>
@@ -76,7 +74,6 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
     sheet: 'Document',
     columns: [
       { label: 'ID', value: 'id' },
-      { label: 'Describes', value: 'describes' },
       { label: 'Name', value: 'name' },
       { label: 'Created', value: 'created' },
       { label: 'Creator', value: 'organization' },
@@ -84,6 +81,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'SPDX Version', value: 'spdxVersion' },
       { label: 'Data License', value: 'dataLicense' },
       { label: 'Namespace', value: 'namespace' },
+      { label: 'Describes', value: 'describes' },
     ],
     content: [
       {
