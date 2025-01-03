@@ -31,6 +31,10 @@ export class SpdxRelationshipCard extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
+    this.setState({
+      documentGraphSvgMarkup: undefined,
+      loadError: undefined,
+    });
     this.props.loadSvgDocumentAsync().then(
       (documentSvgMarkup) => {
         this.setState({
@@ -46,11 +50,9 @@ export class SpdxRelationshipCard extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
-    if (
-      prevProps.document !== this.props.document ||
-      prevProps.loadSvgDocumentAsync !== this.props.loadSvgDocumentAsync
-    ) {
+    if (prevProps.document !== this.props.document) {
       this.setState(SpdxRelationshipCard.getDerivedStateFromProps(this.props));
+      this.componentDidMount();
     }
   }
 
