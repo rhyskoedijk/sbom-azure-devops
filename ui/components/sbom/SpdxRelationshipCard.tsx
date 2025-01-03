@@ -2,10 +2,8 @@ import * as React from 'react';
 
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
-import { ObservableValue } from 'azure-devops-ui/Core/Observable';
-import { Observer } from 'azure-devops-ui/Observer';
+import { MessageCard, MessageCardSeverity } from 'azure-devops-ui/MessageCard';
 import { Spinner } from 'azure-devops-ui/Spinner';
-import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 
@@ -16,40 +14,35 @@ interface Props {
 
 interface State {
   documentGraphSvgContainerRef?: React.Ref<HTMLDivElement>;
-  documentSvgMarkup: ObservableValue<string | undefined>;
-  documentIsLoading: ObservableValue<boolean>;
-  loadDocumentAsync: () => Promise<void>;
+  documentGraphSvgMarkup?: string;
+  loadError?: any;
 }
 
 export class SpdxRelationshipCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = SpdxRelationshipCard.getDerivedStateFromProps(props);
+    this.state = {};
   }
 
   static getDerivedStateFromProps(props: Props): State {
-    const state: State = {
+    return {
       documentGraphSvgContainerRef: React.createRef<HTMLDivElement>(),
-      // TODO: Dynamically render the graph if documentGraphSvg is null?
-      documentSvgMarkup: new ObservableValue<string | undefined>(undefined),
-      documentIsLoading: new ObservableValue(true),
-      loadDocumentAsync: () => {
-        return props.loadSvgDocumentAsync().then(
-          (documentSvgMarkup) => {
-            state.documentSvgMarkup.value = new TextDecoder().decode(documentSvgMarkup);
-          },
-          (error) => {
-            state.documentSvgMarkup.value = undefined;
-          },
-        );
-      },
     };
+  }
 
-    state.loadDocumentAsync().finally(() => {
-      state.documentIsLoading.value = false;
-    });
-
-    return state;
+  public componentDidMount() {
+    this.props.loadSvgDocumentAsync().then(
+      (documentSvgMarkup) => {
+        this.setState({
+          documentGraphSvgMarkup: new TextDecoder().decode(documentSvgMarkup),
+        });
+      },
+      (error) => {
+        this.setState({
+          loadError: error,
+        });
+      },
+    );
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>): void {
@@ -68,47 +61,37 @@ export class SpdxRelationshipCard extends React.Component<Props, State> {
       }
     }
 
-    return (
-      <Observer documentIsLoading={this.state.documentIsLoading} documentSvgMarkup={this.state.documentSvgMarkup}>
-        {(props: { documentIsLoading: boolean; documentSvgMarkup: string | undefined }) =>
-          props.documentIsLoading ? (
-            <Spinner label="Loading graph data..." />
-          ) : !this.state.documentSvgMarkup ? (
-            <ZeroData
-              iconProps={{ iconName: 'FlowChart' }}
-              primaryText="Graph Data Missing"
-              secondaryText="Document does not contain graph data."
-              imageAltText=""
-              className="page-content margin-vertical-20"
+    return this.state.loadError ? (
+      <MessageCard severity={MessageCardSeverity.Error}>
+        {this.state.loadError.message || 'An error occurred while loading the graph data.'}
+      </MessageCard>
+    ) : !this.state.documentGraphSvgMarkup ? (
+      <Spinner className="margin-vertical-16" label="Loading graph data..." />
+    ) : (
+      <TransformWrapper
+        initialScale={1}
+        minScale={1}
+        maxScale={100}
+        centerOnInit={true}
+        centerZoomedOut={true}
+        wheel={{ activationKeys: ['Control', 'Shift'] }}
+        onPanningStart={() => {
+          setCursor(this.state.documentGraphSvgContainerRef, 'grabbing');
+        }}
+        onPanningStop={() => {
+          setCursor(this.state.documentGraphSvgContainerRef, 'grab');
+        }}
+      >
+        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+          <TransformComponent>
+            <div
+              ref={this.state.documentGraphSvgContainerRef}
+              style={{ backgroundColor: 'white', width: '100vw', minHeight: '80vh', cursor: 'grab' }}
+              dangerouslySetInnerHTML={{ __html: this.state.documentGraphSvgMarkup || '' }}
             />
-          ) : (
-            <TransformWrapper
-              initialScale={1}
-              minScale={1}
-              maxScale={100}
-              centerOnInit={true}
-              centerZoomedOut={true}
-              wheel={{ activationKeys: ['Control', 'Shift'] }}
-              onPanningStart={() => {
-                setCursor(this.state.documentGraphSvgContainerRef, 'grabbing');
-              }}
-              onPanningStop={() => {
-                setCursor(this.state.documentGraphSvgContainerRef, 'grab');
-              }}
-            >
-              {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                <TransformComponent>
-                  <div
-                    ref={this.state.documentGraphSvgContainerRef}
-                    style={{ backgroundColor: 'white', width: '100vw', minHeight: '80vh', cursor: 'grab' }}
-                    dangerouslySetInnerHTML={{ __html: props.documentSvgMarkup || '' }}
-                  />
-                </TransformComponent>
-              )}
-            </TransformWrapper>
-          )
-        }
-      </Observer>
+          </TransformComponent>
+        )}
+      </TransformWrapper>
     );
   }
 }
