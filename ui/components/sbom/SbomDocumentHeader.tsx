@@ -87,7 +87,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
         id: 'exportSvg',
         text: 'Export to SVG',
         iconProps: {
-          iconName: 'BranchFork2',
+          iconName: 'FlowChart',
         },
         important: false,
         disabled: artifact.loadSvgDocumentAsync === undefined,

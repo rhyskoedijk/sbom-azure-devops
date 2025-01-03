@@ -109,7 +109,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
     }
     // TODO: Use page providers; https://developer.microsoft.com/en-us/azure-devops/components/page#page-with-providers
     return (
-      <Page orientation={Orientation.Vertical}>
+      <Page orientation={Orientation.Vertical} className="flex-grow">
         <SbomDocumentHeader artifact={this.props.artifact} onLoadArtifact={this.props.onLoadArtifact} />
         <TabBar
           onSelectedTabChanged={this.onSelectedTabChanged}
@@ -136,7 +136,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
             <Tab
               id="relationships"
               name="Relationship View"
-              iconProps={{ iconName: 'BranchFork2', className: 'margin-right-4' }}
+              iconProps={{ iconName: 'FlowChart', className: 'margin-right-4' }}
             />
           ) : null}
         </TabBar>

@@ -8,7 +8,7 @@ import { ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { MessageCard, MessageCardSeverity } from 'azure-devops-ui/MessageCard';
 import { Observer } from 'azure-devops-ui/Observer';
 import { Spinner } from 'azure-devops-ui/Spinner';
-import { Tab, TabBar, TabContent, TabSize } from 'azure-devops-ui/Tabs';
+import { Tab, TabContent, TabList, TabSize } from 'azure-devops-ui/Tabs';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import '../shared/extensions/ArrayExtensions';
@@ -204,7 +204,7 @@ export class Root extends React.Component<{}, State> {
         ) : this.state.artifacts.length == 0 ? (
           <ZeroData
             iconProps={{ iconName: 'Certificate' }}
-            primaryText="Empty"
+            primaryText="No artifacts found"
             secondaryText="Unable to find any SBOM artifacts for this build."
             imageAltText=""
           />
@@ -214,19 +214,24 @@ export class Root extends React.Component<{}, State> {
             onLoadArtifact={(file) => this.loadSbomArtifactFromFileUpload(file)}
           />
         ) : (
-          <div className="flex flex-column">
-            <TabBar
+          <div className="flex flex-row">
+            <TabList
               onSelectedTabChanged={this.onSelectedArtifactTabChanged}
               selectedTabId={this.selectedArtifactId}
               tabSize={TabSize.Compact}
-              className="bolt-tabbar-grey margin-bottom-16"
-              tabsClassName="flex-wrap flex-shrink"
-              disableSticky={true}
+              className="bolt-tabbar-grey bolt-tabbar-compact flex-shrink"
+              tabGroups={[{ id: 'manifests', name: 'Manifests' }]}
             >
               {this.state.artifacts.map((artifact, index) => (
-                <Tab key={index} id={artifact.id} name={getDisplayNameForDocument(artifact.spdxDocument)} />
+                <Tab
+                  key={index}
+                  id={artifact.id}
+                  groupId="manifests"
+                  name={getDisplayNameForDocument(artifact.spdxDocument)}
+                  iconProps={{ iconName: 'Certificate', className: 'margin-right-4' }}
+                />
               ))}
-            </TabBar>
+            </TabList>
             <TabContent>
               <Observer selectedArtifactId={this.selectedArtifactId}>
                 {(props: { selectedArtifactId: string }) =>
@@ -238,9 +243,10 @@ export class Root extends React.Component<{}, State> {
                     />
                   ) : (
                     <ZeroData
+                      className="flex-grow"
                       iconProps={{ iconName: 'Certificate' }}
-                      primaryText="No document selected"
-                      secondaryText="Please select an SBOM build artifact to view its details."
+                      primaryText="Artifact not found"
+                      secondaryText="Unable to find the selected SBOM artifact."
                       imageAltText=""
                     />
                   )

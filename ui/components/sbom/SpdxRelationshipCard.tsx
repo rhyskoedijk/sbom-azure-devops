@@ -75,7 +75,7 @@ export class SpdxRelationshipCard extends React.Component<Props, State> {
             <Spinner label="Loading graph data..." />
           ) : !this.state.documentSvgMarkup ? (
             <ZeroData
-              iconProps={{ iconName: 'BranchFork2' }}
+              iconProps={{ iconName: 'FlowChart' }}
               primaryText="Graph Data Missing"
               secondaryText="Document does not contain graph data."
               imageAltText=""

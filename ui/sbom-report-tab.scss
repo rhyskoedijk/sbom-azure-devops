@@ -17,10 +17,6 @@ $severity-none-background: var(--status-neutral-background);
   display: flex;
 }
 
-.text-on-communication-background {
-  color: var(--text-on-communication-background);
-}
-
 .flex-gap-4 {
   gap: 4px;
 }
@@ -38,5 +34,20 @@ $severity-none-background: var(--status-neutral-background);
 }
 
 .overflow-hidden {
+  overflow: hidden !important;
+}
+
+.text-on-communication-background {
+  color: var(--text-on-communication-background);
+}
+
+.bolt-tabbar-compact .bolt-tablist-title,
+.bolt-tabbar-compact .bolt-tablist-subtitle,
+.bolt-tabbar-compact .bolt-tablist-heading,
+.bolt-tabbar-compact .bolt-tab {
+  padding-left: 8px;
+}
+
+.bolt-tabbar-compact .bolt-tab-text {
   overflow: hidden !important;
 }
