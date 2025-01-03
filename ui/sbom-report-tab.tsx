@@ -172,9 +172,6 @@ export class Root extends React.Component<{}, State> {
         }
       }
 
-      // Generate a summary SBOM artifact if multiple artifacts were loaded
-      this.generateSbomSummaryArtifact();
-
       // Update the state with the loaded SBOM artifacts
       console.info(`Loaded ${Object.keys(sbomArtifacts).length} SBOM artifact(s) for build ${buildId}`);
       this.selectedArtifactId.value = sbomArtifacts[0]?.spdxDocument?.documentNamespace || '';
@@ -183,6 +180,9 @@ export class Root extends React.Component<{}, State> {
         loadingMessage: undefined,
         loadError: undefined,
       });
+
+      // Generate a summary SBOM artifact if multiple artifacts were loaded
+      this.generateSbomSummaryArtifact();
     } catch (error) {
       console.error(error);
       this.setState({ loadError: error });
