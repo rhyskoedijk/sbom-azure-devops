@@ -34,7 +34,7 @@ import { SpdxSupplierTableCard } from './SpdxSupplierTableCard';
 
 interface Props {
   artifact: ISbomBuildArtifact;
-  onLoadArtifact: (file: File) => void;
+  onLoadArtifacts: (files: File[]) => void;
 }
 
 interface State {
@@ -110,7 +110,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
     // TODO: Use page providers; https://developer.microsoft.com/en-us/azure-devops/components/page#page-with-providers
     return (
       <Page orientation={Orientation.Vertical} className="flex-grow">
-        <SbomDocumentHeader artifact={this.props.artifact} onLoadArtifact={this.props.onLoadArtifact} />
+        <SbomDocumentHeader artifact={this.props.artifact} onLoadArtifacts={this.props.onLoadArtifacts} />
         <TabBar
           onSelectedTabChanged={this.onSelectedTabChanged}
           selectedTabId={this.selectedTabId}

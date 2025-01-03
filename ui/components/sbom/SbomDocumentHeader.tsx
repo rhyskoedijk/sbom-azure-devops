@@ -19,7 +19,7 @@ import { convertSpdxToXlsxAsync } from '../../../shared/spdx/convertSpdxToXlsx';
 
 interface Props {
   artifact: ISbomBuildArtifact;
-  onLoadArtifact: (file: File) => void;
+  onLoadArtifacts: (files: File[]) => void;
 }
 
 interface State {
@@ -43,7 +43,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
     return {
       commandBarItems: SbomDocumentHeader.getCommandBarItems(
         props.artifact,
-        isDebug ? props.onLoadArtifact : undefined,
+        isDebug ? props.onLoadArtifacts : undefined,
       ),
       documentName: props.artifact.spdxDocument.name,
       documentSpdxVersion: props.artifact.spdxDocument.spdxVersion,
@@ -56,7 +56,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
 
   static getCommandBarItems(
     artifact: ISbomBuildArtifact,
-    onLoadArtifact?: (file: File) => void,
+    onLoadArtifacts?: (files: File[]) => void,
   ): IHeaderCommandBarItem[] {
     return [
       {
@@ -100,7 +100,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
               (await convertSpdxToSvgAsync(artifact.spdxDocument)),
           ),
       },
-      ...(onLoadArtifact
+      ...(onLoadArtifacts
         ? [
             {
               id: 'separator',
@@ -116,9 +116,7 @@ export class SbomDocumentHeader extends React.Component<Props, State> {
               onActivate: () => {
                 uploadFile('.spdx.json').then((files) => {
                   if (files) {
-                    for (const file of files) {
-                      onLoadArtifact(file);
-                    }
+                    onLoadArtifacts(files);
                   }
                 });
               },
