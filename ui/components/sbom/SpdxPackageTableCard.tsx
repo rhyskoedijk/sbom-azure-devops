@@ -303,6 +303,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
+          className="margin-vertical-32"
           iconProps={{ iconName: 'Package' }}
           primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Packages'}
           secondaryText={
@@ -311,7 +312,6 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
               : 'Document does not contain any packages.'
           }
           imageAltText=""
-          className="margin-vertical-20"
         />
       );
     }

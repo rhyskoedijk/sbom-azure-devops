@@ -252,11 +252,11 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
     if (!this.props?.document) {
       return (
         <ZeroData
+          className="margin-vertical-32"
           iconProps={{ iconName: 'ViewDashboard' }}
           primaryText="Nothing to display"
           secondaryText="Document does not contain any data to summarise."
           imageAltText=""
-          className="margin-vertical-20"
         />
       );
     }

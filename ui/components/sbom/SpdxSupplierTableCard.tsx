@@ -190,6 +190,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
+          className="margin-vertical-32"
           iconProps={{ iconName: 'Info' }}
           primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Suppliers'}
           secondaryText={
@@ -198,7 +199,6 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
               : 'Document does not contain any supplier information.'
           }
           imageAltText=""
-          className="margin-vertical-20"
         />
       );
     }

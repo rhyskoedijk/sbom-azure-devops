@@ -153,6 +153,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
+          className="margin-vertical-32"
           iconProps={{ iconName: 'TextDocument' }}
           primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Files'}
           secondaryText={
@@ -161,7 +162,6 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
               : 'Document does not contain any files.'
           }
           imageAltText=""
-          className="margin-vertical-20"
         />
       );
     }

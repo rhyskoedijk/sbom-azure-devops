@@ -211,9 +211,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                   return (
                     <SpdxRelationshipCard
                       document={this.props.artifact.spdxDocument}
-                      loadSvgDocumentAsync={
-                        this.props.artifact.loadSvgDocumentAsync || (() => Promise.resolve(new ArrayBuffer(0)))
-                      }
+                      loadSvgDocumentAsync={this.props.artifact.loadSvgDocumentAsync}
                     />
                   );
               }

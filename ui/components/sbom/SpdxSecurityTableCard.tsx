@@ -295,6 +295,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
     if (!this.state?.tableItems?.length) {
       return (
         <ZeroData
+          className="margin-vertical-32"
           iconProps={{ iconName: 'Shield' }}
           primaryText={this.props.filter.getFilterItemValue('keyword') ? 'No Match' : 'No Security Advisories'}
           secondaryText={
@@ -303,7 +304,6 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
               : 'Document does not contain any security advisories.'
           }
           imageAltText=""
-          className="margin-vertical-20"
         />
       );
     }

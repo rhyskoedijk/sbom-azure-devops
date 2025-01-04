@@ -33,6 +33,11 @@ $severity-none-background: var(--status-neutral-background);
   gap: 24px;
 }
 
+.margin-vertical-32 {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
 .overflow-hidden {
   overflow: hidden !important;
 }

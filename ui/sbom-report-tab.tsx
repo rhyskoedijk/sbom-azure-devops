@@ -264,13 +264,14 @@ export class Root extends React.Component<{}, State> {
           </MessageCard>
         ) : this.state.loadingMessage ? (
           <Spinner
-            className="margin-vertical-16"
+            className="margin-vertical-32"
             label={this.state.loadingMessage || 'Loading SBOM build artifacts...'}
           />
         ) : (
           this.state.artifacts &&
           (this.state.artifacts.length == 0 ? (
             <ZeroData
+              className="margin-vertical-32"
               iconProps={{ iconName: 'Certificate' }}
               primaryText="No artifacts found"
               secondaryText="Unable to find any SBOM artifacts for this build."
@@ -322,7 +323,7 @@ export class Root extends React.Component<{}, State> {
                       />
                     ) : (
                       <ZeroData
-                        className="flex-grow"
+                        className="flex-grow margin-vertical-32"
                         iconProps={{ iconName: 'Certificate' }}
                         primaryText="Artifact not found"
                         secondaryText="Unable to find the selected SBOM artifact."
