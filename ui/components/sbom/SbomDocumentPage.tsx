@@ -9,6 +9,7 @@ import { Filter, IFilter } from 'azure-devops-ui/Utilities/Filter';
 
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { ISbomBuildArtifact } from '../../../shared/models/ISbomBuildArtifact';
+import { isPackageRootLevel } from '../../../shared/models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
@@ -58,10 +59,9 @@ export class SbomDocumentPage extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(props: Props): State {
     const spdx = props.artifact.spdxDocument;
-    const rootPackageIds = spdx.documentDescribes;
     const files = spdx.files || [];
     const packages = (spdx.packages || []).filter((p) => {
-      return !rootPackageIds.includes(p.SPDXID);
+      return !isPackageRootLevel(spdx, p.SPDXID);
     });
     const securityAdvisories = packages
       .flatMap(

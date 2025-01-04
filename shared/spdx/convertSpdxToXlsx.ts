@@ -5,7 +5,7 @@ import { IJsonSheet } from 'json-as-xlsx';
 import { getSeverityByName } from '../models/severity/Severities';
 import { ChecksumAlgorithm, getChecksum } from '../models/spdx/2.3/IChecksum';
 import { getCreatorOrganization, getCreatorTool } from '../models/spdx/2.3/ICreationInfo';
-import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../models/spdx/2.3/IDocument';
+import { getPackageDependsOnChain, getPackageLevelName, IDocument } from '../models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
@@ -37,7 +37,6 @@ import '../extensions/ArrayExtensions';
  */
 export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
   console.info('Parising SPDX document objects');
-  const rootPackageIds = spdx.documentDescribes;
   const relationships = spdx.relationships || [];
   const files = spdx.files || [];
   const packages = spdx.packages || [];
@@ -93,7 +92,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
         organization: getCreatorOrganization(spdx.creationInfo) || '',
         tool: getCreatorTool(spdx.creationInfo) || '',
         namespace: spdx.documentNamespace || '',
-        describes: spdx.documentDescribes?.join(', ') || '',
+        describes: spdx.documentDescribes.join(', ') || '',
       },
     ],
   };
@@ -106,7 +105,8 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
     sheet: 'Files',
     columns: [
       { label: 'ID', value: 'id' },
-      { label: 'Name', value: 'name' },
+      { label: 'Package', value: 'package' },
+      { label: 'File Name', value: 'name' },
       { label: 'Checksum (SHA256)', value: 'checksum' },
     ],
     content: files
@@ -114,6 +114,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       .map((file: IFile) => {
         return {
           id: file.SPDXID,
+          package: packages.find((p) => p.hasFiles?.includes(file.SPDXID))?.name || '',
           name: Path.normalize(file.fileName),
           checksum: getChecksum(file.checksums, ChecksumAlgorithm.SHA256) || '',
         };
@@ -160,7 +161,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           version: pkg.versionInfo,
           packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
           packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
-          type: isPackageTopLevel(spdx, pkg.SPDXID) ? 'Top-Level' : 'Transitive',
+          type: getPackageLevelName(spdx, pkg.SPDXID) || '',
           introducedThrough:
             getPackageDependsOnChain(spdx, pkg.SPDXID)
               .map((x) => x.name)

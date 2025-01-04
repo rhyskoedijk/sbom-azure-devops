@@ -17,7 +17,7 @@ import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { getSeverityByName } from '../../../shared/models/severity/Severities';
-import { getPackageDependsOnChain, IDocument, isPackageTopLevel } from '../../../shared/models/spdx/2.3/IDocument';
+import { getPackageDependsOnChain, getPackageLevelName, IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
@@ -94,7 +94,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             version: pkg.versionInfo,
             packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
             packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
-            type: isPackageTopLevel(props.document, pkg.SPDXID) ? 'Top-Level' : 'Transitive',
+            type: getPackageLevelName(props.document, pkg.SPDXID) || '',
             introducedThrough: getPackageDependsOnChain(props.document, pkg.SPDXID).map((x) => x.name),
             license: getPackageLicenseExpression(pkg) || '',
             supplier: getPackageSupplierOrganization(pkg) || '',

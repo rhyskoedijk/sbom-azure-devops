@@ -23,6 +23,7 @@ interface IFileTableItem extends ISimpleTableCell {
   id: string;
   name: string;
   checksum: string;
+  package: string;
 }
 
 interface Props {
@@ -61,6 +62,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
             id: x.SPDXID,
             name: Path.normalize(x.fileName),
             checksum: getChecksum(x.checksums, ChecksumAlgorithm.SHA256) || '',
+            package: props.document.packages?.find((p) => p.hasFiles?.includes(x.SPDXID))?.name || '',
           };
         }) || [];
 
@@ -73,10 +75,27 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
       (column.width as ObservableValue<number>).value = width;
     };
 
+    const documentHasMultipleRootPackages = props.document.documentDescribes.length > 1;
     const tableColumns: ITableColumn<IFileTableItem>[] = [
+      ...(documentHasMultipleRootPackages
+        ? [
+            {
+              id: 'package',
+              name: 'Package',
+              onSize: tableColumnResize,
+              readonly: true,
+              renderCell: renderSimpleCell,
+              sortProps: {
+                ariaLabelAscending: 'Sorted A to Z',
+                ariaLabelDescending: 'Sorted Z to A',
+              },
+              width: new ObservableValue(-15),
+            },
+          ]
+        : []),
       {
         id: 'name',
-        name: 'Name',
+        name: 'File Name',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: renderSimpleCell,
@@ -84,14 +103,14 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
           ariaLabelAscending: 'Sorted A to Z',
           ariaLabelDescending: 'Sorted Z to A',
         },
-        width: new ObservableValue(-50),
+        width: new ObservableValue(-60),
       },
       {
         id: 'checksum',
         name: 'Checksum (SHA256)',
         readonly: true,
         renderCell: renderSimpleCell,
-        width: new ObservableValue(-50),
+        width: new ObservableValue(-25),
       },
     ];
 
@@ -112,6 +131,14 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
             columnIndex,
             proposedSortOrder,
             [
+              // Sort on package name
+              ...(documentHasMultipleRootPackages
+                ? [
+                    (item1: IFileTableItem, item2: IFileTableItem): number => {
+                      return item1.package!.localeCompare(item2.package!);
+                    },
+                  ]
+                : []),
               // Sort on file name
               (item1: IFileTableItem, item2: IFileTableItem): number => {
                 return item1.name!.localeCompare(item2.name!);

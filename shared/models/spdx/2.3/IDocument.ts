@@ -13,7 +13,7 @@ export interface IDocument {
   externalDocumentRefs: any[];
   relationships: IRelationship[];
   spdxVersion: DocumentVersion | string;
-  dataLicense: string;
+  dataLicense: DocumentDataLicense | string;
   SPDXID: string;
   name: string;
   documentNamespace: string;
@@ -26,39 +26,29 @@ export enum DocumentVersion {
   SPDX_2_3 = 'SPDX-2.3',
 }
 
-export function getDisplayNameForDocument(document: IDocument): string {
-  const describesIds = document.documentDescribes;
-  return document.packages
-    ?.filter((p) => describesIds.includes(p.SPDXID))
-    ?.map((p) => p.name)
-    ?.join(' & ');
+export enum DocumentDataLicense {
+  CC0_1_0 = 'CC0-1.0',
 }
 
-export function isPackageTopLevel(document: IDocument, packageId: string): boolean {
-  const rootPackageIds = document.documentDescribes;
-  const relationships = document.relationships || [];
-  const dependsOnRelationships = relationships.filter((r) =>
-    spdxConstantsAreEqual(r.relationshipType, RelationshipType.DependsOn),
-  );
-  return (
-    rootPackageIds.includes(packageId) ||
-    dependsOnRelationships.some(
-      (relationship) =>
-        rootPackageIds.includes(relationship.spdxElementId) &&
-        relationship.relatedSpdxElement === packageId &&
-        spdxConstantsAreEqual(relationship.relationshipType, RelationshipType.DependsOn),
-    )
-  );
+export function getDisplayNameForDocument(document: IDocument): string | undefined {
+  const describesPackageIds = document.documentDescribes;
+  const packages = document.packages?.filter((p) => describesPackageIds.includes(p.SPDXID))?.map((p) => p.name);
+  if (packages?.length > 1) {
+    return `${packages[0]} + ${packages.length - 1} package(s)`;
+  } else if (packages?.length == 1) {
+    return packages[0] || '';
+  }
 }
 
 export function getPackageDependsOnChain(document: IDocument, packageId: string): IPackage[] {
+  const hasMultipleRootPackages = document.documentDescribes.length > 1;
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];
   const dependsOnRelationships = relationships.filter((r) =>
     spdxConstantsAreEqual(r.relationshipType, RelationshipType.DependsOn),
   );
   const packages = (document.packages || []).filter((p) => {
-    return !rootPackageIds.includes(p.SPDXID);
+    return hasMultipleRootPackages || !rootPackageIds.includes(p.SPDXID);
   });
 
   // Walk the chain of "DependsOn" relationships for the package to discover the dependencies
@@ -76,4 +66,32 @@ export function getPackageDependsOnChain(document: IDocument, packageId: string)
   }
 
   return packageChain;
+}
+
+export function getPackageLevelName(document: IDocument, packageId: string): string {
+  if (isPackageRootLevel(document, packageId)) {
+    return 'Root';
+  } else if (isPackageTopLevel(document, packageId)) {
+    return 'Top';
+  } else {
+    return 'Transitive';
+  }
+}
+
+export function isPackageRootLevel(document: IDocument, packageId: string): boolean {
+  return document.documentDescribes.includes(packageId);
+}
+
+export function isPackageTopLevel(document: IDocument, packageId: string): boolean {
+  const rootPackageIds = document.documentDescribes;
+  const relationships = document.relationships || [];
+  const dependsOnRelationships = relationships.filter((r) =>
+    spdxConstantsAreEqual(r.relationshipType, RelationshipType.DependsOn),
+  );
+  return dependsOnRelationships.some(
+    (relationship) =>
+      rootPackageIds.includes(relationship.spdxElementId) &&
+      relationship.relatedSpdxElement === packageId &&
+      spdxConstantsAreEqual(relationship.relationshipType, RelationshipType.DependsOn),
+  );
 }
