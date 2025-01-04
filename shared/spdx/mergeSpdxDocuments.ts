@@ -2,7 +2,7 @@ import { getCreatorOrganization } from '../models/spdx/2.3/ICreationInfo';
 import { DocumentVersion, IDocument } from '../models/spdx/2.3/IDocument';
 import { IPackage } from '../models/spdx/2.3/IPackage';
 
-const SpdxRefPrefix = 'SPDXRef-';
+const SpdxRefPrefix = 'SPDXRef';
 const SpdxDocumentId = `${SpdxRefPrefix}-DOCUMENT`;
 const SpdxRootPackageId = `${SpdxRefPrefix}-RootPackage`;
 
