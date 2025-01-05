@@ -79,6 +79,9 @@ export class SbomToolRunner {
       }
       if (args.buildFileList) {
         sbomToolArguments.push('-bl', await createTemporaryFileAsync('build-file-list', args.buildFileList.join('\n')));
+        if (this.debug) {
+          console.debug(`Using build file list (-bl):`, args.buildFileList);
+        }
       }
       if (args.buildDockerImagesToScan) {
         sbomToolArguments.push('-di', args.buildDockerImagesToScan);
@@ -118,6 +121,9 @@ export class SbomToolRunner {
           '-er',
           await createTemporaryFileAsync('external-doc-refs-list', args.externalDocumentReferenceListFile),
         );
+        if (this.debug) {
+          console.debug(`Using external doc refs list (-er):`, args.externalDocumentReferenceListFile);
+        }
       }
       sbomToolArguments.push('-V', this.debug ? 'Debug' : 'Information');
 
