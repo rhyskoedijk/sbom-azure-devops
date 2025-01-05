@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { tmpdir } from 'node:os';
@@ -174,7 +175,7 @@ export class SbomToolRunner {
 
       // Regenerate the SHA-256 hash of the SPDX file, in case it was modified
       section('Generating SHA-256 hash file');
-      // TODO: writeSha265HashFileAsync(spdxJsonPath);
+      await writeSha256HashFileAsync(spdxJsonPath);
 
       // Generate a XLSX spreadsheet of the SPDX file, if configured
       if (args.enableManifestSpreadsheetGeneration && spdxJsonContent) {
@@ -183,19 +184,19 @@ export class SbomToolRunner {
         if (xlsx) {
           const xlsxPath = path.format({ ...path.parse(spdxJsonPath), base: '', ext: '.xlsx' });
           await fs.writeFile(xlsxPath, xlsx);
-          // TODO: writeSha265HashFileAsync(xlsxPath);
+          await writeSha256HashFileAsync(xlsxPath);
         }
       }
 
       // Generate a SVG graph diagram of the SPDX file
+      // TODO: Remove SVG graph generation once web browser SPDX to SVG generation is implemented
       if (args.enableManifestGraphGeneration && spdxJsonContent) {
         section(`Generating SVG graph diagram`);
         const svg = await convertSpdxToSvgAsync(JSON.parse(spdxJsonContent) as IDocument);
         if (svg) {
           const svgPath = path.format({ ...path.parse(spdxJsonPath), base: '', ext: '.svg' });
           await fs.writeFile(svgPath, svg);
-          // TODO: writeSha265HashFileAsync(svgPath);
-          // TODO: Remove this attachment once web browser SPDX to SVG generation is implemented
+          await writeSha256HashFileAsync(svgPath);
           addAttachment(`${MANIFEST_FORMAT}.svg`, path.basename(svgPath), svgPath);
         }
       }
@@ -296,4 +297,18 @@ async function createTemporaryFileAsync(fileName: string, content: string): Prom
   const tmpFilePath = path.join(await fs.mkdtemp(path.join(tmpdir(), 'sbom-tool-')), fileName);
   await fs.writeFile(tmpFilePath, content);
   return tmpFilePath;
+}
+
+/**
+ * Write a SHA-256 hash file for the given file
+ * @param filePath The path to the file
+ */
+async function writeSha256HashFileAsync(filePath: string): Promise<void> {
+  await fs.writeFile(
+    `${filePath}.sha256`,
+    crypto
+      .createHash('sha256')
+      .update(await fs.readFile(filePath))
+      .digest('hex'),
+  );
 }
