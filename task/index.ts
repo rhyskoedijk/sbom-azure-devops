@@ -36,8 +36,11 @@ async function run() {
           try {
             await sbomTool.generateAsync({
               buildSourcePath: packageSourcePath,
-              buildArtifactPath: packageArtifactPaths[0] || packageSourcePath,
-              buildFileList: getFilesMatchingPathGlobs(packageArtifactPaths, packageSourcePath),
+              buildArtifactPath: packageArtifactPaths.length === 1 ? packageArtifactPaths[0] : packageSourcePath,
+              buildFileList:
+                packageArtifactPaths.length > 1
+                  ? getFilesMatchingPathGlobs(packageArtifactPaths, packageSourcePath)
+                  : undefined,
               buildDockerImagesToScan: getInput('buildDockerImagesToScan', false),
               manifestOutputPath: getInput('manifestOutputPath', false),
               manifestFileNamePrefix:
