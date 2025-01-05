@@ -48,7 +48,7 @@
       "label": "Build Source Paths",
       "defaultValue": "$(Build.SourcesDirectory)",
       "required": true,
-      "helpMarkDown": "The list of source code directories (one per line) to be scanned for package dependencies. [Glob patterns](https://globster.xyz/) are supported. Each directory will generates its own set of SBOM manifest files. Defaults to the build repository root directory, which will result in a single SBOM for the entire repository.",
+      "helpMarkDown": "The list of source code directories (one per line) to be scanned for package dependencies; [Glob patterns](https://globster.xyz/) are supported. Each resolved directory will generates its own set of SBOM manifest files. Defaults to the build repository root directory, which will result in a single SBOM for the entire repository.",
       "visibleRule": "command=generate"
     },
     {
@@ -57,13 +57,13 @@
       "label": "Build Artifact Paths",
       "defaultValue": "$(Build.ArtifactStagingDirectory)",
       "required": true,
-      "helpMarkDown": "The list of directories or files (one per line) to be included as build artifact files in the SBOM. [Glob patterns](https://globster.xyz/) are supported. Relative paths will be resolved from the source code directory. Defaults to the build artifact staging directory.",
+      "helpMarkDown": "The list of directories or files (one per line) to be included as build artifact files in the SBOM; [Glob patterns](https://globster.xyz/) are supported. Relative paths will be resolved from the build source path. Defaults to the build artifact staging directory.",
       "visibleRule": "command=generate"
     },
     {
       "name": "buildDockerImagesToScan",
-      "type": "multiLine",
-      "label": "Build Docker Images To Scan",
+      "type": "string",
+      "label": "Build Docker Images",
       "defaultValue": "",
       "required": false,
       "helpMarkDown": "Comma separated list of docker image names or hashes to be scanned for package dependencies. For example, `ubuntu:16.04, 56bab49eef2ef07505f6a1b0d5bd3a601dfc3c76ad4460f24c91d6fa298369ab`.",
