@@ -2,6 +2,7 @@ import * as crypto from 'crypto';
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { tmpdir } from 'node:os';
+import { EOL } from 'os';
 import * as path from 'path';
 
 import { addAttachment, getVariable, tool, which } from 'azure-pipelines-task-lib/task';
@@ -78,7 +79,7 @@ export class SbomToolRunner {
         sbomToolArguments.push('-b', args.buildArtifactPath);
       }
       if (args.buildFileList) {
-        sbomToolArguments.push('-bl', await createTemporaryFileAsync('build-file-list', args.buildFileList.join('\n')));
+        sbomToolArguments.push('-bl', await createTemporaryFileAsync('build-file-list', args.buildFileList.join(EOL)));
         if (this.debug) {
           console.debug(`Using build file list (-bl):`, args.buildFileList);
         }

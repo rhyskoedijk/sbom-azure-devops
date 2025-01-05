@@ -1,3 +1,4 @@
+import { EOL } from 'os';
 import * as path from 'path';
 
 // `getrandom` does not directly support ES Modules running on Node.js.
@@ -46,7 +47,7 @@ export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
       render: {
         shape: Shape.Circle,
         label: spdx.name,
-        tooltip: ((spdx.creationInfo?.creators as string[]) || []).concat(spdxProperties).join('\n'),
+        tooltip: ((spdx.creationInfo?.creators as string[]) || []).concat(spdxProperties).join(EOL),
         fill_color: VERTEX_DOC_FILL_COLOR,
       },
     }),
@@ -59,7 +60,7 @@ export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
     const pkgVertex = graph.new_vertex({
       render: {
         label: `${pkg.name} v${pkg.versionInfo}`,
-        tooltip: pkgProperties.join('\n'),
+        tooltip: pkgProperties.join(EOL),
         fill_color: VERTEX_PKG_FILL_COLOR,
       },
     });
@@ -120,7 +121,7 @@ export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
           referenceVertex = graph.new_vertex({
             render: {
               label: referenceId,
-              tooltip: referenceProperties?.join('\n'),
+              tooltip: referenceProperties?.join(EOL),
               url: referenceUrl,
               shape: referenceShape,
               fill_color: referenceFillColour,
@@ -198,7 +199,7 @@ function graphFileAndParentDirectoriesRecursive(
     nodeVertex = graph.new_vertex({
       render: {
         label: path.basename(nodePath),
-        tooltip: (node.checksums as any[])?.map((c) => `${c.algorithm}: ${c.checksumValue}`)?.join('\n'),
+        tooltip: (node.checksums as any[])?.map((c) => `${c.algorithm}: ${c.checksumValue}`)?.join(EOL),
         fill_color: VERTEX_FILE_FILL_COLOR,
       },
     });
