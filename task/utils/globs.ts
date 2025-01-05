@@ -31,6 +31,6 @@ export function resolvePathGlobs(paths: string | string[], cwd?: string): string
 export function getFilesMatchingPathGlobs(paths: string | string[], cwd?: string): string[] {
   const resolvedPaths = resolvePathGlobs(paths, cwd);
   return resolvedPaths
-    .flatMap((p) => (fs.lstatSync(p).isDirectory() ? getFilesMatchingPathGlobs(path.join(p, '*')) : [p]))
+    .flatMap((p) => (fs.lstatSync(p).isDirectory() ? getFilesMatchingPathGlobs(path.join(p, '**', '*.*')) : [p]))
     .distinct();
 }
