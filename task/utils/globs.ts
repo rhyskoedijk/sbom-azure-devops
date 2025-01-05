@@ -17,9 +17,7 @@ export function resolvePathGlobs(paths: string | string[], cwd?: string): string
         .split(/\r?\n|;/)
         .map((p) => p.trim())
         .filter((p) => p);
-  const result = globSync(patterns, options).distinct();
-  console.log('GLOB', patterns, result);
-  return result;
+  return globSync(patterns, options).distinct();
 }
 
 /**
@@ -50,6 +48,5 @@ function getFilesInDirectoryRecursive(directory: string): string[] {
       resolvedFiles.push(filePath);
     }
   }
-  console.log('DIR FILES', directory, resolvedFiles);
   return resolvedFiles;
 }
