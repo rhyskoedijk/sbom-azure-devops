@@ -191,6 +191,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
       {
         id: 'supplier',
         name: 'Supplier',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
           renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.supplier),
@@ -349,7 +350,7 @@ function renderSimpleValueCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    children: <span>{tableItemValue}</span>,
+    children: <span className="text-ellipsis">{tableItemValue}</span>,
   });
 }
 
@@ -366,7 +367,10 @@ function renderPackageIntroducedThroughCell(
     children: (
       <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
         {tableItem.introducedThrough.map((pkg, index) => (
-          <div key={index} className={'rhythm-horizontal-4' + (index > 0 ? ' secondary-text' : undefined)}>
+          <div
+            key={index}
+            className={'text-ellipsis rhythm-horizontal-4' + (index > 0 ? ' secondary-text' : undefined)}
+          >
             {index > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
             <span>{pkg}</span>
           </div>

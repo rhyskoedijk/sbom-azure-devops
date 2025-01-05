@@ -108,6 +108,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
       {
         id: 'checksum',
         name: 'Checksum (SHA256)',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: renderSimpleCell,
         width: new ObservableValue(-25),

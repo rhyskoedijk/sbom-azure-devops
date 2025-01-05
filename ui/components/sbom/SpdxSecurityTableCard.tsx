@@ -179,6 +179,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
       {
         id: 'cvss',
         name: 'CVSS',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: renderAdvisoryCvssCell,
         sortProps: {
@@ -190,6 +191,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
       {
         id: 'epss',
         name: 'EPSS',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: renderAdvisoryEpssCell,
         sortProps: {
@@ -201,6 +203,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
       {
         id: 'cwes',
         name: 'Weaknesses',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: renderAdvisoryCwesCell,
         sortProps: {
@@ -341,7 +344,7 @@ function renderSimpleValueCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    children: <span>{tableItemValue}</span>,
+    children: <span className="text-ellipsis">{tableItemValue}</span>,
   });
 }
 
@@ -358,7 +361,7 @@ function renderAdvisoryIdsCell(
     line1: (
       <Link
         tooltipProps={{ text: 'View this advisory in the GitHub Advisory (GHSA) Database' }}
-        className="bolt-table-link bolt-table-link-inline"
+        className="bolt-table-link bolt-table-link-inline text-ellipsis"
         href={`https://github.com/advisories/${tableItem.ghsaId}`}
         target="_blank"
         excludeTabStop
@@ -369,7 +372,7 @@ function renderAdvisoryIdsCell(
     line2: tableItem.cveId ? (
       <Link
         tooltipProps={{ text: 'View this advisory in the Common Vulnerabilities and Exposures (CVE) Database' }}
-        className="bolt-table-link bolt-table-link-inline"
+        className="bolt-table-link bolt-table-link-inline text-ellipsis"
         href={`https://www.cve.org/CVERecord?id=${tableItem.cveId}`}
         target="_blank"
         excludeTabStop
@@ -390,14 +393,14 @@ function renderAdvisorySummaryCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    line1: <div className="primary-text">{tableItem.summary}</div>,
+    line1: <div className="primary-text text-ellipsis">{tableItem.summary}</div>,
     line2: (
-      <div className="flex-row rhythm-horizontal-8">
+      <div className="flex-row rhythm-horizontal-8 full-width">
         <Pill size={PillSize.compact} variant={PillVariant.colored} color={tableItem.severity.color}>
           <span className="font-weight-heavy text-on-communication-background">{tableItem.severity.name} Severity</span>
         </Pill>
         {tableItem.publishedAt && tableItem.ageInDays > 0 && (
-          <div className="secondary-text">
+          <div className="secondary-text text-ellipsis">
             Published on {tableItem.publishedAt.toLocaleString()}; {tableItem.ageInDays} days ago
           </div>
         )}
@@ -424,10 +427,10 @@ function renderAdvisoryPackageCell(
             : 'Direct dependency'
         }
       >
-        <div className="primary-text">{tableItem.package?.name}</div>
+        <div className="primary-text text-ellipsis">{tableItem.package?.name}</div>
       </Tooltip>
     ),
-    line2: <div className="secondary-text">{tableItem.package?.version}</div>,
+    line2: <div className="secondary-text text-ellipsis">{tableItem.package?.version}</div>,
   });
 }
 
@@ -442,7 +445,7 @@ function renderAdvisoryCvssCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     children: tableItem.cvssScore > 0 && tableItem.cvssVector && tableItem.cvssVersion && (
-      <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
+      <div className="bolt-table-cell-content flex-row rhythm-horizontal-4 text-ellipsis">
         <span>{tableItem.cvssScore} / 10</span>
         <Link
           tooltipProps={{
@@ -455,6 +458,39 @@ function renderAdvisoryCvssCell(
         >
           <Icon size={IconSize.medium} iconName="Info" />
         </Link>
+      </div>
+    ),
+  });
+}
+
+function renderAdvisoryEpssCell(
+  rowIndex: number,
+  columnIndex: number,
+  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
+  tableItem: ISecurityAdvisoryTableItem,
+): JSX.Element {
+  return TwoLineTableCell({
+    ariaRowIndex: rowIndex,
+    columnIndex: columnIndex,
+    tableColumn: tableColumn,
+    line1: tableItem.epssPercentage > 0 && (
+      <div className="primary-text text-ellipsis">
+        <span>{tableItem.epssPercentage.toFixed(3)}%</span>
+        <Link
+          tooltipProps={{ text: 'Learn more about the Exploit Prediction Scoring System (EPSS)' }}
+          className="bolt-table-link bolt-table-link-icon"
+          href="https://www.first.org/epss/user-guide"
+          target="_blank"
+          excludeTabStop
+        >
+          <Icon size={IconSize.medium} iconName="Info" />
+        </Link>
+      </div>
+    ),
+    line2: tableItem.epssPercentile > 0 && (
+      <div className="secondary-text text-ellipsis">
+        {tableItem.epssPercentile.toFixed(0)}
+        {tableItem.epssPercentile.toOridinal()} percentile
       </div>
     ),
   });
@@ -484,39 +520,6 @@ function renderAdvisoryCwesCell(
             {cwe.id}
           </Link>
         ))}
-      </div>
-    ),
-  });
-}
-
-function renderAdvisoryEpssCell(
-  rowIndex: number,
-  columnIndex: number,
-  tableColumn: ITableColumn<ISecurityAdvisoryTableItem>,
-  tableItem: ISecurityAdvisoryTableItem,
-): JSX.Element {
-  return TwoLineTableCell({
-    ariaRowIndex: rowIndex,
-    columnIndex: columnIndex,
-    tableColumn: tableColumn,
-    line1: tableItem.epssPercentage > 0 && (
-      <div className="primary-text">
-        <span>{tableItem.epssPercentage.toFixed(3)}%</span>
-        <Link
-          tooltipProps={{ text: 'Learn more about the Exploit Prediction Scoring System (EPSS)' }}
-          className="bolt-table-link bolt-table-link-icon"
-          href="https://www.first.org/epss/user-guide"
-          target="_blank"
-          excludeTabStop
-        >
-          <Icon size={IconSize.medium} iconName="Info" />
-        </Link>
-      </div>
-    ),
-    line2: tableItem.epssPercentile > 0 && (
-      <div className="secondary-text">
-        {tableItem.epssPercentile.toFixed(0)}
-        {tableItem.epssPercentile.toOridinal()} percentile
       </div>
     ),
   });

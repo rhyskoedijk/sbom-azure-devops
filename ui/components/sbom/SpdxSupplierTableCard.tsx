@@ -110,6 +110,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
       {
         id: 'packageCount',
         name: 'Count',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
           renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packagesTotal.toString()),
@@ -122,6 +123,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
       {
         id: 'packages',
         name: 'Packages',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: renderPackagesCell,
         width: new ObservableValue(-70),
@@ -229,7 +231,7 @@ function renderSimpleValueCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    children: <span>{tableItemValue}</span>,
+    children: <span className="text-ellipsis">{tableItemValue}</span>,
   });
 }
 

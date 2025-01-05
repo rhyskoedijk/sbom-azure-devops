@@ -125,6 +125,7 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
       {
         id: 'packageCount',
         name: 'Count',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
           renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packagesTotal.toString()),
@@ -137,6 +138,7 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
       {
         id: 'packages',
         name: 'Packages',
+        onSize: tableColumnResize,
         readonly: true,
         renderCell: renderPackagesCell,
         width: new ObservableValue(-70),
@@ -251,7 +253,7 @@ function renderSimpleValueCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    children: <span>{tableItemValue}</span>,
+    children: <span className="text-ellipsis">{tableItemValue}</span>,
   });
 }
 
@@ -266,7 +268,7 @@ function renderLicenseSummaryCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     children: (
-      <div className="bolt-table-cell-content flex-row rhythm-horizontal-8">
+      <div className="bolt-table-cell-content flex-row rhythm-horizontal-8 text-ellipsis">
         <div className="primary-text">{tableItem.name}</div>
         {tableItem.riskSeverity.id > 1 ? (
           <Tooltip text={tableItem.riskReasons.join('; ')}>
