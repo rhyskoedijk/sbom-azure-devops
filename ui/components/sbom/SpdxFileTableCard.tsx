@@ -75,9 +75,9 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
       (column.width as ObservableValue<number>).value = width;
     };
 
-    const documentHasMultipleRootPackages = props.document.documentDescribes.length > 1;
+    const hasMultipleRootPackages = props.document.documentDescribes.length > 1;
     const tableColumns: ITableColumn<IFileTableItem>[] = [
-      ...(documentHasMultipleRootPackages
+      ...(hasMultipleRootPackages
         ? [
             {
               id: 'package',
@@ -133,7 +133,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
             proposedSortOrder,
             [
               // Sort on package name
-              ...(documentHasMultipleRootPackages
+              ...(hasMultipleRootPackages
                 ? [
                     (item1: IFileTableItem, item2: IFileTableItem): number => {
                       return item1.package!.localeCompare(item2.package!);

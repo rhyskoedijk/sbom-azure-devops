@@ -64,7 +64,7 @@ export class SbomToolRunner {
     // Find the sbom-tool path, or install it if missing
     const sbomToolPath = await this.getToolPathAsync();
 
-    group(`SBOM generate '${args.packageName}' in ${args.buildSourcePath}`);
+    group(`Generate SBOM for '${args.packageName}' in ${args.buildSourcePath}`);
     try {
       // Sanity check
       if (!args.buildArtifactPath && !args.buildFileList) {
