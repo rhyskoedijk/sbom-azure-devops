@@ -175,7 +175,7 @@ export class Root extends React.Component<{}, State> {
       // Update the state with the loaded SBOM artifacts
       console.info(`Loaded ${Object.keys(sbomArtifacts).length} SBOM artifact(s) for build ${buildId}`);
       this.setState({
-        artifacts: sbomArtifacts,
+        artifacts: sbomArtifacts.orderBy((a) => a.spdxDocument.name),
         loadingMessage: undefined,
         loadError: undefined,
       });
@@ -218,7 +218,7 @@ export class Root extends React.Component<{}, State> {
         // Update the state with the new SBOM artifact
         this.selectedArtifactId.value = newArtifact.id;
         this.setState({
-          artifacts: [...(this.state.artifacts || []), newArtifact],
+          artifacts: [...(this.state.artifacts || []), newArtifact].orderBy((a) => a.spdxDocument.name),
           loadingMessage: undefined,
           loadError: undefined,
         });
