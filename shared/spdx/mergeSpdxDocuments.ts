@@ -1,5 +1,8 @@
+import md5 from 'md5';
+
 import { getCreatorOrganization } from '../models/spdx/2.3/ICreationInfo';
 import { DocumentVersion, IDocument } from '../models/spdx/2.3/IDocument';
+import { IFile } from '../models/spdx/2.3/IFile';
 import { IPackage } from '../models/spdx/2.3/IPackage';
 
 const SpdxRefPrefix = 'SPDXRef';
@@ -30,6 +33,19 @@ export function mergeSpdxDocuments(
       SpdxRootPackageId,
       (p) => `${SpdxRefPrefix}-Package-${p.name.replace(/[^a-zA-Z0-9]+/g, '')}-${crypto.randomUUID()}`,
     );
+  });
+
+  // Files with the same path will share the same SPDX ID, so we need to rename them to avoid conflicts
+  sourceDocuments.forEach((doc) => {
+    const namespaceHash = md5(doc.documentNamespace).substring(0, 10);
+    doc.files.forEach((file) => {
+      const packageName = doc.packages.find((p) => p.hasFiles?.includes(file.SPDXID))?.name;
+      renameFileId(doc, file.SPDXID, (f) => {
+        const oldPrefix = `${SpdxRefPrefix}-File-`;
+        const newPrefix = `${SpdxRefPrefix}-File-${packageName?.replace(/[^a-zA-Z0-9]+/g, '') || namespaceHash}`;
+        return f.SPDXID.startsWith(newPrefix) ? f.SPDXID : f.SPDXID.replace(oldPrefix, newPrefix);
+      });
+    });
   });
 
   // Merge the documents
@@ -75,6 +91,33 @@ function renamePackageId(document: IDocument, packageId: string, packageIdBuilde
       }
       if (r.relatedSpdxElement == oldId) {
         r.relatedSpdxElement = newId;
+      }
+    });
+  }
+
+  return document;
+}
+
+/**
+ * Rename the file ID in the SPDX document
+ * @param document The SPDX document
+ * @param fileId The file ID to be renamed
+ * @param fileIdBuilder The function to build the new file ID
+ * @returns The SPDX document with the renamed file ID
+ */
+function renameFileId(document: IDocument, fileId: string, fileIdBuilder: (p: IFile) => string): IDocument {
+  // Find the file
+  const file = document.files.find((p) => p.SPDXID === fileId);
+  if (file) {
+    // Rename the file
+    const oldId = file.SPDXID;
+    const newId = fileIdBuilder(file);
+    file.SPDXID = newId;
+
+    // Update all references to the file
+    document.packages.forEach((p) => {
+      if (p.hasFiles?.includes(oldId)) {
+        p.hasFiles = p.hasFiles.map((id) => (id == oldId ? newId : id));
       }
     });
   }
