@@ -40,10 +40,10 @@ jobs:
           echo "`jq '.version.Minor=${{ steps.gitversion.outputs.minor }}' task/task.json`" > task/task.json
           echo "`jq '.version.Patch=${{ github.run_number }}' task/task.json`" > task/task.json
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 20.1.x
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.1.x'
 
       - name: NPM Install
         run: npm install
@@ -87,10 +87,10 @@ jobs:
           draft: true
           allowUpdates: true
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 20.1.x
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.1.x'
 
       - name: Publish to marketplace (dev)
         if: github.ref == 'refs/heads/main'
