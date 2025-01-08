@@ -17,7 +17,12 @@ import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { getSeverityByName } from '../../../shared/models/severity/Severities';
-import { getPackageDependsOnChain, getPackageLevelName, IDocument } from '../../../shared/models/spdx/2.3/IDocument';
+import {
+  getPackageAncestorPaths,
+  getPackageLevelName,
+  IDocument,
+  IPackageDependencyPath,
+} from '../../../shared/models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
@@ -41,7 +46,7 @@ interface IPackageTableItem {
   packageManagerName: string;
   packageManagerUrl: string;
   type: string;
-  introducedThrough: string[];
+  introducedThrough: IPackageDependencyPath[];
   license: string;
   supplier: string;
   vulnerabilityServerityWeighting: number;
@@ -95,7 +100,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
             packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
             type: getPackageLevelName(props.document, pkg.SPDXID) || '',
-            introducedThrough: getPackageDependsOnChain(props.document, pkg.SPDXID).map((x) => x.name),
+            introducedThrough: getPackageAncestorPaths(props.document, pkg.SPDXID),
             license: getPackageLicenseExpression(pkg) || '',
             supplier: getPackageSupplierOrganization(pkg) || '',
             vulnerabilityServerityWeighting: securityAdvisories.reduce(
@@ -365,14 +370,18 @@ function renderPackageIntroducedThroughCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     children: (
-      <div className="bolt-table-cell-content flex-row flex-wrap rhythm-horizontal-4">
-        {tableItem.introducedThrough.map((pkg, index) => (
-          <div
-            key={index}
-            className={'text-ellipsis rhythm-horizontal-4' + (index > 0 ? ' secondary-text' : undefined)}
-          >
-            {index > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
-            <span>{pkg}</span>
+      <div className="bolt-table-cell-content flex-column rhythm-vertical-4">
+        {tableItem.introducedThrough.map((ancestor, acestorIndex) => (
+          <div className="flex-row flex-wrap rhythm-horizontal-4">
+            {ancestor.dependencyPath.map((pkg, dependencyIndex) => (
+              <div
+                key={acestorIndex + '-' + dependencyIndex}
+                className={'text-ellipsis rhythm-horizontal-4' + (acestorIndex > 0 ? ' secondary-text' : undefined)}
+              >
+                {dependencyIndex > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
+                <span>{pkg.name}</span>
+              </div>
+            ))}
           </div>
         ))}
       </div>

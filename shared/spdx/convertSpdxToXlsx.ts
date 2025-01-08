@@ -5,7 +5,7 @@ import { IJsonSheet } from 'json-as-xlsx';
 import { getSeverityByName } from '../models/severity/Severities';
 import { ChecksumAlgorithm, getChecksum } from '../models/spdx/2.3/IChecksum';
 import { getCreatorOrganization, getCreatorTool } from '../models/spdx/2.3/ICreationInfo';
-import { getPackageDependsOnChain, getPackageLevelName, IDocument } from '../models/spdx/2.3/IDocument';
+import { getPackageAncestorPaths, getPackageLevelName, IDocument } from '../models/spdx/2.3/IDocument';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
@@ -163,9 +163,9 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
           type: getPackageLevelName(spdx, pkg.SPDXID) || '',
           introducedThrough:
-            getPackageDependsOnChain(spdx, pkg.SPDXID)
-              .map((x) => x.name)
-              .join(' > ') || '',
+            getPackageAncestorPaths(spdx, pkg.SPDXID)
+              .map((p) => p.dependencyPath.map((p) => p.name).join(' > '))
+              .join(', ') || '',
           license: getPackageLicenseExpression(pkg) || '',
           supplier: getPackageSupplierOrganization(pkg) || '',
           totalVulnerabilities: securityAdvisories.length,
@@ -227,9 +227,9 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           firstPatchedVersion: vuln.firstPatchedVersion,
           introducedThrough:
             (packageSpdxId &&
-              getPackageDependsOnChain(spdx, packageSpdxId)
-                .map((p) => p.name)
-                .join(' > ')) ||
+              getPackageAncestorPaths(spdx, packageSpdxId)
+                .map((p) => p.dependencyPath.map((p) => p.name).join(' > '))
+                .join(', ')) ||
             '',
           severity: vuln.advisory.severity?.toPascalCase(),
           cvssScore: vuln.advisory.cvss?.score || '',

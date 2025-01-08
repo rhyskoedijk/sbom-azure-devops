@@ -30,6 +30,10 @@ export enum DocumentDataLicense {
   CC0_1_0 = 'CC0-1.0',
 }
 
+export interface IPackageDependencyPath {
+  dependencyPath: IPackage[];
+}
+
 export function getDisplayNameForDocument(document: IDocument): string | undefined {
   const describesPackageIds = document.documentDescribes;
   const packages = document.packages?.filter((p) => describesPackageIds.includes(p.SPDXID))?.map((p) => p.name);
@@ -40,7 +44,7 @@ export function getDisplayNameForDocument(document: IDocument): string | undefin
   }
 }
 
-export function getPackageDependsOnChain(document: IDocument, packageId: string): IPackage[] {
+export function getPackageAncestorPaths(document: IDocument, packageId: string): IPackageDependencyPath[] {
   const hasMultipleRootPackages = document.documentDescribes.length > 1;
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];
@@ -51,21 +55,43 @@ export function getPackageDependsOnChain(document: IDocument, packageId: string)
     return hasMultipleRootPackages || !rootPackageIds.includes(p.SPDXID);
   });
 
-  // Walk the chain of "DependsOn" relationships for the package to discover the dependencies
-  const packageChain: IPackage[] = [];
-  let currentElementId = packageId;
-  while (currentElementId) {
-    const relationship = dependsOnRelationships.find((r) => r.relatedSpdxElement === currentElementId);
-    if (!relationship) break;
-
-    const pkg = packages.find((p) => p.SPDXID === relationship.spdxElementId);
-    if (!pkg) break;
-
-    packageChain.unshift(pkg);
-    currentElementId = relationship.spdxElementId;
+  const currentPackage = packages.find((p) => p.SPDXID === packageId);
+  if (!currentPackage) {
+    return [];
   }
 
-  return packageChain;
+  // Walk the dependency tree via all "DependsOn" relationships with the package to discover all possible package dependency paths
+  const ancestorDependencyReleationships = dependsOnRelationships.filter((r) => r.relatedSpdxElement === packageId);
+  return ancestorDependencyReleationships.flatMap((relationship) =>
+    getPackageAncestorPathsRecursive(dependsOnRelationships, packages, relationship.spdxElementId, [currentPackage]),
+  );
+}
+
+function getPackageAncestorPathsRecursive(
+  relationships: IRelationship[],
+  packages: IPackage[],
+  packageId: string,
+  pathSoFar: IPackage[],
+): IPackageDependencyPath[] {
+  const currentPackage = packages.find((p) => p.SPDXID === packageId);
+  if (!currentPackage) {
+    return [{ dependencyPath: pathSoFar }];
+  }
+
+  const newPath = [currentPackage, ...pathSoFar].filter((p) => p !== undefined);
+  const ancestorDependencyPaths: IPackageDependencyPath[] = [];
+  const ancestorDependencyReleationships = relationships.filter((r) => r.relatedSpdxElement === packageId);
+  if (ancestorDependencyReleationships.length > 0) {
+    for (const relationship of ancestorDependencyReleationships) {
+      ancestorDependencyPaths.push(
+        ...getPackageAncestorPathsRecursive(relationships, packages, relationship.spdxElementId, newPath),
+      );
+    }
+  } else {
+    ancestorDependencyPaths.push({ dependencyPath: newPath });
+  }
+
+  return ancestorDependencyPaths;
 }
 
 export function getPackageLevelName(document: IDocument, packageId: string): string {

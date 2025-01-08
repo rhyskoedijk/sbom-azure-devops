@@ -1,0 +1,1334 @@
+{
+  "files": [
+    {
+      "fileName": "./Project1.zip",
+      "SPDXID": "SPDXRef-File--Project1.zip-9BA7630936E369BC5B1223A0E5B858DCE4B35529",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ed3fb3ab0a87ab27b6bce569180e761d38906bb2df0dac6d10a5bf71562849a0"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9ba7630936e369bc5b1223a0e5b858dce4b35529"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": ["NOASSERTION"],
+      "copyrightText": "NOASSERTION"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Microsoft.Identity.Web.Certificateless",
+      "SPDXID": "SPDXRef-Package-2CD142DB555D8B62DD3BDC26C980423C3B5CAD28955BE98388627B6288E93A86",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Web.Certificateless@2.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.LoggingExtensions",
+      "SPDXID": "SPDXRef-Package-1E40DCF5268C5C3C66650FDFBB4E24B7F36BA30AEC9B879EEE656DCC65321759",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.LoggingExtensions@6.25.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Abstractions",
+      "SPDXID": "SPDXRef-Package-53BE199C17C0A64FE9557BDDA5EFE17F562F9A585756B4BA1723992F8EC771F3",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.0.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Abstractions@2.0.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.Abstractions",
+      "SPDXID": "SPDXRef-Package-BC337EE5606ECEE2096F9E98A8ACBD1C8FCBE844822C9ED45690E7FC32E0A66D",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.Abstractions@6.25.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "SPDXID": "SPDXRef-Package-40E1A9E59C44F0CD9170AD10FCF36B05A76D5491CC455DE3F2ADE9EBF152931D",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Logging.Abstractions@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Drawing.Common",
+      "SPDXID": "SPDXRef-Package-81A37F08E5228FE4E73A9017987C44CB948CFBB7022CD968684BBEDCC533605E",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "4.7.2",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Drawing.Common@4.7.2"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Security.Cryptography.ProtectedData",
+      "SPDXID": "SPDXRef-Package-99B6F9B2C3E257680B493D0D32986C07A66295DA7B01676ED98DC39D14D84CAA",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "4.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Security.Cryptography.ProtectedData@4.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.Logging",
+      "SPDXID": "SPDXRef-Package-0FFF1FC4ECD43C637805D2F4BAEE2A5E9E85A5129F79CD18C9B4E3554756E580",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.Logging@6.25.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Web.Diagnostics",
+      "SPDXID": "SPDXRef-Package-8C0CF7980BDA0B1D7231BD2C20D43ACFC1F7C78C6317977BF538C53794610E8D",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Web.Diagnostics@2.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Authentication.OpenIdConnect",
+      "SPDXID": "SPDXRef-Package-129568A707B7907D22BC0D26E125D7D7BC0C7DC8C931934D8BFBD93723363AF3",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.AspNetCore.Authentication.OpenIdConnect@7.0.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Options",
+      "SPDXID": "SPDXRef-Package-7F3F787481824EFB73F4AAC7D7210C8CEB08AFEDC49640FB3AB8FDF75EE77B9A",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Options@7.0.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "SPDXID": "SPDXRef-Package-1A8ED08FCCB0E96A340A7589485C1A7D63FFDAD628A019657EC7169841E3DB83",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Caching.Abstractions@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Azure.Security.KeyVault.Certificates",
+      "SPDXID": "SPDXRef-Package-B958DF6815E84E0B0DF04BA74704AF7C82ECFFBCAD55F666FC8367D357A947A8",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "4.1.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Azure.Security.KeyVault.Certificates@4.1.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Web.Certificate",
+      "SPDXID": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Web.Certificate@2.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Hosting.Abstractions",
+      "SPDXID": "SPDXRef-Package-87F2E9DD3CF10FAEA6703A8AFE83724C1B5D13DE961907575F419E42C57770E8",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Hosting.Abstractions@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Primitives",
+      "SPDXID": "SPDXRef-Package-659FC6F6442DDDEB1A085D79166237DC05B228DAF796D7615D512FA9E3217439",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Primitives@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Bcl.AsyncInterfaces",
+      "SPDXID": "SPDXRef-Package-56227D0C9534C0E36A540D266B5B59110E8ACB1289FE15DDB859A2DE4FF28887",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@1.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Web.TokenCache",
+      "SPDXID": "SPDXRef-Package-FE8DC86213C4FA4030DFF15DC8EF66EB565B18C94723248AAE98F9B31760A856",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Web.TokenCache@2.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Cryptography.Internal",
+      "SPDXID": "SPDXRef-Package-FE592971B7EF0DAB29055AD0CCE769DF80C7D47D3225914BE4285F2035C105B6",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.3",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.AspNetCore.Cryptography.Internal@7.0.3"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Web.TokenAcquisition",
+      "SPDXID": "SPDXRef-Package-6443DEE1972C66BB66CC00151EA2952F5BC5FF7ECFF978B376C02ECBCAE2195C",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Web.TokenAcquisition@2.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.Tokens",
+      "SPDXID": "SPDXRef-Package-02E75C1581BEA9439CEE5344C805B8E3B1AD4EA9F77A69E8D1B9A40B1373B270",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.Tokens@6.25.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Http",
+      "SPDXID": "SPDXRef-Package-870F545F5960EFFD36CBB480E5FC727B0CC884AFD5392ECDAFD996B964F5402E",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "3.1.3",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Http@3.1.3"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.Protocols",
+      "SPDXID": "SPDXRef-Package-1AA56C193CE65B30FBCB74CB1B2F09D3887DC93CAB98C89056AC31ED216D527B",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.Protocols@6.25.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.Validators",
+      "SPDXID": "SPDXRef-Package-A5A3922616CDA74E136AF7764F7F6338CCE161D25AE6D10D479139A2724F2D9D",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.Validators@6.25.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Azure.Core",
+      "SPDXID": "SPDXRef-Package-0285EDB74EFC537740BD6A6C16FF480E123B106291AEA4767373FDE5E8F170D5",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.6.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Azure.Core@1.6.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Web",
+      "SPDXID": "SPDXRef-Package-5D2E3E3892C8B382054EFA2CD546B90E1821D89C1C971436E0DDD7DD24711600",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Web@2.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Client",
+      "SPDXID": "SPDXRef-Package-45B61C4E05FBE2335A7F9C4F822BEFF93BB2F7DAFDBA629833148956DD44E153",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "4.48.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Client@4.48.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-x674-v45j-fwxw",
+          "comment": "[LOW] MSAL.NET applications targeting Xamarin Android and .NET Android (MAUI) susceptible to local denial of service; Affects Microsoft.Identity.Client v4.48.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvTWljcm9zb2Z0LklkZW50aXR5LkNsaWVudEA0LjQ4LjEiLCJuYW1lIjoiTWljcm9zb2Z0LklkZW50aXR5LkNsaWVudCIsInZlcnNpb24iOiI0LjQ4LjEifSwiYWR2aXNvcnkiOnsiaWRlbnRpZmllcnMiOlt7InR5cGUiOiJHSFNBIiwidmFsdWUiOiJHSFNBLXg2NzQtdjQ1ai1md3h3In0seyJ0eXBlIjoiQ1ZFIiwidmFsdWUiOiJDVkUtMjAyNC0yNzA4NiJ9XSwic2V2ZXJpdHkiOiJMT1ciLCJzdW1tYXJ5IjoiTVNBTC5ORVQgYXBwbGljYXRpb25zIHRhcmdldGluZyBYYW1hcmluIEFuZHJvaWQgYW5kIC5ORVQgQW5kcm9pZCAoTUFVSSkgc3VzY2VwdGlibGUgdG8gbG9jYWwgZGVuaWFsIG9mIHNlcnZpY2UiLCJkZXNjcmlwdGlvbiI6Ij5bIUlNUE9SVEFOVF1cbj4qKk9OTFkqKiBhcHBsaWNhdGlvbnMgdGFyZ2V0aW5nIFhhbWFyaW4gQW5kcm9pZCBhbmQgLk5FVCBBbmRyb2lkIChNQVVJKSBhcmUgaW1wYWN0ZWQuIEFsbCBvdGhlcnMgY2FuIHNhZmVseSBkaXNtaXNzIHRoaXMgQ1ZFLlxuXG4jIyMgSW1wYWN0XG5cbltNU0FMLk5FVF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5JZGVudGl0eS5DbGllbnQvKSBhcHBsaWNhdGlvbnMgdGFyZ2V0aW5nIFhhbWFyaW4gQW5kcm9pZCBhbmQgLk5FVCBBbmRyb2lkIChlLmcuLCBNQVVJKSB1c2luZyB0aGUgbGlicmFyeSBmcm9tIHZlcnNpb25zIGA0LjQ4LjBgIHRvIGA0LjYwLjNgIChpbmNsdXNpdmUsIGV4Y2VwdCBgNC41OS4xYCBhbmQgYDQuNjAuM2ApIGFyZSBpbXBhY3RlZCBieSBhIGxvdyBzZXZlcml0eSB2dWxuZXJhYmlsaXR5LiAgIFxuXG5BIG1hbGljaW91cyBhcHBsaWNhdGlvbiBydW5uaW5nIG9uIGEgY3VzdG9tZXIgQW5kcm9pZCBkZXZpY2UgY2FuICgxKSBpbmplY3QgSFRNTC9KYXZhU2NyaXB0IGluIGFuIGVtYmVkZGVkIHdlYiB2aWV3IGV4cG9ydGVkIGJ5IGFmZmVjdGVkIGFwcGxpY2F0aW9ucywgb3IgKDIpIGNhdXNlIGxvY2FsIGRlbmlhbCBvZiBzZXJ2aWNlIGFnYWluc3QgYXBwbGljYXRpb25zIHRoYXQgd2VyZSBidWlsdCB1c2luZyBNU0FMLk5FVCBmb3IgYXV0aGVudGljYXRpb24gb24gdGhlIHNhbWUgZGV2aWNlIChpLmUuLCBwcmV2ZW50IHRoZSB1c2VyIG9mIHRoZSBsZWdpdGltYXRlIGFwcGxpY2F0aW9uIGZyb20gbG9nZ2luZyBpbikgZHVlIHRvIGluY29ycmVjdCBhY3Rpdml0eSBleHBvcnQgY29uZmlndXJhdGlvbi5cblxuIyMjIFBhdGNoZXNcblxuTVNBTC5ORVQgdmVyc2lvbiA0LjYwLjMgaW5jbHVkZXMgdGhlIGZpeC4gV2UgcmVjb21tZW5kIGFsbCB1c2VycyBvZiBNU0FMLk5FVCB0aGF0IGFyZSBidWlsZGluZyBwdWJsaWMgY2xpZW50IGFwcGxpY2F0aW9ucyBmb3IgQW5kcm9pZCB1cGRhdGUgdG8gdGhlIGxhdGVzdCB2ZXJzaW9uLlxuXG4jIyMgV29ya2Fyb3VuZHNcblxuV2UgcmVjb21tZW5kIGRldmVsb3BlcnMgdXBkYXRlIHRvIHRoZSBsYXRlc3QgdmVyc2lvbiBvZiBNU0FMLk5FVC4gSWYgdGhhdCBpcyBub3QgcG9zc2libGUsIGEgZGV2ZWxvcGVyIG1heSBleHBsaWNpdGx5IG1hcmsgdGhlIE1TQUwuTkVUIGFjdGl2aXR5IG5vbi1leHBvcnRlZDpcblxuYGBgeG1sXG48YWN0aXZpdHkgYW5kcm9pZDpuYW1lPVwibWljcm9zb2Z0LmlkZW50aXR5LmNsaWVudC5BdXRoZW50aWNhdGlvbkFnZW50QWN0aXZpdHlcIiBhbmRyb2lkOmNvbmZpZ0NoYW5nZXM9XCJvcmllbnRhdGlvbnxzY3JlZW5TaXplXCIgYW5kcm9pZDpleHBvcnRlZD1cImZhbHNlXCI+XG48aW50ZW50LWZpbHRlcj5cbjxhY3Rpb24gYW5kcm9pZDpuYW1lPVwiYW5kcm9pZC5pbnRlbnQuYWN0aW9uLlZJRVdcIiAvPlxuPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT1cImFuZHJvaWQuaW50ZW50LmNhdGVnb3J5LkRFRkFVTFRcIiAvPlxuPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT1cImFuZHJvaWQuaW50ZW50LmNhdGVnb3J5LkJST1dTQUJMRVwiIC8+XG48ZGF0YSBhbmRyb2lkOnNjaGVtZT1cIm1zYWxZT1VSX0NMSUVOVF9JRFwiIGFuZHJvaWQ6aG9zdD1cImF1dGhcIiAvPlxuPC9pbnRlbnQtZmlsdGVyPlxuPC9hY3Rpdml0eT5cbmBgYFxuXG4jIyMgUmVmZXJlbmNlc1xuXG5SZWZlciB0byBbTVNBTC5ORVQgZG9jdW1lbnRhdGlvbl0oaHR0cHM6Ly9sZWFybi5taWNyb3NvZnQuY29tL2VudHJhL21zYWwvZG90bmV0LykgZm9yIGxhdGVzdCBndWlkYW5jZSBhbmQgYmVzdCBwcmFjdGljZXMgb24gY29uZmlndXJpbmcgY2xpZW50IGFwcGxpY2F0aW9ucyB1c2luZyB0aGUgbGlicmFyeS5cbiIsInJlZmVyZW5jZXMiOlsiaHR0cHM6Ly9naXRodWIuY29tL0F6dXJlQUQvbWljcm9zb2Z0LWF1dGhlbnRpY2F0aW9uLWxpYnJhcnktZm9yLWRvdG5ldC9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EteDY3NC12NDVqLWZ3eHciLCJodHRwczovL2dpdGh1Yi5jb20vQXp1cmVBRC9taWNyb3NvZnQtYXV0aGVudGljYXRpb24tbGlicmFyeS1mb3ItZG90bmV0L2NvbW1pdC80MTNlMzE5NDcyY2NmNDhjODY2NDdmMTlmYTJhYTQ5ZmY2MDM4NDg4IiwiaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5JZGVudGl0eS5DbGllbnQiLCJodHRwczovL2xlYXJuLm1pY3Jvc29mdC5jb20vZW4tdXMvZW50cmEvbXNhbC9kb3RuZXQiLCJodHRwczovL252ZC5uaXN0Lmdvdi92dWxuL2RldGFpbC9DVkUtMjAyNC0yNzA4NiIsImh0dHBzOi8vZ2l0aHViLmNvbS9hZHZpc29yaWVzL0dIU0EteDY3NC12NDVqLWZ3eHciXSwiY3ZzcyI6eyJzY29yZSI6My45LCJ2ZWN0b3JTdHJpbmciOiJDVlNTOjMuMS9BVjpML0FDOkwvUFI6TC9VSTpSL1M6VS9DOk4vSTpML0E6TCJ9LCJjd2VzIjpbeyJpZCI6IkNXRS04NjMiLCJuYW1lIjoiSW5jb3JyZWN0IEF1dGhvcml6YXRpb24iLCJkZXNjcmlwdGlvbiI6IlRoZSBwcm9kdWN0IHBlcmZvcm1zIGFuIGF1dGhvcml6YXRpb24gY2hlY2sgd2hlbiBhbiBhY3RvciBhdHRlbXB0cyB0byBhY2Nlc3MgYSByZXNvdXJjZSBvciBwZXJmb3JtIGFuIGFjdGlvbiwgYnV0IGl0IGRvZXMgbm90IGNvcnJlY3RseSBwZXJmb3JtIHRoZSBjaGVjay4gVGhpcyBhbGxvd3MgYXR0YWNrZXJzIHRvIGJ5cGFzcyBpbnRlbmRlZCBhY2Nlc3MgcmVzdHJpY3Rpb25zLiJ9LHsiaWQiOiJDV0UtOTI2IiwibmFtZSI6IkltcHJvcGVyIEV4cG9ydCBvZiBBbmRyb2lkIEFwcGxpY2F0aW9uIENvbXBvbmVudHMiLCJkZXNjcmlwdGlvbiI6IlRoZSBBbmRyb2lkIGFwcGxpY2F0aW9uIGV4cG9ydHMgYSBjb21wb25lbnQgZm9yIHVzZSBieSBvdGhlciBhcHBsaWNhdGlvbnMsIGJ1dCBkb2VzIG5vdCBwcm9wZXJseSByZXN0cmljdCB3aGljaCBhcHBsaWNhdGlvbnMgY2FuIGxhdW5jaCB0aGUgY29tcG9uZW50IG9yIGFjY2VzcyB0aGUgZGF0YSBpdCBjb250YWlucy4ifV0sImVwc3MiOnsicGVyY2VudGFnZSI6MC4wMDA0MywicGVyY2VudGlsZSI6MC4wOTYxMX0sInB1Ymxpc2hlZEF0IjoiMjAyNC0wNC0xNlQyMTo0MTo1N1oiLCJ1cGRhdGVkQXQiOiIyMDI0LTA0LTIzVDIwOjQyOjEzWiIsIndpdGhkcmF3bkF0IjpudWxsLCJwZXJtYWxpbmsiOiJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLXg2NzQtdjQ1ai1md3h3In0sInZ1bG5lcmFibGVWZXJzaW9uUmFuZ2UiOiI+PSA0LjQ4LjAsIDwgNC41OS4xIiwiZmlyc3RQYXRjaGVkVmVyc2lvbiI6IjQuNTkuMSJ9",
+          "comment": "GHSA security vulnerability details for GHSA-x674-v45j-fwxw encoded as Base64 JSON text"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Win32.SystemEvents",
+      "SPDXID": "SPDXRef-Package-225EFF52E277D23AB16527105F8FD2301169354FF14D6EE79397130BD953F75E",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "4.7.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Win32.SystemEvents@4.7.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Abstractions",
+      "SPDXID": "SPDXRef-Package-2A048EFF47C4A3603422771936915063286D22538798FF4AECFB60014878789B",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Configuration.Abstractions@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Security.Cryptography.Pkcs",
+      "SPDXID": "SPDXRef-Package-148BA170BB3A0ECCA59205F0EB30F5199263FC9F863B1B63243199A61D43ED45",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Security.Cryptography.Pkcs@7.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-555c-2p6r-68mm",
+          "comment": "[HIGH] .NET Denial of Service vulnerability; Affects System.Security.Cryptography.Pkcs v7.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvU3lzdGVtLlNlY3VyaXR5LkNyeXB0b2dyYXBoeS5Qa2NzQDcuMC4wIiwibmFtZSI6IlN5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuUGtjcyIsInZlcnNpb24iOiI3LjAuMCJ9LCJhZHZpc29yeSI6eyJpZGVudGlmaWVycyI6W3sidHlwZSI6IkdIU0EiLCJ2YWx1ZSI6IkdIU0EtNTU1Yy0ycDZyLTY4bW0ifSx7InR5cGUiOiJDVkUiLCJ2YWx1ZSI6IkNWRS0yMDIzLTI5MzMxIn1dLCJzZXZlcml0eSI6IkhJR0giLCJzdW1tYXJ5IjoiLk5FVCBEZW5pYWwgb2YgU2VydmljZSB2dWxuZXJhYmlsaXR5IiwiZGVzY3JpcHRpb24iOiIjIE1pY3Jvc29mdCBTZWN1cml0eSBBZHZpc29yeSBDVkUtMjAyMy0yOTMzMTogLk5FVCBEZW5pYWwgb2YgU2VydmljZSB2dWxuZXJhYmlsaXR5XG5cbiMjIDxhIG5hbWU9XCJleGVjdXRpdmUtc3VtbWFyeVwiPjwvYT5FeGVjdXRpdmUgc3VtbWFyeVxuXG5NaWNyb3NvZnQgaXMgcmVsZWFzaW5nIHRoaXMgc2VjdXJpdHkgYWR2aXNvcnkgdG8gcHJvdmlkZSBpbmZvcm1hdGlvbiBhYm91dCBhIHZ1bG5lcmFiaWxpdHkgaW4gLk5FVCA3LjAgYW5kIC5ORVQgNi4wLiBUaGlzIGFkdmlzb3J5IGFsc28gcHJvdmlkZXMgZ3VpZGFuY2Ugb24gd2hhdCBkZXZlbG9wZXJzIGNhbiBkbyB0byB1cGRhdGUgdGhlaXIgYXBwbGljYXRpb25zIHRvIHJlbW92ZSB0aGlzIHZ1bG5lcmFiaWxpdHkuXG5cbkEgdnVsbmVyYWJpbGl0eSBleGlzdHMgaW4gLk5FVCB3aGVuIHByb2Nlc3NpbmcgWC41MDkgY2VydGlmaWNhdGVzIHRoYXQgbWF5IHJlc3VsdCBpbiBEZW5pYWwgb2YgU2VydmljZS4gXG5cbkRldGFpbHM6IFtLQjUwMjU4MjMgXShodHRwczovL3N1cHBvcnQubWljcm9zb2Z0LmNvbS9rYi81MDI1ODIzKVxuXG4jIyBBbm5vdW5jZW1lbnRcblxuQW5ub3VuY2VtZW50IGZvciB0aGlzIGlzc3VlIGNhbiBiZSBmb3VuZCBhdCAgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hbm5vdW5jZW1lbnRzL2lzc3Vlcy8yNTdcblxuIyMjIDxhIG5hbWU9XCJtaXRpZ2F0aW9uLWZhY3RvcnNcIj48L2E+TWl0aWdhdGlvbiBmYWN0b3JzXG5cbk1pY3Jvc29mdCBoYXMgbm90IGlkZW50aWZpZWQgYW55IG1pdGlnYXRpbmcgZmFjdG9ycyBmb3IgdGhpcyB2dWxuZXJhYmlsaXR5LlxuXG4jIyA8YSBuYW1lPVwiYWZmZWN0ZWQtc29mdHdhcmVcIj48L2E+QWZmZWN0ZWQgc29mdHdhcmVcblxuKiBBbnkgLk5FVCA3LjAgYXBwbGljYXRpb24gcnVubmluZyBvbiAuTkVUIDcuMC41IG9yIGVhcmxpZXIuXG4qIEFueSAuTkVUIDYuMCBhcHBsaWNhdGlvbiBydW5uaW5nIG9uIC5ORVQgNi4wLjE2IG9yIGVhcmxpZXIuXG5cbklmIHlvdXIgYXBwbGljYXRpb24gdXNlcyB0aGUgZm9sbG93aW5nIHBhY2thZ2UgdmVyc2lvbnMsIGVuc3VyZSB5b3UgdXBkYXRlIHRvIHRoZSBsYXRlc3QgdmVyc2lvbiBvZiAuTkVULlxuXG4jIyMgPGEgbmFtZT1cIi5ORVQgN1wiPjwvYT4uTkVUIDdcblxuUGFja2FnZSBuYW1lIHwgQWZmZWN0ZWQgdmVyc2lvbiB8IFBhdGNoZWQgdmVyc2lvblxuLS0tLS0tLS0tLS0tIHwgLS0tLS0tLS0tLS0tLS0tLSB8IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbltNaWNyb3NvZnQuV2luZG93cy5Db21wYXRpYmlsaXR5XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0LldpbmRvd3MuQ29tcGF0aWJpbGl0eSkgICAgICAgICAgICAgICB8ID49IDcuMC4wLCA8IDcuMC4xIHwgNy4wLjNcbltTeXN0ZW0uU2VjdXJpdHkuQ3J5cHRvZ3JhcGh5LlBrY3NdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9TeXN0ZW0uU2VjdXJpdHkuQ3J5cHRvZ3JhcGh5LlBrY3MpICAgICAgICAgICB8ID49IDcuMC4wLCA8IDcuMC4xIHwgNy4wLjJcbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm1dKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm0pICAgICAgICAgICAgICAgfCA+PSA3LjAuMCwgPCA3LjAuNSB8IDcuMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm02NCkgICAgICAgICAgIHwgPj0gNy4wLjAsIDwgNy4wLjUgfCA3LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LW11c2wtYXJtXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm0pICAgICB8ID49IDcuMC4wLCA8IDcuMC41IHwgNy4wLjdcbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLWFybTY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm02NCkgfCA+PSA3LjAuMCwgPCA3LjAuNSB8IDcuMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC14NjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLXg2NCkgICAgIHwgPj0gNy4wLjAsIDwgNy4wLjUgfCA3LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LXg2NCkgICAgICAgICAgICAgICB8ID49IDcuMC4wLCA8IDcuMC41IHwgNy4wLjdcbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5vc3gtYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5vc3gtYXJtNjQpICAgICAgICAgICAgICAgfCA+PSA3LjAuMCwgPCA3LjAuNSB8IDcuMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLm9zeC14NjQpICAgICAgICAgICAgICAgICAgIHwgPj0gNy4wLjAsIDwgNy4wLjUgfCA3LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi1hcm1dKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4tYXJtKSAgICAgICAgICAgICAgICAgICB8ID49IDcuMC4wLCA8IDcuMC41IHwgNy4wLjdcbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4tYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4tYXJtNjQpICAgICAgICAgICAgICAgfCA+PSA3LjAuMCwgPCA3LjAuNSB8IDcuMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14NjQpICAgICAgICAgICAgICAgICAgIHwgPj0gNy4wLjAsIDwgNy4wLjUgfCA3LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14ODZdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4teDg2KSAgICAgICAgICAgICAgICAgICB8ID49IDcuMC4wLCA8IDcuMC41IHwgNy4wLjdcblxuIyMjIDxhIG5hbWU9XCIuTkVUIDZcIj48L2E+Lk5FVCA2XG5cblBhY2thZ2UgbmFtZSB8IEFmZmVjdGVkIHZlcnNpb24gfCBQYXRjaGVkIHZlcnNpb25cbi0tLS0tLS0tLS0tLSB8IC0tLS0tLS0tLS0tLS0tLS0gfCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5bTWljcm9zb2Z0LldpbmRvd3MuQ29tcGF0aWJpbGl0eV0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5XaW5kb3dzLkNvbXBhdGliaWxpdHkpICAgICAgICAgICAgICAgfCA+PSA2LjAuMCwgPCA2LjAuNCB8IDYuMC42XG5bU3lzdGVtLlNlY3VyaXR5LkNyeXB0b2dyYXBoeS5Qa2NzXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvU3lzdGVtLlNlY3VyaXR5LkNyeXB0b2dyYXBoeS5Qa2NzKSAgICAgICAgICAgfCA+PSA2LjAuMCwgPCA2LjAuMiB8IDYuMC4zXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtKSAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm02NCkgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm1dKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLWFybSkgICAgIHwgPj0gNi4wLjEsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm02NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LW11c2wtYXJtNjQpIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC14NjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLXg2NCkgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgteDY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgteDY0KSAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LWFybTY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LWFybTY0KSAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLm9zeC14NjQpICAgICAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLWFybV0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi1hcm0pICAgICAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLWFybTY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLWFybTY0KSAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14NjQpICAgICAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLXg4Nl0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14ODYpICAgICAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDwgNi4wLjE2IHwgNi4wLjE4XG5cblxuIyMgQWR2aXNvcnkgRkFRXG5cbiMjIyA8YSBuYW1lPVwiaG93LWFmZmVjdGVkXCI+PC9hPkhvdyBkbyBJIGtub3cgaWYgSSBhbSBhZmZlY3RlZD9cblxuSWYgeW91IGhhdmUgYSBydW50aW1lIG9yIFNESyB3aXRoIGEgdmVyc2lvbiBsaXN0ZWQsIG9yIGFuIGFmZmVjdGVkIHBhY2thZ2UgbGlzdGVkIGluIFthZmZlY3RlZCBzb2Z0d2FyZV0oI2FmZmVjdGVkLXNvZnR3YXJlKSwgeW91J3JlIGV4cG9zZWQgdG8gdGhlIHZ1bG5lcmFiaWxpdHkuXG5cbiMjIyA8YSBuYW1lPVwiaG93LWZpeFwiPjwvYT5Ib3cgZG8gSSBmaXggdGhlIGlzc3VlP1xuXG4qIFRvIGZpeCB0aGUgaXNzdWUgcGxlYXNlIGluc3RhbGwgdGhlIGxhdGVzdCB2ZXJzaW9uIG9mIC5ORVQgNi4wIG9yIC5ORVQgNy4wLiBJZiB5b3UgaGF2ZSBpbnN0YWxsZWQgb25lIG9yIG1vcmUgLk5FVCBTREtzIHRocm91Z2ggVmlzdWFsIFN0dWRpbywgVmlzdWFsIFN0dWRpbyB3aWxsIHByb21wdCB5b3UgdG8gdXBkYXRlIFZpc3VhbCBTdHVkaW8sIHdoaWNoIHdpbGwgYWxzbyB1cGRhdGUgeW91ciAuTkVUICBTREtzLlxuKiBJZiB5b3UgYXJlIHVzaW5nIG9uZSBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMsIHBsZWFzZSB1cGRhdGUgdG8gdGhlIHBhdGNoZWQgdmVyc2lvbiBsaXN0ZWQgYWJvdmUuXG4qIElmIHlvdSBoYXZlIC5ORVQgNi4wIG9yIGdyZWF0ZXIgaW5zdGFsbGVkLCB5b3UgY2FuIGxpc3QgdGhlIHZlcnNpb25zIHlvdSBoYXZlIGluc3RhbGxlZCBieSBydW5uaW5nIHRoZSBgZG90bmV0IC0taW5mb2AgY29tbWFuZC4gWW91IHdpbGwgc2VlIG91dHB1dCBsaWtlIHRoZSBmb2xsb3dpbmc7XG5cbmBgYFxuLk5FVCBDb3JlIFNESyAocmVmbGVjdGluZyBhbnkgZ2xvYmFsLmpzb24pOlxuXG4gVmVyc2lvbjogICA2LjAuMzAwXG4gQ29tbWl0OiAgICA4NDczMTQ2ZTdkXG5cblJ1bnRpbWUgRW52aXJvbm1lbnQ6XG5cbiBPUyBOYW1lOiAgICAgV2luZG93c1xuIE9TIFZlcnNpb246ICAxMC4wLjE4MzYzXG4gT1MgUGxhdGZvcm06IFdpbmRvd3NcbiBSSUQ6ICAgICAgICAgd2luMTAteDY0XG4gQmFzZSBQYXRoOiAgIEM6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka1xcNi4wLjMwMFxcXG5cbkhvc3QgKHVzZWZ1bCBmb3Igc3VwcG9ydCk6XG5cbiAgVmVyc2lvbjogNi4wLjVcbiAgQ29tbWl0OiAgODQ3MzE0NmU3ZFxuXG4uTkVUIENvcmUgU0RLcyBpbnN0YWxsZWQ6XG5cbiAgNi4wLjMwMCBbQzpcXFByb2dyYW0gRmlsZXNcXGRvdG5ldFxcc2RrXVxuXG4uTkVUIENvcmUgcnVudGltZXMgaW5zdGFsbGVkOlxuXG4gIE1pY3Jvc29mdC5Bc3BOZXRDb3JlLkFwcCA2LjAuNSBbQzpcXFByb2dyYW0gRmlsZXNcXGRvdG5ldFxcc2hhcmVkXFxNaWNyb3NvZnQuQXNwTmV0Q29yZS5BcHBdXG4gIE1pY3Jvc29mdC5ORVRDb3JlLkFwcCA2LjAuNSBbQzpcXFByb2dyYW0gRmlsZXNcXGRvdG5ldFxcc2hhcmVkXFxNaWNyb3NvZnQuTkVUQ29yZS5BcHBdXG4gIE1pY3Jvc29mdC5XaW5kb3dzRGVza3RvcC5BcHAgNi4wLjUgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LldpbmRvd3NEZXNrdG9wLkFwcF1cblxuVG8gaW5zdGFsbCBhZGRpdGlvbmFsIC5ORVQgQ29yZSBydW50aW1lcyBvciBTREtzOlxuICBodHRwczovL2FrYS5tcy9kb3RuZXQtZG93bmxvYWRcbmBgYFxuXG4qIElmIHlvdSdyZSB1c2luZyAuTkVUIDcuMCwgeW91IHNob3VsZCBkb3dubG9hZCBhbmQgaW5zdGFsbCBSdW50aW1lIDcuMC43IG9yIFNESyA3LjAuMTA2IChmb3IgVmlzdWFsIFN0dWRpbyAyMDIyIHYxNy40KSBmcm9tIGh0dHBzOi8vZG90bmV0Lm1pY3Jvc29mdC5jb20vZG93bmxvYWQvZG90bmV0LWNvcmUvNy4wLlxuKiBJZiB5b3UncmUgdXNpbmcgLk5FVCA2LjAsIHlvdSBzaG91bGQgZG93bmxvYWQgYW5kIGluc3RhbGwgUnVudGltZSA2LjAuMTggb3IgU0RLIDYuMC4zMTIgKGZvciBWaXN1YWwgU3R1ZGlvIDIwMjIgdjE3LjIpIGZyb20gaHR0cHM6Ly9kb3RuZXQubWljcm9zb2Z0LmNvbS9kb3dubG9hZC9kb3RuZXQtY29yZS82LjAuXG5cbi5ORVQgNi4wIGFuZCBhbmQgLk5FVCA3LjAgdXBkYXRlcyBhcmUgYWxzbyBhdmFpbGFibGUgZnJvbSBNaWNyb3NvZnQgVXBkYXRlLiBUbyBhY2Nlc3MgdGhpcyBlaXRoZXIgdHlwZSBcIkNoZWNrIGZvciB1cGRhdGVzXCIgaW4geW91ciBXaW5kb3dzIHNlYXJjaCwgb3Igb3BlbiBTZXR0aW5ncywgY2hvb3NlIFVwZGF0ZSAmIFNlY3VyaXR5IGFuZCB0aGVuIGNsaWNrIENoZWNrIGZvciBVcGRhdGVzLlxuXG5PbmNlIHlvdSBoYXZlIGluc3RhbGxlZCB0aGUgdXBkYXRlZCBydW50aW1lIG9yIFNESywgcmVzdGFydCB5b3VyIGFwcHMgZm9yIHRoZSB1cGRhdGUgdG8gdGFrZSBlZmZlY3QuXG5cbkFkZGl0aW9uYWxseSwgaWYgeW91J3ZlIGRlcGxveWVkIFtzZWxmLWNvbnRhaW5lZCBhcHBsaWNhdGlvbnNdKGh0dHBzOi8vZG9jcy5taWNyb3NvZnQuY29tL2RvdG5ldC9jb3JlL2RlcGxveWluZy8jc2VsZi1jb250YWluZWQtZGVwbG95bWVudHMtc2NkKSB0YXJnZXRpbmcgYW55IG9mIHRoZSBpbXBhY3RlZCB2ZXJzaW9ucywgdGhlc2UgYXBwbGljYXRpb25zIGFyZSBhbHNvIHZ1bG5lcmFibGUgYW5kIG11c3QgYmUgcmVjb21waWxlZCBhbmQgcmVkZXBsb3llZC5cblxuIyMgT3RoZXIgSW5mb3JtYXRpb25cblxuIyMjIFJlcG9ydGluZyBTZWN1cml0eSBJc3N1ZXNcblxuSWYgeW91IGhhdmUgZm91bmQgYSBwb3RlbnRpYWwgc2VjdXJpdHkgaXNzdWUgaW4gLk5FVCA2LjAgb3IgLk5FVCA3LjAsIHBsZWFzZSBlbWFpbCBkZXRhaWxzIHRvIHNlY3VyZUBtaWNyb3NvZnQuY29tLiBSZXBvcnRzIG1heSBxdWFsaWZ5IGZvciB0aGUgTWljcm9zb2Z0IC5ORVQgQ29yZSAmIC5ORVQgNSBCb3VudHkuIERldGFpbHMgb2YgdGhlIE1pY3Jvc29mdCAuTkVUIEJvdW50eSBQcm9ncmFtIGluY2x1ZGluZyB0ZXJtcyBhbmQgY29uZGl0aW9ucyBhcmUgYXQgPGh0dHBzOi8vYWthLm1zL2NvcmVib3VudHk+LlxuXG4jIyMgU3VwcG9ydFxuXG5Zb3UgY2FuIGFzayBxdWVzdGlvbnMgYWJvdXQgdGhpcyBpc3N1ZSBvbiBHaXRIdWIgaW4gdGhlIC5ORVQgR2l0SHViIG9yZ2FuaXphdGlvbi4gVGhlIG1haW4gcmVwb3MgYXJlIGxvY2F0ZWQgYXQgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9ydW50aW1lIGFuZCBodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L2FzcG5ldC8uIFRoZSBBbm5vdW5jZW1lbnRzIHJlcG8gKGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvQW5ub3VuY2VtZW50cykgd2lsbCBjb250YWluIHRoaXMgYnVsbGV0aW4gYXMgYW4gaXNzdWUgYW5kIHdpbGwgaW5jbHVkZSBhIGxpbmsgdG8gYSBkaXNjdXNzaW9uIGlzc3VlLiBZb3UgY2FuIGFzayBxdWVzdGlvbnMgaW4gdGhlIGxpbmtlZCBkaXNjdXNzaW9uIGlzc3VlLlxuXG4jIyMgRGlzY2xhaW1lclxuXG5UaGUgaW5mb3JtYXRpb24gcHJvdmlkZWQgaW4gdGhpcyBhZHZpc29yeSBpcyBwcm92aWRlZCBcImFzIGlzXCIgd2l0aG91dCB3YXJyYW50eSBvZiBhbnkga2luZC4gTWljcm9zb2Z0IGRpc2NsYWltcyBhbGwgd2FycmFudGllcywgZWl0aGVyIGV4cHJlc3Mgb3IgaW1wbGllZCwgaW5jbHVkaW5nIHRoZSB3YXJyYW50aWVzIG9mIG1lcmNoYW50YWJpbGl0eSBhbmQgZml0bmVzcyBmb3IgYSBwYXJ0aWN1bGFyIHB1cnBvc2UuIEluIG5vIGV2ZW50IHNoYWxsIE1pY3Jvc29mdCBDb3Jwb3JhdGlvbiBvciBpdHMgc3VwcGxpZXJzIGJlIGxpYWJsZSBmb3IgYW55IGRhbWFnZXMgd2hhdHNvZXZlciBpbmNsdWRpbmcgZGlyZWN0LCBpbmRpcmVjdCwgaW5jaWRlbnRhbCwgY29uc2VxdWVudGlhbCwgbG9zcyBvZiBidXNpbmVzcyBwcm9maXRzIG9yIHNwZWNpYWwgZGFtYWdlcywgZXZlbiBpZiBNaWNyb3NvZnQgQ29ycG9yYXRpb24gb3IgaXRzIHN1cHBsaWVycyBoYXZlIGJlZW4gYWR2aXNlZCBvZiB0aGUgcG9zc2liaWxpdHkgb2Ygc3VjaCBkYW1hZ2VzLiBTb21lIHN0YXRlcyBkbyBub3QgYWxsb3cgdGhlIGV4Y2x1c2lvbiBvciBsaW1pdGF0aW9uIG9mIGxpYWJpbGl0eSBmb3IgY29uc2VxdWVudGlhbCBvciBpbmNpZGVudGFsIGRhbWFnZXMgc28gdGhlIGZvcmVnb2luZyBsaW1pdGF0aW9uIG1heSBub3QgYXBwbHkuXG5cbiMjIyBFeHRlcm5hbCBMaW5rc1xuXG5bQ1ZFLTIwMjMtMjkzMzFdKCBodHRwczovL3d3dy5jdmUub3JnL0NWRVJlY29yZD9pZD0yMDIzLTI5MzMxKVxuXG4jIyMgUmV2aXNpb25zXG5cblYxLjAgKEp1bmUgMTMsIDIwMjMpOiBBZHZpc29yeSBwdWJsaXNoZWQuXG5cbl9WZXJzaW9uIDEuMF9cblxuX0xhc3QgVXBkYXRlZCAyMDIzLTA2LTEzXyIsInJlZmVyZW5jZXMiOlsiaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9ydW50aW1lL3NlY3VyaXR5L2Fkdmlzb3JpZXMvR0hTQS01NTVjLTJwNnItNjhtbSIsImh0dHBzOi8vbnZkLm5pc3QuZ292L3Z1bG4vZGV0YWlsL0NWRS0yMDIzLTI5MzMxIiwiaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hbm5vdW5jZW1lbnRzL2lzc3Vlcy8yNTciLCJodHRwczovL21zcmMubWljcm9zb2Z0LmNvbS91cGRhdGUtZ3VpZGUvdnVsbmVyYWJpbGl0eS9DVkUtMjAyMy0yOTMzMSIsImh0dHBzOi8vc3VwcG9ydC5taWNyb3NvZnQuY29tL2tiLzUwMjU4MjMiLCJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLTU1NWMtMnA2ci02OG1tIl0sImN2c3MiOnsic2NvcmUiOjcuNSwidmVjdG9yU3RyaW5nIjoiQ1ZTUzozLjEvQVY6Ti9BQzpML1BSOk4vVUk6Ti9TOlUvQzpOL0k6Ti9BOkgifSwiY3dlcyI6W3siaWQiOiJDV0UtNDAwIiwibmFtZSI6IlVuY29udHJvbGxlZCBSZXNvdXJjZSBDb25zdW1wdGlvbiIsImRlc2NyaXB0aW9uIjoiVGhlIHByb2R1Y3QgZG9lcyBub3QgcHJvcGVybHkgY29udHJvbCB0aGUgYWxsb2NhdGlvbiBhbmQgbWFpbnRlbmFuY2Ugb2YgYSBsaW1pdGVkIHJlc291cmNlLCB0aGVyZWJ5IGVuYWJsaW5nIGFuIGFjdG9yIHRvIGluZmx1ZW5jZSB0aGUgYW1vdW50IG9mIHJlc291cmNlcyBjb25zdW1lZCwgZXZlbnR1YWxseSBsZWFkaW5nIHRvIHRoZSBleGhhdXN0aW9uIG9mIGF2YWlsYWJsZSByZXNvdXJjZXMuIn1dLCJlcHNzIjp7InBlcmNlbnRhZ2UiOjAuMDAxNzIsInBlcmNlbnRpbGUiOjAuNTUyNjl9LCJwdWJsaXNoZWRBdCI6IjIwMjMtMDYtMTRUMTc6MDg6NTRaIiwidXBkYXRlZEF0IjoiMjAyNC0wNy0zMFQyMToxNjowNFoiLCJ3aXRoZHJhd25BdCI6bnVsbCwicGVybWFsaW5rIjoiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS01NTVjLTJwNnItNjhtbSJ9LCJ2dWxuZXJhYmxlVmVyc2lvblJhbmdlIjoiPj0gNy4wLjAsIDw9IDcuMC4xIiwiZmlyc3RQYXRjaGVkVmVyc2lvbiI6IjcuMC4yIn0=",
+          "comment": "GHSA security vulnerability details for GHSA-555c-2p6r-68mm encoded as Base64 JSON text"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Text.Json",
+      "SPDXID": "SPDXRef-Package-D010D6803532B8F44E031576D059B01154585F59FD75B33C044C7A658BBB47D3",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "8.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Text.Json@8.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-8g4q-xg66-9fp4",
+          "comment": "[HIGH] Microsoft Security Advisory CVE-2024-43485 | .NET Denial of Service Vulnerability; Affects System.Text.Json v8.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvU3lzdGVtLlRleHQuSnNvbkA4LjAuMCIsIm5hbWUiOiJTeXN0ZW0uVGV4dC5Kc29uIiwidmVyc2lvbiI6IjguMC4wIn0sImFkdmlzb3J5Ijp7ImlkZW50aWZpZXJzIjpbeyJ0eXBlIjoiR0hTQSIsInZhbHVlIjoiR0hTQS04ZzRxLXhnNjYtOWZwNCJ9LHsidHlwZSI6IkNWRSIsInZhbHVlIjoiQ1ZFLTIwMjQtNDM0ODUifV0sInNldmVyaXR5IjoiSElHSCIsInN1bW1hcnkiOiJNaWNyb3NvZnQgU2VjdXJpdHkgQWR2aXNvcnkgQ1ZFLTIwMjQtNDM0ODUgfCAuTkVUIERlbmlhbCBvZiBTZXJ2aWNlIFZ1bG5lcmFiaWxpdHkiLCJkZXNjcmlwdGlvbiI6IiMgTWljcm9zb2Z0IFNlY3VyaXR5IEFkdmlzb3J5IENWRS0yMDI0LTQzNDg1IHwgLk5FVCBEZW5pYWwgb2YgU2VydmljZSBWdWxuZXJhYmlsaXR5XG5cbiMjIDxhIG5hbWU9XCJleGVjdXRpdmUtc3VtbWFyeVwiPjwvYT5FeGVjdXRpdmUgc3VtbWFyeVxuXG5NaWNyb3NvZnQgaXMgcmVsZWFzaW5nIHRoaXMgc2VjdXJpdHkgYWR2aXNvcnkgdG8gcHJvdmlkZSBpbmZvcm1hdGlvbiBhYm91dCBhIHZ1bG5lcmFiaWxpdHkgaW4gU3lzdGVtLlRleHQuSnNvbiA2LjAueCBhbmQgOC4wLnguIFRoaXMgYWR2aXNvcnkgYWxzbyBwcm92aWRlcyBndWlkYW5jZSBvbiB3aGF0IGRldmVsb3BlcnMgY2FuIGRvIHRvIHVwZGF0ZSB0aGVpciBhcHBsaWNhdGlvbnMgdG8gcmVtb3ZlIHRoaXMgdnVsbmVyYWJpbGl0eS5cblxuSW4gU3lzdGVtLlRleHQuSnNvbiA2LjAueCBhbmQgOC4wLngsIGFwcGxpY2F0aW9ucyB3aGljaCBkZXNlcmlhbGl6ZSBpbnB1dCB0byBhIG1vZGVsIHdpdGggYW4gYFtKc29uRXh0ZW5zaW9uRGF0YV1gIHByb3BlcnR5IGNhbiBiZSB2dWxuZXJhYmxlIHRvIGFuIGFsZ29yaXRobWljIGNvbXBsZXhpdHkgYXR0YWNrIHJlc3VsdGluZyBpbiBEZW5pYWwgb2YgU2VydmljZS5cblxuIyMgQW5ub3VuY2VtZW50XG5cbkFubm91bmNlbWVudCBmb3IgdGhpcyBpc3N1ZSBjYW4gYmUgZm91bmQgYXQgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hbm5vdW5jZW1lbnRzL2lzc3Vlcy8zMjlcblxuIyMgPGEgbmFtZT1cIm1pdGlnYXRpb24tZmFjdG9yc1wiPjwvYT5NaXRpZ2F0aW9uIGZhY3RvcnNcblxuSlNPTiBtb2RlbHMgd2hpY2ggZG8gbm90IHV0aWxpemUgdGhlIGBbSnNvbkV4dGVuc2lvbkRhdGFdYCBmZWF0dXJlIGFyZSBub3QgaW1wYWN0ZWQgYnkgdGhpcyB2dWxuZXJhYmlsaXR5LlxuXG4jIyA8YSBuYW1lPVwiYWZmZWN0ZWQtc29mdHdhcmVcIj48L2E+QWZmZWN0ZWQgc29mdHdhcmVcblxuKiBBbnkgLk5FVCA4LjAgYXBwbGljYXRpb24gcnVubmluZyBvbiAuTkVUIDguMC44IG9yIGVhcmxpZXIuXG4qIEFueSAuTkVUIDYuMCBhcGxpY2F0aW9uIHJ1bm5pbmcgb24gLk5FVCA2LjAuMzMgb3IgZWFybGllci5cbiogQW55IGFwcGxpY2F0aW9uIGNvbnN1bWluZyBvbmUgb2YgdGhlIFt2dWxuZXJhYmxlIHBhY2thZ2VzXShhZmZlY3RlZC1wYWNrYWdlcykuXG5cbiMjIDxhIG5hbWU9XCJhZmZlY3RlZC1wYWNrYWdlc1wiPjwvYT5BZmZlY3RlZCBQYWNrYWdlc1xuVGhlIHZ1bG5lcmFiaWxpdHkgYWZmZWN0cyBhbnkgTWljcm9zb2Z0IC5ORVQgQ29yZSBwcm9qZWN0IGlmIGl0IHVzZXMgYW55IG9mIGFmZmVjdGVkIHBhY2thZ2VzIHZlcnNpb25zIGxpc3RlZCBiZWxvd1xuXG5cbiMjIyA8YSBuYW1lPVwiLk5FVCA4XCI+PC9hPi5ORVQgOFxuUGFja2FnZSBuYW1lIHwgQWZmZWN0ZWQgdmVyc2lvbiB8IFBhdGNoZWQgdmVyc2lvblxuLS0tLS0tLS0tLS0tIHwgLS0tLS0tLS0tLS0tLS0tLSB8IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbltTeXN0ZW0uVGV4dC5Kc29uXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvU3lzdGVtLlRleHQuSnNvbikgICAgICAgICAgICAgICAgICAgfCA+PSA4LjAuMCwgPD0gOC4wLjQgfCA4LjAuNVxuXG4jIyMgPGEgbmFtZT1cIi5ORVQgNlwiPjwvYT4uTkVUIDZcblBhY2thZ2UgbmFtZSB8IEFmZmVjdGVkIHZlcnNpb24gfCBQYXRjaGVkIHZlcnNpb25cbi0tLS0tLS0tLS0tLSB8IC0tLS0tLS0tLS0tLS0tLS0gfCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5bU3lzdGVtLlRleHQuSnNvbl0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL1N5c3RlbS5UZXh0Lkpzb24pICAgICAgICAgICAgICAgICAgIHwgPj0gNi4wLjAsIDw9IDYuMC45IHwgNi4wLjEwXG5cblxuIyMgQWR2aXNvcnkgRkFRXG5cbiMjIyA8YSBuYW1lPVwiaG93LWFmZmVjdGVkXCI+PC9hPkhvdyBkbyBJIGtub3cgaWYgSSBhbSBhZmZlY3RlZD9cblxuSWYgeW91IGhhdmUgYSBydW50aW1lIG9yIFNESyB3aXRoIGEgdmVyc2lvbiBsaXN0ZWQsIG9yIGFuIGFmZmVjdGVkIHBhY2thZ2UgbGlzdGVkIGluIFthZmZlY3RlZCBzb2Z0d2FyZV0oI2FmZmVjdGVkLXBhY2thZ2VzKSBvciBbYWZmZWN0ZWQgcGFja2FnZXNdKCNhZmZlY3RlZC1zb2Z0d2FyZSksIHlvdSdyZSBleHBvc2VkIHRvIHRoZSB2dWxuZXJhYmlsaXR5LlxuXG4jIyMgPGEgbmFtZT1cImhvdy1maXhcIj48L2E+SG93IGRvIEkgZml4IHRoZSBpc3N1ZT9cblxuKiBUbyBmaXggdGhlIGlzc3VlIHBsZWFzZSBpbnN0YWxsIHRoZSBsYXRlc3QgdmVyc2lvbiBvZiAuTkVUIDguMCBvciAuTkVUIDYuMC4gSWYgeW91IGhhdmUgaW5zdGFsbGVkIG9uZSBvciBtb3JlIC5ORVQgU0RLcyB0aHJvdWdoIFZpc3VhbCBTdHVkaW8sIFZpc3VhbCBTdHVkaW8gd2lsbCBwcm9tcHQgeW91IHRvIHVwZGF0ZSBWaXN1YWwgU3R1ZGlvLCB3aGljaCB3aWxsIGFsc28gdXBkYXRlIHlvdXIgLk5FVCAgU0RLcy5cbiogLk5FVCBGcmFtZXdvcmstYmFzZWQgYXBwbGljYXRpb25zIGFuZCBvdGhlciBhcHBsaWNhdGlvbiB0eXBlcyBuZWVkIHRvIHBlcmZvcm0gYSBwYWNrYWdlIHVwZGF0ZS5cbiogSWYgeW91IGhhdmUgLk5FVCA2LjAgb3IgZ3JlYXRlciBpbnN0YWxsZWQsIHlvdSBjYW4gbGlzdCB0aGUgdmVyc2lvbnMgeW91IGhhdmUgaW5zdGFsbGVkIGJ5IHJ1bm5pbmcgdGhlIGBkb3RuZXQgLS1pbmZvYCBjb21tYW5kLiBZb3Ugd2lsbCBzZWUgb3V0cHV0IGxpa2UgdGhlIGZvbGxvd2luZztcblxuYGBgXG4uTkVUIENvcmUgU0RLIChyZWZsZWN0aW5nIGFueSBnbG9iYWwuanNvbik6XG5cblxuIFZlcnNpb246ICAgOC4wLjIwMFxuIENvbW1pdDogICAgODQ3MzE0NmU3ZFxuXG5SdW50aW1lIEVudmlyb25tZW50OlxuXG4gT1MgTmFtZTogICAgIFdpbmRvd3NcbiBPUyBWZXJzaW9uOiAgMTAuMC4xODM2M1xuIE9TIFBsYXRmb3JtOiBXaW5kb3dzXG4gUklEOiAgICAgICAgIHdpbjEwLXg2NFxuIEJhc2UgUGF0aDogICBDOlxcUHJvZ3JhbSBGaWxlc1xcZG90bmV0XFxzZGtcXDYuMC4zMDBcXFxuXG5Ib3N0ICh1c2VmdWwgZm9yIHN1cHBvcnQpOlxuXG4gIFZlcnNpb246IDguMC4zXG4gIENvbW1pdDogIDg0NzMxNDZlN2RcblxuLk5FVCBDb3JlIFNES3MgaW5zdGFsbGVkOlxuXG4gIDguMC4yMDAgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka11cblxuLk5FVCBDb3JlIHJ1bnRpbWVzIGluc3RhbGxlZDpcblxuICBNaWNyb3NvZnQuQXNwQXNwTmV0Q29yZS5BcHAgOC4wLjMgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LkFzcEFzcE5ldENvcmUuQXBwXVxuICBNaWNyb3NvZnQuQXNwTmV0Q29yZS5BcHAgOC4wLjMgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LkFzcE5ldENvcmUuQXBwXVxuICBNaWNyb3NvZnQuV2luZG93c0Rlc2t0b3AuQXBwIDguMC4zIFtDOlxcUHJvZ3JhbSBGaWxlc1xcZG90bmV0XFxzaGFyZWRcXE1pY3Jvc29mdC5XaW5kb3dzRGVza3RvcC5BcHBdXG5cblxuVG8gaW5zdGFsbCBhZGRpdGlvbmFsIC5ORVQgQ29yZSBydW50aW1lcyBvciBTREtzOlxuICBodHRwczovL2FrYS5tcy9kb3RuZXQtZG93bmxvYWRcbmBgYFxuXG4qIElmIHlvdSdyZSB1c2luZyAuTkVUIDYuMCwgeW91IHNob3VsZCBkb3dubG9hZCBhbmQgaW5zdGFsbCAuTkVUIDYuMC4zNSAgUnVudGltZSBvciAuTkVUIDYuMC4xMzUgU0RLIChmb3IgVmlzdWFsIFN0dWRpbyAyMDIyIHYxNy42KSBmcm9tIGh0dHBzOi8vZG90bmV0Lm1pY3Jvc29mdC5jb20vZG93bmxvYWQvZG90bmV0LWNvcmUvNi4wLlxuKiBJZiB5b3UncmUgdXNpbmcgLk5FVCA4LjAsIHlvdSBzaG91bGQgZG93bmxvYWQgYW5kIGluc3RhbGwgLk5FVCA4LjAuMTAgIFJ1bnRpbWUgb3IgLk5FVCA4LjAuMTEwIFNESyAoZm9yIFZpc3VhbCBTdHVkaW8gMjAyMiB2MTcuOCkgZnJvbSBodHRwczovL2RvdG5ldC5taWNyb3NvZnQuY29tL2Rvd25sb2FkL2RvdG5ldC1jb3JlLzguMC5cblxuLk5FVCA4LjAgYW5kIC5ORVQgNi4wIHVwZGF0ZXMgYXJlIGFsc28gYXZhaWxhYmxlIGZyb20gTWljcm9zb2Z0IFVwZGF0ZS4gVG8gYWNjZXNzIHRoaXMgZWl0aGVyIHR5cGUgXCJDaGVjayBmb3IgdXBkYXRlc1wiIGluIHlvdXIgV2luZG93cyBzZWFyY2gsIG9yIG9wZW4gU2V0dGluZ3MsIGNob29zZSBVcGRhdGUgJiBTZWN1cml0eSBhbmQgdGhlbiBjbGljayBDaGVjayBmb3IgVXBkYXRlcy5cblxuT25jZSB5b3UgaGF2ZSBpbnN0YWxsZWQgdGhlIHVwZGF0ZWQgcnVudGltZSBvciBTREssIHJlc3RhcnQgeW91ciBhcHBzIGZvciB0aGUgdXBkYXRlIHRvIHRha2UgZWZmZWN0LlxuXG5BZGRpdGlvbmFsbHksIGlmIHlvdSd2ZSBkZXBsb3llZCBbc2VsZi1jb250YWluZWQgYXBwbGljYXRpb25zXShodHRwczovL2RvY3MubWljcm9zb2Z0LmNvbS9kb3RuZXQvY29yZS9kZXBsb3lpbmcvI3NlbGYtY29udGFpbmVkLWRlcGxveW1lbnRzLXNjZCkgdGFyZ2V0aW5nIGFueSBvZiB0aGUgaW1wYWN0ZWQgdmVyc2lvbnMsIHRoZXNlIGFwcGxpY2F0aW9ucyBhcmUgYWxzbyB2dWxuZXJhYmxlIGFuZCBtdXN0IGJlIHJlY29tcGlsZWQgYW5kIHJlZGVwbG95ZWQuXG5cbiMjIE90aGVyIEluZm9ybWF0aW9uXG5cbiMjIyBSZXBvcnRpbmcgU2VjdXJpdHkgSXNzdWVzXG5cbklmIHlvdSBoYXZlIGZvdW5kIGEgcG90ZW50aWFsIHNlY3VyaXR5IGlzc3VlIGluIC5ORVQgOC4wIG9yIC5ORVQgNi4wLCBwbGVhc2UgZW1haWwgZGV0YWlscyB0byBzZWN1cmVAbWljcm9zb2Z0LmNvbS4gUmVwb3J0cyBtYXkgcXVhbGlmeSBmb3IgdGhlIE1pY3Jvc29mdCAuTkVUIENvcmUgJiAuTkVUIDUgQm91bnR5LiBEZXRhaWxzIG9mIHRoZSBNaWNyb3NvZnQgLk5FVCBCb3VudHkgUHJvZ3JhbSBpbmNsdWRpbmcgdGVybXMgYW5kIGNvbmRpdGlvbnMgYXJlIGF0IDxodHRwczovL2FrYS5tcy9jb3JlYm91bnR5Pi5cblxuIyMjIFN1cHBvcnRcblxuWW91IGNhbiBhc2sgcXVlc3Rpb25zIGFib3V0IHRoaXMgaXNzdWUgb24gR2l0SHViIGluIHRoZSAuTkVUIEdpdEh1YiBvcmdhbml6YXRpb24uIFRoZSBtYWluIHJlcG9zIGFyZSBsb2NhdGVkIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvcnVudGltZSBhbmQgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hc3BuZXQvLiBUaGUgQW5ub3VuY2VtZW50cyByZXBvIChodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L0Fubm91bmNlbWVudHMpIHdpbGwgY29udGFpbiB0aGlzIGJ1bGxldGluIGFzIGFuIGlzc3VlIGFuZCB3aWxsIGluY2x1ZGUgYSBsaW5rIHRvIGEgZGlzY3Vzc2lvbiBpc3N1ZS4gWW91IGNhbiBhc2sgcXVlc3Rpb25zIGluIHRoZSBsaW5rZWQgZGlzY3Vzc2lvbiBpc3N1ZS5cblxuIyMjIERpc2NsYWltZXJcblxuVGhlIGluZm9ybWF0aW9uIHByb3ZpZGVkIGluIHRoaXMgYWR2aXNvcnkgaXMgcHJvdmlkZWQgXCJhcyBpc1wiIHdpdGhvdXQgd2FycmFudHkgb2YgYW55IGtpbmQuIE1pY3Jvc29mdCBkaXNjbGFpbXMgYWxsIHdhcnJhbnRpZXMsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQsIGluY2x1ZGluZyB0aGUgd2FycmFudGllcyBvZiBtZXJjaGFudGFiaWxpdHkgYW5kIGZpdG5lc3MgZm9yIGEgcGFydGljdWxhciBwdXJwb3NlLiBJbiBubyBldmVudCBzaGFsbCBNaWNyb3NvZnQgQ29ycG9yYXRpb24gb3IgaXRzIHN1cHBsaWVycyBiZSBsaWFibGUgZm9yIGFueSBkYW1hZ2VzIHdoYXRzb2V2ZXIgaW5jbHVkaW5nIGRpcmVjdCwgaW5kaXJlY3QsIGluY2lkZW50YWwsIGNvbnNlcXVlbnRpYWwsIGxvc3Mgb2YgYnVzaW5lc3MgcHJvZml0cyBvciBzcGVjaWFsIGRhbWFnZXMsIGV2ZW4gaWYgTWljcm9zb2Z0IENvcnBvcmF0aW9uIG9yIGl0cyBzdXBwbGllcnMgaGF2ZSBiZWVuIGFkdmlzZWQgb2YgdGhlIHBvc3NpYmlsaXR5IG9mIHN1Y2ggZGFtYWdlcy4gU29tZSBzdGF0ZXMgZG8gbm90IGFsbG93IHRoZSBleGNsdXNpb24gb3IgbGltaXRhdGlvbiBvZiBsaWFiaWxpdHkgZm9yIGNvbnNlcXVlbnRpYWwgb3IgaW5jaWRlbnRhbCBkYW1hZ2VzIHNvIHRoZSBmb3JlZ29pbmcgbGltaXRhdGlvbiBtYXkgbm90IGFwcGx5LlxuXG4jIyMgRXh0ZXJuYWwgTGlua3NcblxuW0NWRS0yMDI0LTQzNDg1XSggaHR0cHM6Ly93d3cuY3ZlLm9yZy9DVkVSZWNvcmQ/aWQ9Q1ZFLTIwMjQtNDM0ODUpXG5cbiMjIyBSZXZpc2lvbnNcblxuVjEuMCAoT2N0b2JlciAwOCwgMjAyNCk6IEFkdmlzb3J5IHB1Ymxpc2hlZC5cblxuX1ZlcnNpb24gMS4wX1xuXG5fTGFzdCBVcGRhdGVkIDIwMjQtMTAtMDhfIiwicmVmZXJlbmNlcyI6WyJodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L3J1bnRpbWUvc2VjdXJpdHkvYWR2aXNvcmllcy9HSFNBLThnNHEteGc2Ni05ZnA0IiwiaHR0cHM6Ly9udmQubmlzdC5nb3YvdnVsbi9kZXRhaWwvQ1ZFLTIwMjQtNDM0ODUiLCJodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L2Fubm91bmNlbWVudHMvaXNzdWVzLzMyOSIsImh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvcnVudGltZS9pc3N1ZXMvMTA4Njc4IiwiaHR0cHM6Ly9tc3JjLm1pY3Jvc29mdC5jb20vdXBkYXRlLWd1aWRlL3Z1bG5lcmFiaWxpdHkvQ1ZFLTIwMjQtNDM0ODUiLCJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLThnNHEteGc2Ni05ZnA0Il0sImN2c3MiOnsic2NvcmUiOjcuNSwidmVjdG9yU3RyaW5nIjoiQ1ZTUzozLjEvQVY6Ti9BQzpML1BSOk4vVUk6Ti9TOlUvQzpOL0k6Ti9BOkgifSwiY3dlcyI6W3siaWQiOiJDV0UtNDA3IiwibmFtZSI6IkluZWZmaWNpZW50IEFsZ29yaXRobWljIENvbXBsZXhpdHkiLCJkZXNjcmlwdGlvbiI6IkFuIGFsZ29yaXRobSBpbiBhIHByb2R1Y3QgaGFzIGFuIGluZWZmaWNpZW50IHdvcnN0LWNhc2UgY29tcHV0YXRpb25hbCBjb21wbGV4aXR5IHRoYXQgbWF5IGJlIGRldHJpbWVudGFsIHRvIHN5c3RlbSBwZXJmb3JtYW5jZSBhbmQgY2FuIGJlIHRyaWdnZXJlZCBieSBhbiBhdHRhY2tlciwgdHlwaWNhbGx5IHVzaW5nIGNyYWZ0ZWQgbWFuaXB1bGF0aW9ucyB0aGF0IGVuc3VyZSB0aGF0IHRoZSB3b3JzdCBjYXNlIGlzIGJlaW5nIHJlYWNoZWQuIn1dLCJlcHNzIjp7InBlcmNlbnRhZ2UiOjAuMDAwNjMsInBlcmNlbnRpbGUiOjAuMjg1MjR9LCJwdWJsaXNoZWRBdCI6IjIwMjQtMTAtMDhUMjA6MjU6MTlaIiwidXBkYXRlZEF0IjoiMjAyNC0xMC0yNFQxNjoxMToyM1oiLCJ3aXRoZHJhd25BdCI6bnVsbCwicGVybWFsaW5rIjoiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS04ZzRxLXhnNjYtOWZwNCJ9LCJ2dWxuZXJhYmxlVmVyc2lvblJhbmdlIjoiPj0gOC4wLjAsIDw9IDguMC40IiwiZmlyc3RQYXRjaGVkVmVyc2lvbiI6IjguMC41In0=",
+          "comment": "GHSA security vulnerability details for GHSA-8g4q-xg66-9fp4 encoded as Base64 JSON text"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
+          "comment": "[HIGH] Microsoft Security Advisory CVE-2024-30105 | .NET Denial of Service Vulnerability; Affects System.Text.Json v8.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvU3lzdGVtLlRleHQuSnNvbkA4LjAuMCIsIm5hbWUiOiJTeXN0ZW0uVGV4dC5Kc29uIiwidmVyc2lvbiI6IjguMC4wIn0sImFkdmlzb3J5Ijp7ImlkZW50aWZpZXJzIjpbeyJ0eXBlIjoiR0hTQSIsInZhbHVlIjoiR0hTQS1oaDJ3LXA2cnYtNGc3dyJ9LHsidHlwZSI6IkNWRSIsInZhbHVlIjoiQ1ZFLTIwMjQtMzAxMDUifV0sInNldmVyaXR5IjoiSElHSCIsInN1bW1hcnkiOiJNaWNyb3NvZnQgU2VjdXJpdHkgQWR2aXNvcnkgQ1ZFLTIwMjQtMzAxMDUgfCAuTkVUIERlbmlhbCBvZiBTZXJ2aWNlIFZ1bG5lcmFiaWxpdHkiLCJkZXNjcmlwdGlvbiI6IiMgTWljcm9zb2Z0IFNlY3VyaXR5IEFkdmlzb3J5IENWRS0yMDI0LTMwMTA1IHwgLk5FVCBEZW5pYWwgb2YgU2VydmljZSBWdWxuZXJhYmlsaXR5XG5cbiMjIDxhIG5hbWU9XCJleGVjdXRpdmUtc3VtbWFyeVwiPjwvYT5FeGVjdXRpdmUgc3VtbWFyeVxuXG5NaWNyb3NvZnQgaXMgcmVsZWFzaW5nIHRoaXMgc2VjdXJpdHkgYWR2aXNvcnkgdG8gcHJvdmlkZSBpbmZvcm1hdGlvbiBhYm91dCBhIHZ1bG5lcmFiaWxpdHkgaW4gIC5ORVQgOC4wLiBUaGlzIGFkdmlzb3J5IGFsc28gcHJvdmlkZXMgZ3VpZGFuY2Ugb24gd2hhdCBkZXZlbG9wZXJzIGNhbiBkbyB0byB1cGRhdGUgdGhlaXIgYXBwbGljYXRpb25zIHRvIHJlbW92ZSB0aGlzIHZ1bG5lcmFiaWxpdHkuXG5cbkEgdnVsbmVyYWJpbGl0eSBleGlzdHMgaW4gLk5FVCB3aGVuIGNhbGxpbmcgdGhlIEpzb25TZXJpYWxpemVyLkRlc2VyaWFsaXplQXN5bmNFbnVtZXJhYmxlIG1ldGhvZCBhZ2FpbnN0IGFuIHVudHJ1c3RlZCBpbnB1dCB1c2luZyBTeXN0ZW0uVGV4dC5Kc29uIG1heSByZXN1bHQgaW4gRGVuaWFsIG9mIFNlcnZpY2UuXG5cbiMjIERpc2N1c3Npb25cblxuRGlzY3Vzc2lvbiBmb3IgdGhpcyBpc3N1ZSBjYW4gYmUgZm91bmQgYXQgIGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvcnVudGltZS9pc3N1ZXMvMTA0NjE5XG5cbiMjIDxhIG5hbWU9XCJtaXRpZ2F0aW9uLWZhY3RvcnNcIj48L2E+TWl0aWdhdGlvbiBmYWN0b3JzXG5cbk1pY3Jvc29mdCBoYXMgbm90IGlkZW50aWZpZWQgYW55IG1pdGlnYXRpbmcgZmFjdG9ycyBmb3IgdGhpcyB2dWxuZXJhYmlsaXR5LlxuXG4jIyA8YSBuYW1lPVwiYWZmZWN0ZWQtc29mdHdhcmVcIj48L2E+QWZmZWN0ZWQgc29mdHdhcmVcblxuKiBBbnkgLk5FVCA4LjAgYXBwbGljYXRpb24gcnVubmluZyBvbiAuTkVUIDguMC42IG9yIGVhcmxpZXIuXG5cbiMjIDxhIG5hbWU9XCJhZmZlY3RlZC1wYWNrYWdlc1wiPjwvYT5BZmZlY3RlZCBQYWNrYWdlc1xuVGhlIHZ1bG5lcmFiaWxpdHkgYWZmZWN0cyBhbnkgTWljcm9zb2Z0IC5ORVQgQ29yZSBwcm9qZWN0IGlmIGl0IHVzZXMgYW55IG9mIGFmZmVjdGVkIHBhY2thZ2VzIHZlcnNpb25zIGxpc3RlZCBiZWxvd1xuXG4jIyMgPGEgbmFtZT1cIi5ORVQgOFwiPjwvYT4uTkVUIDhcblBhY2thZ2UgbmFtZSB8IEFmZmVjdGVkIHZlcnNpb24gfCBQYXRjaGVkIHZlcnNpb25cbi0tLS0tLS0tLS0tLSB8IC0tLS0tLS0tLS0tLS0tLS0gfCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5bU3lzdGVtLlRleHQuSnNvbl0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL1N5c3RlbS5UZXh0Lkpzb24pICAgICAgICAgICAgICAgfCA+PSA3LjAuMCwgPCA9OC4wLjMgfCA4LjAuNFxuXG5cbiMjIEFkdmlzb3J5IEZBUVxuXG4jIyMgPGEgbmFtZT1cImhvdy1hZmZlY3RlZFwiPjwvYT5Ib3cgZG8gSSBrbm93IGlmIEkgYW0gYWZmZWN0ZWQ/XG5cbklmIHlvdSBoYXZlIGEgcnVudGltZSBvciBTREsgd2l0aCBhIHZlcnNpb24gbGlzdGVkLCBvciBhbiBhZmZlY3RlZCBwYWNrYWdlIGxpc3RlZCBpbiBbYWZmZWN0ZWQgc29mdHdhcmVdKCNhZmZlY3RlZC1wYWNrYWdlcykgb3IgW2FmZmVjdGVkIHBhY2thZ2VzXSgjYWZmZWN0ZWQtc29mdHdhcmUpLCB5b3UncmUgZXhwb3NlZCB0byB0aGUgdnVsbmVyYWJpbGl0eS5cblxuIyMjIDxhIG5hbWU9XCJob3ctZml4XCI+PC9hPkhvdyBkbyBJIGZpeCB0aGUgaXNzdWU/XG5cbiogVG8gZml4IHRoZSBpc3N1ZSBwbGVhc2UgaW5zdGFsbCB0aGUgbGF0ZXN0IHZlcnNpb24gb2YgLk5FVCA4LjAgLiBJZiB5b3UgaGF2ZSBpbnN0YWxsZWQgb25lIG9yIG1vcmUgLk5FVCBTREtzIHRocm91Z2ggVmlzdWFsIFN0dWRpbywgVmlzdWFsIFN0dWRpbyB3aWxsIHByb21wdCB5b3UgdG8gdXBkYXRlIFZpc3VhbCBTdHVkaW8sIHdoaWNoIHdpbGwgYWxzbyB1cGRhdGUgeW91ciAuTkVUICBTREtzLlxuKiBJZiB5b3UgaGF2ZSAuTkVUIDYuMCBvciBncmVhdGVyIGluc3RhbGxlZCwgeW91IGNhbiBsaXN0IHRoZSB2ZXJzaW9ucyB5b3UgaGF2ZSBpbnN0YWxsZWQgYnkgcnVubmluZyB0aGUgYGRvdG5ldCAtLWluZm9gIGNvbW1hbmQuIFlvdSB3aWxsIHNlZSBvdXRwdXQgbGlrZSB0aGUgZm9sbG93aW5nO1xuXG5gYGBcbi5ORVQgQ29yZSBTREsgKHJlZmxlY3RpbmcgYW55IGdsb2JhbC5qc29uKTpcblxuXG4gVmVyc2lvbjogICA4LjAuMjAwXG4gQ29tbWl0OiAgICA4NDczMTQ2ZTdkXG5cblJ1bnRpbWUgRW52aXJvbm1lbnQ6XG5cbiBPUyBOYW1lOiAgICAgV2luZG93c1xuIE9TIFZlcnNpb246ICAxMC4wLjE4MzYzXG4gT1MgUGxhdGZvcm06IFdpbmRvd3NcbiBSSUQ6ICAgICAgICAgd2luMTAteDY0XG4gQmFzZSBQYXRoOiAgIEM6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka1xcNi4wLjMwMFxcXG5cbkhvc3QgKHVzZWZ1bCBmb3Igc3VwcG9ydCk6XG5cbiAgVmVyc2lvbjogOC4wLjNcbiAgQ29tbWl0OiAgODQ3MzE0NmU3ZFxuXG4uTkVUIENvcmUgU0RLcyBpbnN0YWxsZWQ6XG5cbiAgOC4wLjIwMCBbQzpcXFByb2dyYW0gRmlsZXNcXGRvdG5ldFxcc2RrXVxuXG4uTkVUIENvcmUgcnVudGltZXMgaW5zdGFsbGVkOlxuXG4gIE1pY3Jvc29mdC5Bc3BBc3BOZXRDb3JlLkFwcCA4LjAuMyBbQzpcXFByb2dyYW0gRmlsZXNcXGRvdG5ldFxcc2hhcmVkXFxNaWNyb3NvZnQuQXNwQXNwTmV0Q29yZS5BcHBdXG4gIE1pY3Jvc29mdC5Bc3BOZXRDb3JlLkFwcCA4LjAuMyBbQzpcXFByb2dyYW0gRmlsZXNcXGRvdG5ldFxcc2hhcmVkXFxNaWNyb3NvZnQuQXNwTmV0Q29yZS5BcHBdXG4gIE1pY3Jvc29mdC5XaW5kb3dzRGVza3RvcC5BcHAgOC4wLjMgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LldpbmRvd3NEZXNrdG9wLkFwcF1cblxuXG5UbyBpbnN0YWxsIGFkZGl0aW9uYWwgLk5FVCBDb3JlIHJ1bnRpbWVzIG9yIFNES3M6XG4gIGh0dHBzOi8vYWthLm1zL2RvdG5ldC1kb3dubG9hZFxuYGBgXG5cbiogSWYgeW91J3JlIHVzaW5nIC5ORVQgOC4wLCB5b3Ugc2hvdWxkIGRvd25sb2FkIGFuZCBpbnN0YWxsIC5ORVQgOC4wLjcgIFJ1bnRpbWUgb3IgLk5FVCA4LjAuMTA3IFNESyAoZm9yIFZpc3VhbCBTdHVkaW8gMjAyMiB2MTcuOCkgZnJvbSBodHRwczovL2RvdG5ldC5taWNyb3NvZnQuY29tL2Rvd25sb2FkL2RvdG5ldC1jb3JlLzguMC5cblxuLk5FVCA4LjAgdXBkYXRlcyBhcmUgYWxzbyBhdmFpbGFibGUgZnJvbSBNaWNyb3NvZnQgVXBkYXRlLiBUbyBhY2Nlc3MgdGhpcyBlaXRoZXIgdHlwZSBcIkNoZWNrIGZvciB1cGRhdGVzXCIgaW4geW91ciBXaW5kb3dzIHNlYXJjaCwgb3Igb3BlbiBTZXR0aW5ncywgY2hvb3NlIFVwZGF0ZSAmIFNlY3VyaXR5IGFuZCB0aGVuIGNsaWNrIENoZWNrIGZvciBVcGRhdGVzLlxuXG5PbmNlIHlvdSBoYXZlIGluc3RhbGxlZCB0aGUgdXBkYXRlZCBydW50aW1lIG9yIFNESywgcmVzdGFydCB5b3VyIGFwcHMgZm9yIHRoZSB1cGRhdGUgdG8gdGFrZSBlZmZlY3QuXG5cbkFkZGl0aW9uYWxseSwgaWYgeW91J3ZlIGRlcGxveWVkIFtzZWxmLWNvbnRhaW5lZCBhcHBsaWNhdGlvbnNdKGh0dHBzOi8vZG9jcy5taWNyb3NvZnQuY29tL2RvdG5ldC9jb3JlL2RlcGxveWluZy8jc2VsZi1jb250YWluZWQtZGVwbG95bWVudHMtc2NkKSB0YXJnZXRpbmcgYW55IG9mIHRoZSBpbXBhY3RlZCB2ZXJzaW9ucywgdGhlc2UgYXBwbGljYXRpb25zIGFyZSBhbHNvIHZ1bG5lcmFibGUgYW5kIG11c3QgYmUgcmVjb21waWxlZCBhbmQgcmVkZXBsb3llZC5cblxuIyMgT3RoZXIgSW5mb3JtYXRpb25cblxuIyMjIFJlcG9ydGluZyBTZWN1cml0eSBJc3N1ZXNcblxuSWYgeW91IGhhdmUgZm91bmQgYSBwb3RlbnRpYWwgc2VjdXJpdHkgaXNzdWUgaW4gLk5FVCA4LjAgb3IgLk5FVCA3LjAgb3IgLk5FVCA2LjAsIHBsZWFzZSBlbWFpbCBkZXRhaWxzIHRvIHNlY3VyZUBtaWNyb3NvZnQuY29tLiBSZXBvcnRzIG1heSBxdWFsaWZ5IGZvciB0aGUgTWljcm9zb2Z0IC5ORVQgQ29yZSAmIC5ORVQgNSBCb3VudHkuIERldGFpbHMgb2YgdGhlIE1pY3Jvc29mdCAuTkVUIEJvdW50eSBQcm9ncmFtIGluY2x1ZGluZyB0ZXJtcyBhbmQgY29uZGl0aW9ucyBhcmUgYXQgPGh0dHBzOi8vYWthLm1zL2NvcmVib3VudHk+LlxuXG4jIyMgU3VwcG9ydFxuXG5Zb3UgY2FuIGFzayBxdWVzdGlvbnMgYWJvdXQgdGhpcyBpc3N1ZSBvbiBHaXRIdWIgaW4gdGhlIC5ORVQgR2l0SHViIG9yZ2FuaXphdGlvbi4gVGhlIG1haW4gcmVwb3MgYXJlIGxvY2F0ZWQgYXQgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9ydW50aW1lIGFuZCBodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L2FzcG5ldC8uIFRoZSBBbm5vdW5jZW1lbnRzIHJlcG8gKGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvQW5ub3VuY2VtZW50cykgd2lsbCBjb250YWluIHRoaXMgYnVsbGV0aW4gYXMgYW4gaXNzdWUgYW5kIHdpbGwgaW5jbHVkZSBhIGxpbmsgdG8gYSBkaXNjdXNzaW9uIGlzc3VlLiBZb3UgY2FuIGFzayBxdWVzdGlvbnMgaW4gdGhlIGxpbmtlZCBkaXNjdXNzaW9uIGlzc3VlLlxuXG4jIyMgRGlzY2xhaW1lclxuXG5UaGUgaW5mb3JtYXRpb24gcHJvdmlkZWQgaW4gdGhpcyBhZHZpc29yeSBpcyBwcm92aWRlZCBcImFzIGlzXCIgd2l0aG91dCB3YXJyYW50eSBvZiBhbnkga2luZC4gTWljcm9zb2Z0IGRpc2NsYWltcyBhbGwgd2FycmFudGllcywgZWl0aGVyIGV4cHJlc3Mgb3IgaW1wbGllZCwgaW5jbHVkaW5nIHRoZSB3YXJyYW50aWVzIG9mIG1lcmNoYW50YWJpbGl0eSBhbmQgZml0bmVzcyBmb3IgYSBwYXJ0aWN1bGFyIHB1cnBvc2UuIEluIG5vIGV2ZW50IHNoYWxsIE1pY3Jvc29mdCBDb3Jwb3JhdGlvbiBvciBpdHMgc3VwcGxpZXJzIGJlIGxpYWJsZSBmb3IgYW55IGRhbWFnZXMgd2hhdHNvZXZlciBpbmNsdWRpbmcgZGlyZWN0LCBpbmRpcmVjdCwgaW5jaWRlbnRhbCwgY29uc2VxdWVudGlhbCwgbG9zcyBvZiBidXNpbmVzcyBwcm9maXRzIG9yIHNwZWNpYWwgZGFtYWdlcywgZXZlbiBpZiBNaWNyb3NvZnQgQ29ycG9yYXRpb24gb3IgaXRzIHN1cHBsaWVycyBoYXZlIGJlZW4gYWR2aXNlZCBvZiB0aGUgcG9zc2liaWxpdHkgb2Ygc3VjaCBkYW1hZ2VzLiBTb21lIHN0YXRlcyBkbyBub3QgYWxsb3cgdGhlIGV4Y2x1c2lvbiBvciBsaW1pdGF0aW9uIG9mIGxpYWJpbGl0eSBmb3IgY29uc2VxdWVudGlhbCBvciBpbmNpZGVudGFsIGRhbWFnZXMgc28gdGhlIGZvcmVnb2luZyBsaW1pdGF0aW9uIG1heSBub3QgYXBwbHkuXG5cbiMjIyBFeHRlcm5hbCBMaW5rc1xuXG5bQ1ZFLTIwMjQtMzAxMDVdKCBodHRwczovL3d3dy5jdmUub3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNC0zMDEwNSlcblxuIyMjIFJldmlzaW9uc1xuXG5WMS4wIChKdWx5IDA5LCAyMDI0KTogQWR2aXNvcnkgcHVibGlzaGVkLlxuXG5fVmVyc2lvbiAxLjBfXG5cbl9MYXN0IFVwZGF0ZWQgMjAyNC0wNy0wOV8iLCJyZWZlcmVuY2VzIjpbImh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvcnVudGltZS9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtaGgydy1wNnJ2LTRnN3ciLCJodHRwczovL252ZC5uaXN0Lmdvdi92dWxuL2RldGFpbC9DVkUtMjAyNC0zMDEwNSIsImh0dHBzOi8vbXNyYy5taWNyb3NvZnQuY29tL3VwZGF0ZS1ndWlkZS92dWxuZXJhYmlsaXR5L0NWRS0yMDI0LTMwMTA1IiwiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS1oaDJ3LXA2cnYtNGc3dyJdLCJjdnNzIjp7InNjb3JlIjo3LjUsInZlY3RvclN0cmluZyI6IkNWU1M6My4xL0FWOk4vQUM6TC9QUjpOL1VJOk4vUzpVL0M6Ti9JOk4vQTpIIn0sImN3ZXMiOlt7ImlkIjoiQ1dFLTQwMCIsIm5hbWUiOiJVbmNvbnRyb2xsZWQgUmVzb3VyY2UgQ29uc3VtcHRpb24iLCJkZXNjcmlwdGlvbiI6IlRoZSBwcm9kdWN0IGRvZXMgbm90IHByb3Blcmx5IGNvbnRyb2wgdGhlIGFsbG9jYXRpb24gYW5kIG1haW50ZW5hbmNlIG9mIGEgbGltaXRlZCByZXNvdXJjZSwgdGhlcmVieSBlbmFibGluZyBhbiBhY3RvciB0byBpbmZsdWVuY2UgdGhlIGFtb3VudCBvZiByZXNvdXJjZXMgY29uc3VtZWQsIGV2ZW50dWFsbHkgbGVhZGluZyB0byB0aGUgZXhoYXVzdGlvbiBvZiBhdmFpbGFibGUgcmVzb3VyY2VzLiJ9XSwiZXBzcyI6eyJwZXJjZW50YWdlIjowLjAwMDg0LCJwZXJjZW50aWxlIjowLjM3MzA3fSwicHVibGlzaGVkQXQiOiIyMDI0LTA3LTA5VDIxOjE0OjEwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDgtMDlUMDU6MDE6NDZaIiwid2l0aGRyYXduQXQiOm51bGwsInBlcm1hbGluayI6Imh0dHBzOi8vZ2l0aHViLmNvbS9hZHZpc29yaWVzL0dIU0EtaGgydy1wNnJ2LTRnN3cifSwidnVsbmVyYWJsZVZlcnNpb25SYW5nZSI6Ij49IDcuMC4wLCA8IDguMC40IiwiZmlyc3RQYXRjaGVkVmVyc2lvbiI6IjguMC40In0=",
+          "comment": "GHSA security vulnerability details for GHSA-hh2w-p6rv-4g7w encoded as Base64 JSON text"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging",
+      "SPDXID": "SPDXRef-Package-D6B10CA94F55A75F0746B799EAE1E7372994298991EA077E6BA70102EA1CB0CE",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Logging@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+      "SPDXID": "SPDXRef-Package-AEEDBE4F5C65A38962B24061F4E8ACA23CD2E62D9EB0091799A9D849248B7AFC",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.Protocols.OpenIdConnect@6.25.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.FileProviders.Abstractions",
+      "SPDXID": "SPDXRef-Package-E500AB09C427C236C65BF11267432378942449234CC96220AB3E73277F07A9C8",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.FileProviders.Abstractions@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.IdentityModel.JsonWebTokens",
+      "SPDXID": "SPDXRef-Package-11A5E67C236F36E5825649B810307506498468201C97A1A5A8F6AC1503B186AC",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.IdentityModel.JsonWebTokens@6.25.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-59j7-ghrg-fj52",
+          "comment": "[MODERATE] Microsoft ASP.NET Core project templates vulnerable to denial of service; Affects Microsoft.IdentityModel.JsonWebTokens v6.25.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvTWljcm9zb2Z0LklkZW50aXR5TW9kZWwuSnNvbldlYlRva2Vuc0A2LjI1LjEiLCJuYW1lIjoiTWljcm9zb2Z0LklkZW50aXR5TW9kZWwuSnNvbldlYlRva2VucyIsInZlcnNpb24iOiI2LjI1LjEifSwiYWR2aXNvcnkiOnsiaWRlbnRpZmllcnMiOlt7InR5cGUiOiJHSFNBIiwidmFsdWUiOiJHSFNBLTU5ajctZ2hyZy1majUyIn0seyJ0eXBlIjoiQ1ZFIiwidmFsdWUiOiJDVkUtMjAyNC0yMTMxOSJ9XSwic2V2ZXJpdHkiOiJNT0RFUkFURSIsInN1bW1hcnkiOiJNaWNyb3NvZnQgQVNQLk5FVCBDb3JlIHByb2plY3QgdGVtcGxhdGVzIHZ1bG5lcmFibGUgdG8gZGVuaWFsIG9mIHNlcnZpY2UiLCJkZXNjcmlwdGlvbiI6IiMgTWljcm9zb2Z0IFNlY3VyaXR5IEFkdmlzb3J5IENWRS0yMDI0LTIxMzE5OiAuTkVUIERlbmlhbCBvZiBTZXJ2aWNlIFZ1bG5lcmFiaWxpdHlcblxuIyMgRXhlY3V0aXZlIHN1bW1hcnlcblxuTWljcm9zb2Z0IGlzIHJlbGVhc2luZyB0aGlzIHNlY3VyaXR5IGFkdmlzb3J5IHRvIHByb3ZpZGUgaW5mb3JtYXRpb24gYWJvdXQgYSB2dWxuZXJhYmlsaXR5IGluIHRoZSBBU1AuTkVUIENvcmUgcHJvamVjdCB0ZW1wbGF0ZXMuIFRoaXMgYWR2aXNvcnkgYWxzbyBwcm92aWRlcyBndWlkYW5jZSBvbiB3aGF0IGRldmVsb3BlcnMgY2FuIGRvIHRvIHVwZGF0ZSB0aGVpciBhcHBsaWNhdGlvbnMgdG8gYWRkcmVzcyB0aGlzIHZ1bG5lcmFiaWxpdHkuXG5cbkEgRGVuaWFsIG9mIFNlcnZpY2UgdnVsbmVyYWJpbGl0eSBleGlzdHMgaW4gQVNQLk5FVCBDb3JlIHByb2plY3QgdGVtcGxhdGVzIHdoaWNoIHV0aWxpemUgSldULWJhc2VkIGF1dGhlbnRpY2F0aW9uIHRva2Vucy4gVGhpcyB2dWxuZXJhYmlsaXR5IGFsbG93cyBhbiB1bmF1dGhlbnRpY2F0ZWQgY2xpZW50IHRvIGNvbnN1bWUgYXJiaXRyYXJpbHkgbGFyZ2UgYW1vdW50cyBvZiBzZXJ2ZXIgbWVtb3J5LCBwb3RlbnRpYWxseSB0cmlnZ2VyaW5nIGFuIG91dC1vZi1tZW1vcnkgY29uZGl0aW9uIG9uIHRoZSBzZXJ2ZXIgYW5kIG1ha2luZyB0aGUgc2VydmVyIG5vIGxvbmdlciBhYmxlIHRvIHJlc3BvbmQgdG8gbGVnaXRpbWF0ZSByZXF1ZXN0cy4gXG5cbiMjIEFubm91bmNlbWVudFxuXG5Bbm5vdW5jZW1lbnQgZm9yIHRoaXMgaXNzdWUgY2FuIGJlIGZvdW5kIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvYW5ub3VuY2VtZW50cy9pc3N1ZXMvMjkwXG5cbiMjIyBNaXRpZ2F0aW9uIGZhY3RvcnNcblxuVGhpcyBpbXBhY3RzIG9ubHkgLk5FVCBDb3JlLWJhc2VkIHByb2plY3RzIHRoYXQgd2VyZSBjcmVhdGVkIHVzaW5nIGFueSB2ZXJzaW9uIG9mIHByb2plY3QgdGVtcGxhdGVzIGxpc3RlZCBpbiBbYWZmZWN0ZWQgc29mdHdhcmVdKCNhZmZlY3RlZC1zb2Z0d2FyZSkuIFxuT3RoZXIgcHJvamVjdCB0ZW1wbGF0ZXMgZS5nLiwgY29uc29sZSBhcHBsaWNhdGlvbnMsIE1BVUkgYXBwbGljYXRpb25zLCBXaW5kb3dzIEZvcm1zIG9yIFdQRiBhcHBsaWNhdGlvbnMsIGFyZSBub3QgYWZmZWN0ZWQuXG5cbiMjIEFmZmVjdGVkIHNvZnR3YXJlXG5cblRoaXMgaW1wYWN0cyBvbmx5IC5ORVQgQ29yZS1iYXNlZCBwcm9qZWN0cyB0aGF0IHdlcmUgY3JlYXRlZCB1c2luZyBhbnkgdmVyc2lvbiBvZiB0aGUgYmVsb3cgcHJvamVjdCB0ZW1wbGF0ZXMuXG5cbi1cdEFTUC5ORVQgQ29yZSBXZWIgQXBwIChNb2RlbC1WaWV3LUNvbnRyb2xsZXIpXG4tXHRBU1AuTkVUIENvcmUgV2ViIEFQSVxuLVx0QVNQLk5FVCBDb3JlIFdlYiBBcHAgKFJhem9yIFBhZ2VzKVxuLVx0Qmxhem9yIFNlcnZlciBBcHBcbi1cdEJsYXpvciBXZWJBc3NlbWJseSBBcHBcblxuIyMgQWR2aXNvcnkgRkFRXG5cbiMjIyBIb3cgZG8gSSBrbm93IGlmIEkgYW0gYWZmZWN0ZWQ/XG5cbklmIHlvdSBhcmUgeW91IHVzaW5nIHByb2plY3QgdGVtcGxhdGVzIGxpc3RlZCBpbiBbYWZmZWN0ZWQgc29mdHdhcmVdKCNhZmZlY3RlZC1zb2Z0d2FyZSksIHlvdSBtYXkgYmUgZXhwb3NlZCB0byB0aGUgdnVsbmVyYWJpbGl0eS5cblxuIyMjIEhvdyBkbyBJIGZpeCB0aGUgaXNzdWU/XG5cbiMjIyMgRm9yIGV4aXN0aW5nIHByb2plY3RzOlxuSWYgeW91IGV2ZXIgY3JlYXRlZCBhbnkgb2YgdGhlc2UgcHJvamVjdHMgdmlhIHRoZSBkb3RuZXQgbmV3IGNvbW1hbmQgb3IgdmlhIFZpc3VhbCBTdHVkaW8ncyBGaWxlIC0+IE5ldyBQcm9qZWN0IGdlc3R1cmUsIGFuZCBpZiB5b3UgZW5hYmxlZCBmZWRlcmF0ZWQgYXV0aGVudGljYXRpb24gYXQgcHJvamVjdCBjcmVhdGlvbiB0aW1lLCB5b3VyIHByb2plY3QgbWF5IGJlIHZ1bG5lcmFibGUuIFRvIHJlbWVkaWF0ZSB0aGUgdnVsbmVyYWJpbGl0eSwgdXNlIHlvdXIgcGFja2FnZSBtYW5hZ2VyIHRvIHVwZGF0ZSBhbnkgcmVmZXJlbmNlcyB5b3UgbWF5IGhhdmUgdG8gdGhlIE1pY3Jvc29mdC5Bc3BOZXRDb3JlLkF1dGhlbnRpY2F0aW9uLkp3dEJlYXJlciwgTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uT3BlbklkQ29ubmVjdCwgYW5kIE1pY3Jvc29mdC5JZGVudGl0eU1vZGVsLkpzb25XZWJUb2tlbnMgcGFja2FnZXMgdG8gdGhlaXIgcmVzcGVjdGl2ZSBsYXRlc3QgdmVyc2lvbnMuIFxuLSBbTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uSnd0QmVhcmVyXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uSnd0QmVhcmVyLykgXG4tIFtNaWNyb3NvZnQuQXNwTmV0Q29yZS5BdXRoZW50aWNhdGlvbi5PcGVuSWRDb25uZWN0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uT3BlbklkQ29ubmVjdC8pIFxuXG5JZiB5b3VyIHByb2plY3QgZG9lcyBub3QgcmVmZXJlbmNlIGFueSBvZiB0aG9zZSB0aHJlZSBwYWNrYWdlcywgeW91IGFyZSBub3QgZXhwb3NlZCB0byB0aGlzIHZ1bG5lcmFiaWxpdHkuXG5cbiMjIyMgRm9yIG5ldyBwcm9qZWN0czpcblRvIHJlbWVkaWF0ZSB0aGlzIGlzc3VlIHBsZWFzZSB1cGRhdGUgdG8gdGhlIGxhdGVzdCBTREsgbGlzdGVkIGJlbG93LiBTaW1wbHkgaW5zdGFsbGluZyB0aGUgU0RLIHVwZGF0ZSBpcyBub3Qgc3VmZmljaWVudCB0byByZW1lZGlhdGUgcHJvamVjdHMgYWxyZWFkeS1jcmVhdGVkIC8gYWxyZWFkeS1kZXBsb3llZCBwcm9qZWN0cyB3aGljaCBleGlzdGVkIHByaW9yIHRvIHRoaXMgdXBkYXRlIGJlaW5nIHJlbGVhc2VkLlxuXG4qIFRvIGZpeCB0aGUgaXNzdWUgcGxlYXNlIGluc3RhbGwgdGhlIGxhdGVzdCB2ZXJzaW9uIG9mIC5ORVQgNi4wIG9yIC5ORVQgNy4wLiBJZiB5b3UgaGF2ZSBpbnN0YWxsZWQgb25lIG9yIG1vcmUgLk5FVCBTREtzIHRocm91Z2ggVmlzdWFsIFN0dWRpbywgVmlzdWFsIFN0dWRpbyB3aWxsIHByb21wdCB5b3UgdG8gdXBkYXRlIFZpc3VhbCBTdHVkaW8sIHdoaWNoIHdpbGwgYWxzbyB1cGRhdGUgeW91ciAuTkVUICBTREtzLlxuKiBJZiB5b3UgYXJlIHVzaW5nIG9uZSBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMsIHBsZWFzZSB1cGRhdGUgdG8gdGhlIHBhdGNoZWQgdmVyc2lvbiBsaXN0ZWQgYWJvdmUuXG4qIElmIHlvdSBoYXZlIC5ORVQgNi4wIG9yIGdyZWF0ZXIgaW5zdGFsbGVkLCB5b3UgY2FuIGxpc3QgdGhlIHZlcnNpb25zIHlvdSBoYXZlIGluc3RhbGxlZCBieSBydW5uaW5nIHRoZSBgZG90bmV0IC0taW5mb2AgY29tbWFuZC4gWW91IHdpbGwgc2VlIG91dHB1dCBsaWtlIHRoZSBmb2xsb3dpbmc7XG5cbmBgYFxuLk5FVCBDb3JlIFNESyAocmVmbGVjdGluZyBhbnkgZ2xvYmFsLmpzb24pOlxuXG4gVmVyc2lvbjogICA3LjAuMjAwXG4gQ29tbWl0OiAgICA4NDczMTQ2ZTdkXG5cblJ1bnRpbWUgRW52aXJvbm1lbnQ6XG5cbiBPUyBOYW1lOiAgICAgV2luZG93c1xuIE9TIFZlcnNpb246ICAxMC4wLjE4MzYzXG4gT1MgUGxhdGZvcm06IFdpbmRvd3NcbiBSSUQ6ICAgICAgICAgd2luMTAteDY0XG4gQmFzZSBQYXRoOiAgIEM6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka1xcNy4wLjMwMFxcXG5cbkhvc3QgKHVzZWZ1bCBmb3Igc3VwcG9ydCk6XG5cbiAgVmVyc2lvbjogNzYuMC41XG4gIENvbW1pdDogIDg0NzMxNDZlN2RcblxuLk5FVCBDb3JlIFNES3MgaW5zdGFsbGVkOlxuXG4gIDcuMC4yMDAgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka11cblxuLk5FVCBDb3JlIHJ1bnRpbWVzIGluc3RhbGxlZDpcblxuICBNaWNyb3NvZnQuQXNwTmV0Q29yZS5BcHAgNy4wLjUgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LkFzcE5ldENvcmUuQXBwXVxuICBNaWNyb3NvZnQuTkVUQ29yZS5BcHAgNy4wLjUgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0Lk5FVENvcmUuQXBwXVxuICBNaWNyb3NvZnQuV2luZG93c0Rlc2t0b3AuQXBwIDcuMC41IFtDOlxcUHJvZ3JhbSBGaWxlc1xcZG90bmV0XFxzaGFyZWRcXE1pY3Jvc29mdC5XaW5kb3dzRGVza3RvcC5BcHBdXG5cblRvIGluc3RhbGwgYWRkaXRpb25hbCAuTkVUIENvcmUgcnVudGltZXMgb3IgU0RLczpcbiAgaHR0cHM6Ly9ha2EubXMvZG90bmV0LWRvd25sb2FkXG5gYGBcblxuKiBJZiB5b3UncmUgdXNpbmcgLk5FVCA4LjAsIHlvdSBzaG91bGQgZG93bmxvYWQgYW5kIGluc3RhbGwgLk5FVCA4LjAuMTAxIFNESyAoZm9yIFZpc3VhbCBTdHVkaW8gMjAyMiB2MTcuOCkgZnJvbSBodHRwczovL2RvdG5ldC5taWNyb3NvZnQuY29tL2Rvd25sb2FkL2RvdG5ldC1jb3JlLzguMC5cbiogSWYgeW91J3JlIHVzaW5nIC5ORVQgNy4wLCB5b3Ugc2hvdWxkIGRvd25sb2FkIGFuZCBpbnN0YWxsIC5ORVQgU0RLIDcuMC4xMTUgKGZvciBWaXN1YWwgU3R1ZGlvIDIwMjIgdjE3LjQpIGZyb20gaHR0cHM6Ly9kb3RuZXQubWljcm9zb2Z0LmNvbS9kb3dubG9hZC9kb3RuZXQtY29yZS83LjAuXG4qIElmIHlvdSdyZSB1c2luZyAuTkVUIDYuMCwgeW91IHNob3VsZCBkb3dubG9hZCBhbmQgaW5zdGFsbCAuTkVUIFNESyA2LjAuMzIxIChmb3IgVmlzdWFsIFN0dWRpbyAyMDIyIHYxNy4yKSBmcm9tIGh0dHBzOi8vZG90bmV0Lm1pY3Jvc29mdC5jb20vZG93bmxvYWQvZG90bmV0LWNvcmUvNi4wLlxuXG4uTkVUIDYuMCwgLk5FVCA3LjAsIC5ORVQgOC4wIHVwZGF0ZXMgYXJlIGFsc28gYXZhaWxhYmxlIGZyb20gTWljcm9zb2Z0IFVwZGF0ZS4gVG8gYWNjZXNzIHRoaXMgZWl0aGVyIHR5cGUgXCJDaGVjayBmb3IgdXBkYXRlc1wiIGluIHlvdXIgV2luZG93cyBzZWFyY2gsIG9yIG9wZW4gU2V0dGluZ3MsIGNob29zZSBVcGRhdGUgJiBTZWN1cml0eSBhbmQgdGhlbiBjbGljayBDaGVjayBmb3IgVXBkYXRlcy5cblxuT25jZSB5b3UgaGF2ZSBpbnN0YWxsZWQgdGhlIHVwZGF0ZWQgcnVudGltZSBvciBTREssIHJlc3RhcnQgeW91ciBhcHBzIGZvciB0aGUgdXBkYXRlIHRvIHRha2UgZWZmZWN0LlxuXG5BZGRpdGlvbmFsbHksIGlmIHlvdSd2ZSBkZXBsb3llZCBbc2VsZi1jb250YWluZWQgYXBwbGljYXRpb25zXShodHRwczovL2RvY3MubWljcm9zb2Z0LmNvbS9kb3RuZXQvY29yZS9kZXBsb3lpbmcvI3NlbGYtY29udGFpbmVkLWRlcGxveW1lbnRzLXNjZCkgdGFyZ2V0aW5nIGFueSBvZiB0aGUgaW1wYWN0ZWQgdmVyc2lvbnMsIHRoZXNlIGFwcGxpY2F0aW9ucyBhcmUgYWxzbyB2dWxuZXJhYmxlIGFuZCBtdXN0IGJlIHJlY29tcGlsZWQgYW5kIHJlZGVwbG95ZWQuXG5cbiMjIE90aGVyIEluZm9ybWF0aW9uXG5cbiMjIyBSZXBvcnRpbmcgU2VjdXJpdHkgSXNzdWVzXG5cbklmIHlvdSBoYXZlIGZvdW5kIGEgcG90ZW50aWFsIHNlY3VyaXR5IGlzc3VlIGluIC5ORVQgOC4wIG9yIC5ORVQgNy4wIG9yIC5ORVQgNi4wLCBwbGVhc2UgZW1haWwgZGV0YWlscyB0byBzZWN1cmVAbWljcm9zb2Z0LmNvbS4gUmVwb3J0cyBtYXkgcXVhbGlmeSBmb3IgdGhlIE1pY3Jvc29mdCAuTkVUIENvcmUgJiAuTkVUIDUgQm91bnR5LiBEZXRhaWxzIG9mIHRoZSBNaWNyb3NvZnQgLk5FVCBCb3VudHkgUHJvZ3JhbSBpbmNsdWRpbmcgdGVybXMgYW5kIGNvbmRpdGlvbnMgYXJlIGF0IDxodHRwczovL2FrYS5tcy9jb3JlYm91bnR5Pi5cblxuIyMjIFN1cHBvcnRcblxuWW91IGNhbiBhc2sgcXVlc3Rpb25zIGFib3V0IHRoaXMgaXNzdWUgb24gR2l0SHViIGluIHRoZSAuTkVUIEdpdEh1YiBvcmdhbml6YXRpb24uIFRoZSBtYWluIHJlcG9zIGFyZSBsb2NhdGVkIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvcnVudGltZSBhbmQgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hc3BuZXQvLiBUaGUgQW5ub3VuY2VtZW50cyByZXBvIChodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L0Fubm91bmNlbWVudHMpIHdpbGwgY29udGFpbiB0aGlzIGJ1bGxldGluIGFzIGFuIGlzc3VlIGFuZCB3aWxsIGluY2x1ZGUgYSBsaW5rIHRvIGEgZGlzY3Vzc2lvbiBpc3N1ZS4gWW91IGNhbiBhc2sgcXVlc3Rpb25zIGluIHRoZSBsaW5rZWQgZGlzY3Vzc2lvbiBpc3N1ZS5cblxuIyMjIERpc2NsYWltZXJcblxuVGhlIGluZm9ybWF0aW9uIHByb3ZpZGVkIGluIHRoaXMgYWR2aXNvcnkgaXMgcHJvdmlkZWQgXCJhcyBpc1wiIHdpdGhvdXQgd2FycmFudHkgb2YgYW55IGtpbmQuIE1pY3Jvc29mdCBkaXNjbGFpbXMgYWxsIHdhcnJhbnRpZXMsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQsIGluY2x1ZGluZyB0aGUgd2FycmFudGllcyBvZiBtZXJjaGFudGFiaWxpdHkgYW5kIGZpdG5lc3MgZm9yIGEgcGFydGljdWxhciBwdXJwb3NlLiBJbiBubyBldmVudCBzaGFsbCBNaWNyb3NvZnQgQ29ycG9yYXRpb24gb3IgaXRzIHN1cHBsaWVycyBiZSBsaWFibGUgZm9yIGFueSBkYW1hZ2VzIHdoYXRzb2V2ZXIgaW5jbHVkaW5nIGRpcmVjdCwgaW5kaXJlY3QsIGluY2lkZW50YWwsIGNvbnNlcXVlbnRpYWwsIGxvc3Mgb2YgYnVzaW5lc3MgcHJvZml0cyBvciBzcGVjaWFsIGRhbWFnZXMsIGV2ZW4gaWYgTWljcm9zb2Z0IENvcnBvcmF0aW9uIG9yIGl0cyBzdXBwbGllcnMgaGF2ZSBiZWVuIGFkdmlzZWQgb2YgdGhlIHBvc3NpYmlsaXR5IG9mIHN1Y2ggZGFtYWdlcy4gU29tZSBzdGF0ZXMgZG8gbm90IGFsbG93IHRoZSBleGNsdXNpb24gb3IgbGltaXRhdGlvbiBvZiBsaWFiaWxpdHkgZm9yIGNvbnNlcXVlbnRpYWwgb3IgaW5jaWRlbnRhbCBkYW1hZ2VzIHNvIHRoZSBmb3JlZ29pbmcgbGltaXRhdGlvbiBtYXkgbm90IGFwcGx5LlxuXG4jIyMgQWNrbm93bGVkZ2VtZW50XG5cbk1vcmdhbiBCcm93biwgTWljcm9zb2Z0IENvcnAuXG5cbiMjIyBFeHRlcm5hbCBMaW5rc1xuXG5bQ1ZFLTIwMjQtMjEzMTldKCBodHRwczovL3d3dy5jdmUub3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNC0yMTMxOSkiLCJyZWZlcmVuY2VzIjpbImh0dHBzOi8vZ2l0aHViLmNvbS9BenVyZUFEL2F6dXJlLWFjdGl2ZWRpcmVjdG9yeS1pZGVudGl0eW1vZGVsLWV4dGVuc2lvbnMtZm9yLWRvdG5ldC9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtOGc5Yy0yOGZjLW1jeDIiLCJodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L2FzcG5ldGNvcmUvc2VjdXJpdHkvYWR2aXNvcmllcy9HSFNBLTU5ajctZ2hyZy1majUyIiwiaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hbm5vdW5jZW1lbnRzL2lzc3Vlcy8yOTAiLCJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLTU5ajctZ2hyZy1majUyIl0sImN2c3MiOnsic2NvcmUiOjYuOCwidmVjdG9yU3RyaW5nIjoiQ1ZTUzozLjEvQVY6Ti9BQzpML1BSOkgvVUk6Ti9TOkMvQzpOL0k6Ti9BOkgifSwiY3dlcyI6W3siaWQiOiJDV0UtNDAwIiwibmFtZSI6IlVuY29udHJvbGxlZCBSZXNvdXJjZSBDb25zdW1wdGlvbiIsImRlc2NyaXB0aW9uIjoiVGhlIHByb2R1Y3QgZG9lcyBub3QgcHJvcGVybHkgY29udHJvbCB0aGUgYWxsb2NhdGlvbiBhbmQgbWFpbnRlbmFuY2Ugb2YgYSBsaW1pdGVkIHJlc291cmNlLCB0aGVyZWJ5IGVuYWJsaW5nIGFuIGFjdG9yIHRvIGluZmx1ZW5jZSB0aGUgYW1vdW50IG9mIHJlc291cmNlcyBjb25zdW1lZCwgZXZlbnR1YWxseSBsZWFkaW5nIHRvIHRoZSBleGhhdXN0aW9uIG9mIGF2YWlsYWJsZSByZXNvdXJjZXMuIn1dLCJlcHNzIjp7InBlcmNlbnRhZ2UiOjAuMDAwNzUsInBlcmNlbnRpbGUiOjAuMzM1MDl9LCJwdWJsaXNoZWRBdCI6IjIwMjQtMDEtMDlUMTk6MzU6MDJaIiwidXBkYXRlZEF0IjoiMjAyNC0wNC0xMVQyMDo0Mjo1NFoiLCJ3aXRoZHJhd25BdCI6bnVsbCwicGVybWFsaW5rIjoiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS01OWo3LWdocmctZmo1MiJ9LCJ2dWxuZXJhYmxlVmVyc2lvblJhbmdlIjoiPj0gNi41LjAsIDwgNi4zNC4wIiwiZmlyc3RQYXRjaGVkVmVyc2lvbiI6IjYuMzQuMCJ9",
+          "comment": "GHSA security vulnerability details for GHSA-59j7-ghrg-fj52 encoded as Base64 JSON text"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.AspNetCore.DataProtection",
+      "SPDXID": "SPDXRef-Package-82E53CB6E13DAFD4B3415C0A13A2D17F1D9E123BB5AFB69B354C1ED6D3F624A6",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.3",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.AspNetCore.DataProtection@7.0.3"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Authentication.JwtBearer",
+      "SPDXID": "SPDXRef-Package-316913AF490B11846FE579DC73595D9C1AD29D35201CD6BC392F45BC8BB28F81",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.AspNetCore.Authentication.JwtBearer@7.0.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Memory",
+      "SPDXID": "SPDXRef-Package-4B89AC572DA59759172618501355EE6F17B0092DCD59E3D03269153974D53D26",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "4.5.3",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Memory@4.5.3"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Client.Extensions.Msal",
+      "SPDXID": "SPDXRef-Package-32F9EA119543F242208EF411AF5466648D8BC5C3A76BCFA68957C31FFEC42C80",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.16.5",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Client.Extensions.Msal@2.16.5"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Security.Cryptography.Xml",
+      "SPDXID": "SPDXRef-Package-3AC0672AB1E7524C854606780C895A74D77D40696C93079EA14620045DA0C016",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Security.Cryptography.Xml@7.0.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "SPDXID": "SPDXRef-Package-D595C7CA243D238A94C6D0F9277EB98AE42EDA370259D4615A58E5BE78BAD562",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "8.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Text.Encodings.Web@8.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Azure.Identity",
+      "SPDXID": "SPDXRef-Package-468D62235D09F167D09C5EE759802A9C4A540D3B5AB2DAFD533C3E94309A7352",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.3.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Azure.Identity@1.3.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-m5vv-6r4h-3vj9",
+          "comment": "[MODERATE] Azure Identity Libraries and Microsoft Authentication Library Elevation of Privilege Vulnerability; Affects Azure.Identity v1.3.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvQXp1cmUuSWRlbnRpdHlAMS4zLjAiLCJuYW1lIjoiQXp1cmUuSWRlbnRpdHkiLCJ2ZXJzaW9uIjoiMS4zLjAifSwiYWR2aXNvcnkiOnsiaWRlbnRpZmllcnMiOlt7InR5cGUiOiJHSFNBIiwidmFsdWUiOiJHSFNBLW01dnYtNnI0aC0zdmo5In0seyJ0eXBlIjoiQ1ZFIiwidmFsdWUiOiJDVkUtMjAyNC0zNTI1NSJ9XSwic2V2ZXJpdHkiOiJNT0RFUkFURSIsInN1bW1hcnkiOiJBenVyZSBJZGVudGl0eSBMaWJyYXJpZXMgYW5kIE1pY3Jvc29mdCBBdXRoZW50aWNhdGlvbiBMaWJyYXJ5IEVsZXZhdGlvbiBvZiBQcml2aWxlZ2UgVnVsbmVyYWJpbGl0eSIsImRlc2NyaXB0aW9uIjoiQXp1cmUgSWRlbnRpdHkgTGlicmFyaWVzIGFuZCBNaWNyb3NvZnQgQXV0aGVudGljYXRpb24gTGlicmFyeSBFbGV2YXRpb24gb2YgUHJpdmlsZWdlIFZ1bG5lcmFiaWxpdHkuIiwicmVmZXJlbmNlcyI6WyJodHRwczovL252ZC5uaXN0Lmdvdi92dWxuL2RldGFpbC9DVkUtMjAyNC0zNTI1NSIsImh0dHBzOi8vbXNyYy5taWNyb3NvZnQuY29tL3VwZGF0ZS1ndWlkZS92dWxuZXJhYmlsaXR5L0NWRS0yMDI0LTM1MjU1IiwiaHR0cHM6Ly9naXRodWIuY29tL0F6dXJlL2F6dXJlLXNkay1mb3ItZ28vY29tbWl0LzUwNzc0Y2Q5NzA5OTA1NTIzMTM2ZmIwNWU4Yzg1YTUwZTg5ODQ0OTkiLCJodHRwczovL2dpdGh1Yi5jb20vQXp1cmUvYXp1cmUtc2RrLWZvci1qcy9jb21taXQvYzZhYTc1ZDMxMmFlNDYzZTc0NDE2M2NlZGZkOGZjNDgwY2M4ZDQ5MiIsImh0dHBzOi8vZ2l0aHViLmNvbS9BenVyZS9henVyZS1zZGstZm9yLXB5dGhvbi9jb21taXQvY2IwNjVhY2Q3ZDBmOTU3MzI3ZGM0ZjAyZDE2NDZkNGU1MWE5NDE3OCIsImh0dHBzOi8vZ2l0aHViLmNvbS9BenVyZS9henVyZS1zZGstZm9yLWphdmEvY29tbWl0LzViZjAyMGQ2ZWEwNTZkZTQwZTI3MzhlMzY0N2E0ZTA2ZjkwMmMxOGQiLCJodHRwczovL2dpdGh1Yi5jb20vQXp1cmUvYXp1cmUtc2RrLWZvci1uZXQvY29tbWl0LzkyNzlhNGYzOGJmNjliNDU3Y2ZiOWIzNTRmMjEwZTBhNTQwYTVjNTMiLCJodHRwczovL2dpdGh1Yi5jb20vQXp1cmVBRC9taWNyb3NvZnQtYXV0aGVudGljYXRpb24tbGlicmFyeS1mb3ItZG90bmV0L2lzc3Vlcy80ODA2I2lzc3VlY29tbWVudC0yMTc4OTYwMzQwIiwiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS1tNXZ2LTZyNGgtM3ZqOSJdLCJjdnNzIjp7InNjb3JlIjo1LjUsInZlY3RvclN0cmluZyI6IkNWU1M6My4xL0FWOkwvQUM6TC9QUjpML1VJOk4vUzpVL0M6SC9JOk4vQTpOIn0sImN3ZXMiOlt7ImlkIjoiQ1dFLTM2MiIsIm5hbWUiOiJDb25jdXJyZW50IEV4ZWN1dGlvbiB1c2luZyBTaGFyZWQgUmVzb3VyY2Ugd2l0aCBJbXByb3BlciBTeW5jaHJvbml6YXRpb24gKCdSYWNlIENvbmRpdGlvbicpIiwiZGVzY3JpcHRpb24iOiJUaGUgcHJvZHVjdCBjb250YWlucyBhIGNvZGUgc2VxdWVuY2UgdGhhdCBjYW4gcnVuIGNvbmN1cnJlbnRseSB3aXRoIG90aGVyIGNvZGUsIGFuZCB0aGUgY29kZSBzZXF1ZW5jZSByZXF1aXJlcyB0ZW1wb3JhcnksIGV4Y2x1c2l2ZSBhY2Nlc3MgdG8gYSBzaGFyZWQgcmVzb3VyY2UsIGJ1dCBhIHRpbWluZyB3aW5kb3cgZXhpc3RzIGluIHdoaWNoIHRoZSBzaGFyZWQgcmVzb3VyY2UgY2FuIGJlIG1vZGlmaWVkIGJ5IGFub3RoZXIgY29kZSBzZXF1ZW5jZSB0aGF0IGlzIG9wZXJhdGluZyBjb25jdXJyZW50bHkuIn1dLCJlcHNzIjp7InBlcmNlbnRhZ2UiOjAuMDAwNDMsInBlcmNlbnRpbGUiOjAuMTA1MzZ9LCJwdWJsaXNoZWRBdCI6IjIwMjQtMDYtMTFUMTg6MzA6NTBaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0wN1QwNTowMTo0MFoiLCJ3aXRoZHJhd25BdCI6bnVsbCwicGVybWFsaW5rIjoiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS1tNXZ2LTZyNGgtM3ZqOSJ9LCJ2dWxuZXJhYmxlVmVyc2lvblJhbmdlIjoiPCAxLjExLjQiLCJmaXJzdFBhdGNoZWRWZXJzaW9uIjoiMS4xMS40In0=",
+          "comment": "GHSA security vulnerability details for GHSA-m5vv-6r4h-3vj9 encoded as Base64 JSON text"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-wvxc-855f-jvrv",
+          "comment": "[MODERATE] Azure Identity Library for .NET Information Disclosure Vulnerability; Affects Azure.Identity v1.3.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvQXp1cmUuSWRlbnRpdHlAMS4zLjAiLCJuYW1lIjoiQXp1cmUuSWRlbnRpdHkiLCJ2ZXJzaW9uIjoiMS4zLjAifSwiYWR2aXNvcnkiOnsiaWRlbnRpZmllcnMiOlt7InR5cGUiOiJHSFNBIiwidmFsdWUiOiJHSFNBLXd2eGMtODU1Zi1qdnJ2In0seyJ0eXBlIjoiQ1ZFIiwidmFsdWUiOiJDVkUtMjAyNC0yOTk5MiJ9XSwic2V2ZXJpdHkiOiJNT0RFUkFURSIsInN1bW1hcnkiOiJBenVyZSBJZGVudGl0eSBMaWJyYXJ5IGZvciAuTkVUIEluZm9ybWF0aW9uIERpc2Nsb3N1cmUgVnVsbmVyYWJpbGl0eSIsImRlc2NyaXB0aW9uIjoiQXp1cmUgSWRlbnRpdHkgTGlicmFyeSBmb3IgLk5FVCBJbmZvcm1hdGlvbiBEaXNjbG9zdXJlIFZ1bG5lcmFiaWxpdHkiLCJyZWZlcmVuY2VzIjpbImh0dHBzOi8vbnZkLm5pc3QuZ292L3Z1bG4vZGV0YWlsL0NWRS0yMDI0LTI5OTkyIiwiaHR0cHM6Ly9tc3JjLm1pY3Jvc29mdC5jb20vdXBkYXRlLWd1aWRlL3Z1bG5lcmFiaWxpdHkvQ1ZFLTIwMjQtMjk5OTIiLCJodHRwczovL2dpdGh1Yi5jb20vQXp1cmUvYXp1cmUtc2RrLWZvci1uZXQvYmxvYi9tYWluL3Nkay9pZGVudGl0eS9BenVyZS5JZGVudGl0eS9DSEFOR0VMT0cubWQjMTExMC0yMDI0LTA0LTA5IiwiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS13dnhjLTg1NWYtanZydiJdLCJjdnNzIjp7InNjb3JlIjo1LjUsInZlY3RvclN0cmluZyI6IkNWU1M6My4xL0FWOkwvQUM6TC9QUjpML1VJOk4vUzpVL0M6SC9JOk4vQTpOIn0sImN3ZXMiOlt7ImlkIjoiQ1dFLTUyMiIsIm5hbWUiOiJJbnN1ZmZpY2llbnRseSBQcm90ZWN0ZWQgQ3JlZGVudGlhbHMiLCJkZXNjcmlwdGlvbiI6IlRoZSBwcm9kdWN0IHRyYW5zbWl0cyBvciBzdG9yZXMgYXV0aGVudGljYXRpb24gY3JlZGVudGlhbHMsIGJ1dCBpdCB1c2VzIGFuIGluc2VjdXJlIG1ldGhvZCB0aGF0IGlzIHN1c2NlcHRpYmxlIHRvIHVuYXV0aG9yaXplZCBpbnRlcmNlcHRpb24gYW5kL29yIHJldHJpZXZhbC4ifV0sImVwc3MiOnsicGVyY2VudGFnZSI6MC4wMDA0MywicGVyY2VudGlsZSI6MC4wOTYxMX0sInB1Ymxpc2hlZEF0IjoiMjAyNC0wNC0wOVQxODozMDoyOFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTA0LTExVDE5OjU1OjI4WiIsIndpdGhkcmF3bkF0IjpudWxsLCJwZXJtYWxpbmsiOiJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLXd2eGMtODU1Zi1qdnJ2In0sInZ1bG5lcmFibGVWZXJzaW9uUmFuZ2UiOiI8IDEuMTEuMCIsImZpcnN0UGF0Y2hlZFZlcnNpb24iOiIxLjExLjAifQ==",
+          "comment": "GHSA security vulnerability details for GHSA-wvxc-855f-jvrv encoded as Base64 JSON text"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-5mfx-4wcx-rv27",
+          "comment": "[HIGH] Azure Identity SDK Remote Code Execution Vulnerability; Affects Azure.Identity v1.3.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvQXp1cmUuSWRlbnRpdHlAMS4zLjAiLCJuYW1lIjoiQXp1cmUuSWRlbnRpdHkiLCJ2ZXJzaW9uIjoiMS4zLjAifSwiYWR2aXNvcnkiOnsiaWRlbnRpZmllcnMiOlt7InR5cGUiOiJHSFNBIiwidmFsdWUiOiJHSFNBLTVtZngtNHdjeC1ydjI3In0seyJ0eXBlIjoiQ1ZFIiwidmFsdWUiOiJDVkUtMjAyMy0zNjQxNCJ9XSwic2V2ZXJpdHkiOiJISUdIIiwic3VtbWFyeSI6IkF6dXJlIElkZW50aXR5IFNESyBSZW1vdGUgQ29kZSBFeGVjdXRpb24gVnVsbmVyYWJpbGl0eSIsImRlc2NyaXB0aW9uIjoiQXp1cmUgSWRlbnRpdHkgU0RLIGlzIHZ1bG5lcmFibGUgdG8gcmVtb3RlIGNvZGUgZXhlY3V0aW9uLiIsInJlZmVyZW5jZXMiOlsiaHR0cHM6Ly9udmQubmlzdC5nb3YvdnVsbi9kZXRhaWwvQ1ZFLTIwMjMtMzY0MTQiLCJodHRwczovL21zcmMubWljcm9zb2Z0LmNvbS91cGRhdGUtZ3VpZGUvdnVsbmVyYWJpbGl0eS9DVkUtMjAyMy0zNjQxNCIsImh0dHBzOi8vZ2l0aHViLmNvbS9BenVyZS9henVyZS1zZGstZm9yLW5ldC9ibG9iL21haW4vc2RrL2lkZW50aXR5L0F6dXJlLklkZW50aXR5L0NIQU5HRUxPRy5tZCMxMTAyLTIwMjMtMTAtMTAiLCJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLTVtZngtNHdjeC1ydjI3Il0sImN2c3MiOnsic2NvcmUiOjguOCwidmVjdG9yU3RyaW5nIjoiQ1ZTUzozLjEvQVY6Ti9BQzpML1BSOkwvVUk6Ti9TOlUvQzpIL0k6SC9BOkgifSwiY3dlcyI6W3siaWQiOiJDV0UtNzciLCJuYW1lIjoiSW1wcm9wZXIgTmV1dHJhbGl6YXRpb24gb2YgU3BlY2lhbCBFbGVtZW50cyB1c2VkIGluIGEgQ29tbWFuZCAoJ0NvbW1hbmQgSW5qZWN0aW9uJykiLCJkZXNjcmlwdGlvbiI6IlRoZSBwcm9kdWN0IGNvbnN0cnVjdHMgYWxsIG9yIHBhcnQgb2YgYSBjb21tYW5kIHVzaW5nIGV4dGVybmFsbHktaW5mbHVlbmNlZCBpbnB1dCBmcm9tIGFuIHVwc3RyZWFtIGNvbXBvbmVudCwgYnV0IGl0IGRvZXMgbm90IG5ldXRyYWxpemUgb3IgaW5jb3JyZWN0bHkgbmV1dHJhbGl6ZXMgc3BlY2lhbCBlbGVtZW50cyB0aGF0IGNvdWxkIG1vZGlmeSB0aGUgaW50ZW5kZWQgY29tbWFuZCB3aGVuIGl0IGlzIHNlbnQgdG8gYSBkb3duc3RyZWFtIGNvbXBvbmVudC4ifV0sImVwc3MiOnsicGVyY2VudGFnZSI6MC4wMDc2MiwicGVyY2VudGlsZSI6MC44MTY0NX0sInB1Ymxpc2hlZEF0IjoiMjAyMy0xMC0xMFQxODozMTozM1oiLCJ1cGRhdGVkQXQiOiIyMDI0LTA2LTAzVDE4OjMxOjM1WiIsIndpdGhkcmF3bkF0IjpudWxsLCJwZXJtYWxpbmsiOiJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLTVtZngtNHdjeC1ydjI3In0sInZ1bG5lcmFibGVWZXJzaW9uUmFuZ2UiOiI8IDEuMTAuMiIsImZpcnN0UGF0Y2hlZFZlcnNpb24iOiIxLjEwLjIifQ==",
+          "comment": "GHSA security vulnerability details for GHSA-5mfx-4wcx-rv27 encoded as Base64 JSON text"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Identity.Web.UI",
+      "SPDXID": "SPDXRef-Package-94C1FD799A1321A0B1376230E28CADA8ABF55A3CDF22483B29DEA68FC393E943",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "2.5.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Identity.Web.UI@2.5.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.IdentityModel.Tokens.Jwt",
+      "SPDXID": "SPDXRef-Package-60EDB19C61312565153A643D2A1C43EC7C062F73E9942656AD82A644C288D6E3",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "6.25.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.IdentityModel.Tokens.Jwt@6.25.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-59j7-ghrg-fj52",
+          "comment": "[MODERATE] Microsoft ASP.NET Core project templates vulnerable to denial of service; Affects System.IdentityModel.Tokens.Jwt v6.25.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvU3lzdGVtLklkZW50aXR5TW9kZWwuVG9rZW5zLkp3dEA2LjI1LjEiLCJuYW1lIjoiU3lzdGVtLklkZW50aXR5TW9kZWwuVG9rZW5zLkp3dCIsInZlcnNpb24iOiI2LjI1LjEifSwiYWR2aXNvcnkiOnsiaWRlbnRpZmllcnMiOlt7InR5cGUiOiJHSFNBIiwidmFsdWUiOiJHSFNBLTU5ajctZ2hyZy1majUyIn0seyJ0eXBlIjoiQ1ZFIiwidmFsdWUiOiJDVkUtMjAyNC0yMTMxOSJ9XSwic2V2ZXJpdHkiOiJNT0RFUkFURSIsInN1bW1hcnkiOiJNaWNyb3NvZnQgQVNQLk5FVCBDb3JlIHByb2plY3QgdGVtcGxhdGVzIHZ1bG5lcmFibGUgdG8gZGVuaWFsIG9mIHNlcnZpY2UiLCJkZXNjcmlwdGlvbiI6IiMgTWljcm9zb2Z0IFNlY3VyaXR5IEFkdmlzb3J5IENWRS0yMDI0LTIxMzE5OiAuTkVUIERlbmlhbCBvZiBTZXJ2aWNlIFZ1bG5lcmFiaWxpdHlcblxuIyMgRXhlY3V0aXZlIHN1bW1hcnlcblxuTWljcm9zb2Z0IGlzIHJlbGVhc2luZyB0aGlzIHNlY3VyaXR5IGFkdmlzb3J5IHRvIHByb3ZpZGUgaW5mb3JtYXRpb24gYWJvdXQgYSB2dWxuZXJhYmlsaXR5IGluIHRoZSBBU1AuTkVUIENvcmUgcHJvamVjdCB0ZW1wbGF0ZXMuIFRoaXMgYWR2aXNvcnkgYWxzbyBwcm92aWRlcyBndWlkYW5jZSBvbiB3aGF0IGRldmVsb3BlcnMgY2FuIGRvIHRvIHVwZGF0ZSB0aGVpciBhcHBsaWNhdGlvbnMgdG8gYWRkcmVzcyB0aGlzIHZ1bG5lcmFiaWxpdHkuXG5cbkEgRGVuaWFsIG9mIFNlcnZpY2UgdnVsbmVyYWJpbGl0eSBleGlzdHMgaW4gQVNQLk5FVCBDb3JlIHByb2plY3QgdGVtcGxhdGVzIHdoaWNoIHV0aWxpemUgSldULWJhc2VkIGF1dGhlbnRpY2F0aW9uIHRva2Vucy4gVGhpcyB2dWxuZXJhYmlsaXR5IGFsbG93cyBhbiB1bmF1dGhlbnRpY2F0ZWQgY2xpZW50IHRvIGNvbnN1bWUgYXJiaXRyYXJpbHkgbGFyZ2UgYW1vdW50cyBvZiBzZXJ2ZXIgbWVtb3J5LCBwb3RlbnRpYWxseSB0cmlnZ2VyaW5nIGFuIG91dC1vZi1tZW1vcnkgY29uZGl0aW9uIG9uIHRoZSBzZXJ2ZXIgYW5kIG1ha2luZyB0aGUgc2VydmVyIG5vIGxvbmdlciBhYmxlIHRvIHJlc3BvbmQgdG8gbGVnaXRpbWF0ZSByZXF1ZXN0cy4gXG5cbiMjIEFubm91bmNlbWVudFxuXG5Bbm5vdW5jZW1lbnQgZm9yIHRoaXMgaXNzdWUgY2FuIGJlIGZvdW5kIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvYW5ub3VuY2VtZW50cy9pc3N1ZXMvMjkwXG5cbiMjIyBNaXRpZ2F0aW9uIGZhY3RvcnNcblxuVGhpcyBpbXBhY3RzIG9ubHkgLk5FVCBDb3JlLWJhc2VkIHByb2plY3RzIHRoYXQgd2VyZSBjcmVhdGVkIHVzaW5nIGFueSB2ZXJzaW9uIG9mIHByb2plY3QgdGVtcGxhdGVzIGxpc3RlZCBpbiBbYWZmZWN0ZWQgc29mdHdhcmVdKCNhZmZlY3RlZC1zb2Z0d2FyZSkuIFxuT3RoZXIgcHJvamVjdCB0ZW1wbGF0ZXMgZS5nLiwgY29uc29sZSBhcHBsaWNhdGlvbnMsIE1BVUkgYXBwbGljYXRpb25zLCBXaW5kb3dzIEZvcm1zIG9yIFdQRiBhcHBsaWNhdGlvbnMsIGFyZSBub3QgYWZmZWN0ZWQuXG5cbiMjIEFmZmVjdGVkIHNvZnR3YXJlXG5cblRoaXMgaW1wYWN0cyBvbmx5IC5ORVQgQ29yZS1iYXNlZCBwcm9qZWN0cyB0aGF0IHdlcmUgY3JlYXRlZCB1c2luZyBhbnkgdmVyc2lvbiBvZiB0aGUgYmVsb3cgcHJvamVjdCB0ZW1wbGF0ZXMuXG5cbi1cdEFTUC5ORVQgQ29yZSBXZWIgQXBwIChNb2RlbC1WaWV3LUNvbnRyb2xsZXIpXG4tXHRBU1AuTkVUIENvcmUgV2ViIEFQSVxuLVx0QVNQLk5FVCBDb3JlIFdlYiBBcHAgKFJhem9yIFBhZ2VzKVxuLVx0Qmxhem9yIFNlcnZlciBBcHBcbi1cdEJsYXpvciBXZWJBc3NlbWJseSBBcHBcblxuIyMgQWR2aXNvcnkgRkFRXG5cbiMjIyBIb3cgZG8gSSBrbm93IGlmIEkgYW0gYWZmZWN0ZWQ/XG5cbklmIHlvdSBhcmUgeW91IHVzaW5nIHByb2plY3QgdGVtcGxhdGVzIGxpc3RlZCBpbiBbYWZmZWN0ZWQgc29mdHdhcmVdKCNhZmZlY3RlZC1zb2Z0d2FyZSksIHlvdSBtYXkgYmUgZXhwb3NlZCB0byB0aGUgdnVsbmVyYWJpbGl0eS5cblxuIyMjIEhvdyBkbyBJIGZpeCB0aGUgaXNzdWU/XG5cbiMjIyMgRm9yIGV4aXN0aW5nIHByb2plY3RzOlxuSWYgeW91IGV2ZXIgY3JlYXRlZCBhbnkgb2YgdGhlc2UgcHJvamVjdHMgdmlhIHRoZSBkb3RuZXQgbmV3IGNvbW1hbmQgb3IgdmlhIFZpc3VhbCBTdHVkaW8ncyBGaWxlIC0+IE5ldyBQcm9qZWN0IGdlc3R1cmUsIGFuZCBpZiB5b3UgZW5hYmxlZCBmZWRlcmF0ZWQgYXV0aGVudGljYXRpb24gYXQgcHJvamVjdCBjcmVhdGlvbiB0aW1lLCB5b3VyIHByb2plY3QgbWF5IGJlIHZ1bG5lcmFibGUuIFRvIHJlbWVkaWF0ZSB0aGUgdnVsbmVyYWJpbGl0eSwgdXNlIHlvdXIgcGFja2FnZSBtYW5hZ2VyIHRvIHVwZGF0ZSBhbnkgcmVmZXJlbmNlcyB5b3UgbWF5IGhhdmUgdG8gdGhlIE1pY3Jvc29mdC5Bc3BOZXRDb3JlLkF1dGhlbnRpY2F0aW9uLkp3dEJlYXJlciwgTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uT3BlbklkQ29ubmVjdCwgYW5kIE1pY3Jvc29mdC5JZGVudGl0eU1vZGVsLkpzb25XZWJUb2tlbnMgcGFja2FnZXMgdG8gdGhlaXIgcmVzcGVjdGl2ZSBsYXRlc3QgdmVyc2lvbnMuIFxuLSBbTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uSnd0QmVhcmVyXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uSnd0QmVhcmVyLykgXG4tIFtNaWNyb3NvZnQuQXNwTmV0Q29yZS5BdXRoZW50aWNhdGlvbi5PcGVuSWRDb25uZWN0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0LkFzcE5ldENvcmUuQXV0aGVudGljYXRpb24uT3BlbklkQ29ubmVjdC8pIFxuXG5JZiB5b3VyIHByb2plY3QgZG9lcyBub3QgcmVmZXJlbmNlIGFueSBvZiB0aG9zZSB0aHJlZSBwYWNrYWdlcywgeW91IGFyZSBub3QgZXhwb3NlZCB0byB0aGlzIHZ1bG5lcmFiaWxpdHkuXG5cbiMjIyMgRm9yIG5ldyBwcm9qZWN0czpcblRvIHJlbWVkaWF0ZSB0aGlzIGlzc3VlIHBsZWFzZSB1cGRhdGUgdG8gdGhlIGxhdGVzdCBTREsgbGlzdGVkIGJlbG93LiBTaW1wbHkgaW5zdGFsbGluZyB0aGUgU0RLIHVwZGF0ZSBpcyBub3Qgc3VmZmljaWVudCB0byByZW1lZGlhdGUgcHJvamVjdHMgYWxyZWFkeS1jcmVhdGVkIC8gYWxyZWFkeS1kZXBsb3llZCBwcm9qZWN0cyB3aGljaCBleGlzdGVkIHByaW9yIHRvIHRoaXMgdXBkYXRlIGJlaW5nIHJlbGVhc2VkLlxuXG4qIFRvIGZpeCB0aGUgaXNzdWUgcGxlYXNlIGluc3RhbGwgdGhlIGxhdGVzdCB2ZXJzaW9uIG9mIC5ORVQgNi4wIG9yIC5ORVQgNy4wLiBJZiB5b3UgaGF2ZSBpbnN0YWxsZWQgb25lIG9yIG1vcmUgLk5FVCBTREtzIHRocm91Z2ggVmlzdWFsIFN0dWRpbywgVmlzdWFsIFN0dWRpbyB3aWxsIHByb21wdCB5b3UgdG8gdXBkYXRlIFZpc3VhbCBTdHVkaW8sIHdoaWNoIHdpbGwgYWxzbyB1cGRhdGUgeW91ciAuTkVUICBTREtzLlxuKiBJZiB5b3UgYXJlIHVzaW5nIG9uZSBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMsIHBsZWFzZSB1cGRhdGUgdG8gdGhlIHBhdGNoZWQgdmVyc2lvbiBsaXN0ZWQgYWJvdmUuXG4qIElmIHlvdSBoYXZlIC5ORVQgNi4wIG9yIGdyZWF0ZXIgaW5zdGFsbGVkLCB5b3UgY2FuIGxpc3QgdGhlIHZlcnNpb25zIHlvdSBoYXZlIGluc3RhbGxlZCBieSBydW5uaW5nIHRoZSBgZG90bmV0IC0taW5mb2AgY29tbWFuZC4gWW91IHdpbGwgc2VlIG91dHB1dCBsaWtlIHRoZSBmb2xsb3dpbmc7XG5cbmBgYFxuLk5FVCBDb3JlIFNESyAocmVmbGVjdGluZyBhbnkgZ2xvYmFsLmpzb24pOlxuXG4gVmVyc2lvbjogICA3LjAuMjAwXG4gQ29tbWl0OiAgICA4NDczMTQ2ZTdkXG5cblJ1bnRpbWUgRW52aXJvbm1lbnQ6XG5cbiBPUyBOYW1lOiAgICAgV2luZG93c1xuIE9TIFZlcnNpb246ICAxMC4wLjE4MzYzXG4gT1MgUGxhdGZvcm06IFdpbmRvd3NcbiBSSUQ6ICAgICAgICAgd2luMTAteDY0XG4gQmFzZSBQYXRoOiAgIEM6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka1xcNy4wLjMwMFxcXG5cbkhvc3QgKHVzZWZ1bCBmb3Igc3VwcG9ydCk6XG5cbiAgVmVyc2lvbjogNzYuMC41XG4gIENvbW1pdDogIDg0NzMxNDZlN2RcblxuLk5FVCBDb3JlIFNES3MgaW5zdGFsbGVkOlxuXG4gIDcuMC4yMDAgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka11cblxuLk5FVCBDb3JlIHJ1bnRpbWVzIGluc3RhbGxlZDpcblxuICBNaWNyb3NvZnQuQXNwTmV0Q29yZS5BcHAgNy4wLjUgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LkFzcE5ldENvcmUuQXBwXVxuICBNaWNyb3NvZnQuTkVUQ29yZS5BcHAgNy4wLjUgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0Lk5FVENvcmUuQXBwXVxuICBNaWNyb3NvZnQuV2luZG93c0Rlc2t0b3AuQXBwIDcuMC41IFtDOlxcUHJvZ3JhbSBGaWxlc1xcZG90bmV0XFxzaGFyZWRcXE1pY3Jvc29mdC5XaW5kb3dzRGVza3RvcC5BcHBdXG5cblRvIGluc3RhbGwgYWRkaXRpb25hbCAuTkVUIENvcmUgcnVudGltZXMgb3IgU0RLczpcbiAgaHR0cHM6Ly9ha2EubXMvZG90bmV0LWRvd25sb2FkXG5gYGBcblxuKiBJZiB5b3UncmUgdXNpbmcgLk5FVCA4LjAsIHlvdSBzaG91bGQgZG93bmxvYWQgYW5kIGluc3RhbGwgLk5FVCA4LjAuMTAxIFNESyAoZm9yIFZpc3VhbCBTdHVkaW8gMjAyMiB2MTcuOCkgZnJvbSBodHRwczovL2RvdG5ldC5taWNyb3NvZnQuY29tL2Rvd25sb2FkL2RvdG5ldC1jb3JlLzguMC5cbiogSWYgeW91J3JlIHVzaW5nIC5ORVQgNy4wLCB5b3Ugc2hvdWxkIGRvd25sb2FkIGFuZCBpbnN0YWxsIC5ORVQgU0RLIDcuMC4xMTUgKGZvciBWaXN1YWwgU3R1ZGlvIDIwMjIgdjE3LjQpIGZyb20gaHR0cHM6Ly9kb3RuZXQubWljcm9zb2Z0LmNvbS9kb3dubG9hZC9kb3RuZXQtY29yZS83LjAuXG4qIElmIHlvdSdyZSB1c2luZyAuTkVUIDYuMCwgeW91IHNob3VsZCBkb3dubG9hZCBhbmQgaW5zdGFsbCAuTkVUIFNESyA2LjAuMzIxIChmb3IgVmlzdWFsIFN0dWRpbyAyMDIyIHYxNy4yKSBmcm9tIGh0dHBzOi8vZG90bmV0Lm1pY3Jvc29mdC5jb20vZG93bmxvYWQvZG90bmV0LWNvcmUvNi4wLlxuXG4uTkVUIDYuMCwgLk5FVCA3LjAsIC5ORVQgOC4wIHVwZGF0ZXMgYXJlIGFsc28gYXZhaWxhYmxlIGZyb20gTWljcm9zb2Z0IFVwZGF0ZS4gVG8gYWNjZXNzIHRoaXMgZWl0aGVyIHR5cGUgXCJDaGVjayBmb3IgdXBkYXRlc1wiIGluIHlvdXIgV2luZG93cyBzZWFyY2gsIG9yIG9wZW4gU2V0dGluZ3MsIGNob29zZSBVcGRhdGUgJiBTZWN1cml0eSBhbmQgdGhlbiBjbGljayBDaGVjayBmb3IgVXBkYXRlcy5cblxuT25jZSB5b3UgaGF2ZSBpbnN0YWxsZWQgdGhlIHVwZGF0ZWQgcnVudGltZSBvciBTREssIHJlc3RhcnQgeW91ciBhcHBzIGZvciB0aGUgdXBkYXRlIHRvIHRha2UgZWZmZWN0LlxuXG5BZGRpdGlvbmFsbHksIGlmIHlvdSd2ZSBkZXBsb3llZCBbc2VsZi1jb250YWluZWQgYXBwbGljYXRpb25zXShodHRwczovL2RvY3MubWljcm9zb2Z0LmNvbS9kb3RuZXQvY29yZS9kZXBsb3lpbmcvI3NlbGYtY29udGFpbmVkLWRlcGxveW1lbnRzLXNjZCkgdGFyZ2V0aW5nIGFueSBvZiB0aGUgaW1wYWN0ZWQgdmVyc2lvbnMsIHRoZXNlIGFwcGxpY2F0aW9ucyBhcmUgYWxzbyB2dWxuZXJhYmxlIGFuZCBtdXN0IGJlIHJlY29tcGlsZWQgYW5kIHJlZGVwbG95ZWQuXG5cbiMjIE90aGVyIEluZm9ybWF0aW9uXG5cbiMjIyBSZXBvcnRpbmcgU2VjdXJpdHkgSXNzdWVzXG5cbklmIHlvdSBoYXZlIGZvdW5kIGEgcG90ZW50aWFsIHNlY3VyaXR5IGlzc3VlIGluIC5ORVQgOC4wIG9yIC5ORVQgNy4wIG9yIC5ORVQgNi4wLCBwbGVhc2UgZW1haWwgZGV0YWlscyB0byBzZWN1cmVAbWljcm9zb2Z0LmNvbS4gUmVwb3J0cyBtYXkgcXVhbGlmeSBmb3IgdGhlIE1pY3Jvc29mdCAuTkVUIENvcmUgJiAuTkVUIDUgQm91bnR5LiBEZXRhaWxzIG9mIHRoZSBNaWNyb3NvZnQgLk5FVCBCb3VudHkgUHJvZ3JhbSBpbmNsdWRpbmcgdGVybXMgYW5kIGNvbmRpdGlvbnMgYXJlIGF0IDxodHRwczovL2FrYS5tcy9jb3JlYm91bnR5Pi5cblxuIyMjIFN1cHBvcnRcblxuWW91IGNhbiBhc2sgcXVlc3Rpb25zIGFib3V0IHRoaXMgaXNzdWUgb24gR2l0SHViIGluIHRoZSAuTkVUIEdpdEh1YiBvcmdhbml6YXRpb24uIFRoZSBtYWluIHJlcG9zIGFyZSBsb2NhdGVkIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvcnVudGltZSBhbmQgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hc3BuZXQvLiBUaGUgQW5ub3VuY2VtZW50cyByZXBvIChodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L0Fubm91bmNlbWVudHMpIHdpbGwgY29udGFpbiB0aGlzIGJ1bGxldGluIGFzIGFuIGlzc3VlIGFuZCB3aWxsIGluY2x1ZGUgYSBsaW5rIHRvIGEgZGlzY3Vzc2lvbiBpc3N1ZS4gWW91IGNhbiBhc2sgcXVlc3Rpb25zIGluIHRoZSBsaW5rZWQgZGlzY3Vzc2lvbiBpc3N1ZS5cblxuIyMjIERpc2NsYWltZXJcblxuVGhlIGluZm9ybWF0aW9uIHByb3ZpZGVkIGluIHRoaXMgYWR2aXNvcnkgaXMgcHJvdmlkZWQgXCJhcyBpc1wiIHdpdGhvdXQgd2FycmFudHkgb2YgYW55IGtpbmQuIE1pY3Jvc29mdCBkaXNjbGFpbXMgYWxsIHdhcnJhbnRpZXMsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQsIGluY2x1ZGluZyB0aGUgd2FycmFudGllcyBvZiBtZXJjaGFudGFiaWxpdHkgYW5kIGZpdG5lc3MgZm9yIGEgcGFydGljdWxhciBwdXJwb3NlLiBJbiBubyBldmVudCBzaGFsbCBNaWNyb3NvZnQgQ29ycG9yYXRpb24gb3IgaXRzIHN1cHBsaWVycyBiZSBsaWFibGUgZm9yIGFueSBkYW1hZ2VzIHdoYXRzb2V2ZXIgaW5jbHVkaW5nIGRpcmVjdCwgaW5kaXJlY3QsIGluY2lkZW50YWwsIGNvbnNlcXVlbnRpYWwsIGxvc3Mgb2YgYnVzaW5lc3MgcHJvZml0cyBvciBzcGVjaWFsIGRhbWFnZXMsIGV2ZW4gaWYgTWljcm9zb2Z0IENvcnBvcmF0aW9uIG9yIGl0cyBzdXBwbGllcnMgaGF2ZSBiZWVuIGFkdmlzZWQgb2YgdGhlIHBvc3NpYmlsaXR5IG9mIHN1Y2ggZGFtYWdlcy4gU29tZSBzdGF0ZXMgZG8gbm90IGFsbG93IHRoZSBleGNsdXNpb24gb3IgbGltaXRhdGlvbiBvZiBsaWFiaWxpdHkgZm9yIGNvbnNlcXVlbnRpYWwgb3IgaW5jaWRlbnRhbCBkYW1hZ2VzIHNvIHRoZSBmb3JlZ29pbmcgbGltaXRhdGlvbiBtYXkgbm90IGFwcGx5LlxuXG4jIyMgQWNrbm93bGVkZ2VtZW50XG5cbk1vcmdhbiBCcm93biwgTWljcm9zb2Z0IENvcnAuXG5cbiMjIyBFeHRlcm5hbCBMaW5rc1xuXG5bQ1ZFLTIwMjQtMjEzMTldKCBodHRwczovL3d3dy5jdmUub3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNC0yMTMxOSkiLCJyZWZlcmVuY2VzIjpbImh0dHBzOi8vZ2l0aHViLmNvbS9BenVyZUFEL2F6dXJlLWFjdGl2ZWRpcmVjdG9yeS1pZGVudGl0eW1vZGVsLWV4dGVuc2lvbnMtZm9yLWRvdG5ldC9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtOGc5Yy0yOGZjLW1jeDIiLCJodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L2FzcG5ldGNvcmUvc2VjdXJpdHkvYWR2aXNvcmllcy9HSFNBLTU5ajctZ2hyZy1majUyIiwiaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hbm5vdW5jZW1lbnRzL2lzc3Vlcy8yOTAiLCJodHRwczovL2dpdGh1Yi5jb20vYWR2aXNvcmllcy9HSFNBLTU5ajctZ2hyZy1majUyIl0sImN2c3MiOnsic2NvcmUiOjYuOCwidmVjdG9yU3RyaW5nIjoiQ1ZTUzozLjEvQVY6Ti9BQzpML1BSOkgvVUk6Ti9TOkMvQzpOL0k6Ti9BOkgifSwiY3dlcyI6W3siaWQiOiJDV0UtNDAwIiwibmFtZSI6IlVuY29udHJvbGxlZCBSZXNvdXJjZSBDb25zdW1wdGlvbiIsImRlc2NyaXB0aW9uIjoiVGhlIHByb2R1Y3QgZG9lcyBub3QgcHJvcGVybHkgY29udHJvbCB0aGUgYWxsb2NhdGlvbiBhbmQgbWFpbnRlbmFuY2Ugb2YgYSBsaW1pdGVkIHJlc291cmNlLCB0aGVyZWJ5IGVuYWJsaW5nIGFuIGFjdG9yIHRvIGluZmx1ZW5jZSB0aGUgYW1vdW50IG9mIHJlc291cmNlcyBjb25zdW1lZCwgZXZlbnR1YWxseSBsZWFkaW5nIHRvIHRoZSBleGhhdXN0aW9uIG9mIGF2YWlsYWJsZSByZXNvdXJjZXMuIn1dLCJlcHNzIjp7InBlcmNlbnRhZ2UiOjAuMDAwNzUsInBlcmNlbnRpbGUiOjAuMzM1MDl9LCJwdWJsaXNoZWRBdCI6IjIwMjQtMDEtMDlUMTk6MzU6MDJaIiwidXBkYXRlZEF0IjoiMjAyNC0wNC0xMVQyMDo0Mjo1NFoiLCJ3aXRoZHJhd25BdCI6bnVsbCwicGVybWFsaW5rIjoiaHR0cHM6Ly9naXRodWIuY29tL2Fkdmlzb3JpZXMvR0hTQS01OWo3LWdocmctZmo1MiJ9LCJ2dWxuZXJhYmxlVmVyc2lvblJhbmdlIjoiPj0gNi41LjAsIDwgNi4zNC4wIiwiZmlyc3RQYXRjaGVkVmVyc2lvbiI6IjYuMzQuMCJ9",
+          "comment": "GHSA security vulnerability details for GHSA-59j7-ghrg-fj52 encoded as Base64 JSON text"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "System.Formats.Asn1",
+      "SPDXID": "SPDXRef-Package-E1B2C8E756DB38668C657F05E49E00E0AE6E2AA93D9D57A26F3471C4C579DB29",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/System.Formats.Asn1@7.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://github.com/advisories/GHSA-447r-wph3-92pm",
+          "comment": "[HIGH] Microsoft Security Advisory CVE-2024-38095 | .NET Denial of Service Vulnerability; Affects System.Formats.Asn1 v7.0.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "url",
+          "referenceLocator": "data:text/json;base64,eyJlY29zeXN0ZW0iOiJOVUdFVCIsInBhY2thZ2UiOnsiaWQiOiJwa2c6bnVnZXQvU3lzdGVtLkZvcm1hdHMuQXNuMUA3LjAuMCIsIm5hbWUiOiJTeXN0ZW0uRm9ybWF0cy5Bc24xIiwidmVyc2lvbiI6IjcuMC4wIn0sImFkdmlzb3J5Ijp7ImlkZW50aWZpZXJzIjpbeyJ0eXBlIjoiR0hTQSIsInZhbHVlIjoiR0hTQS00NDdyLXdwaDMtOTJwbSJ9LHsidHlwZSI6IkNWRSIsInZhbHVlIjoiQ1ZFLTIwMjQtMzgwOTUifV0sInNldmVyaXR5IjoiSElHSCIsInN1bW1hcnkiOiJNaWNyb3NvZnQgU2VjdXJpdHkgQWR2aXNvcnkgQ1ZFLTIwMjQtMzgwOTUgfCAuTkVUIERlbmlhbCBvZiBTZXJ2aWNlIFZ1bG5lcmFiaWxpdHkiLCJkZXNjcmlwdGlvbiI6IiMgTWljcm9zb2Z0IFNlY3VyaXR5IEFkdmlzb3J5IENWRS0yMDI0LTM4MDk1IHwgLk5FVCBEZW5pYWwgb2YgU2VydmljZSBWdWxuZXJhYmlsaXR5XG5cbiMjIDxhIG5hbWU9XCJleGVjdXRpdmUtc3VtbWFyeVwiPjwvYT5FeGVjdXRpdmUgc3VtbWFyeVxuXG5NaWNyb3NvZnQgaXMgcmVsZWFzaW5nIHRoaXMgc2VjdXJpdHkgYWR2aXNvcnkgdG8gcHJvdmlkZSBpbmZvcm1hdGlvbiBhYm91dCBhIHZ1bG5lcmFiaWxpdHkgaW4gLk5FVCA2LjAgYW5kIC5ORVQgOC4wLiBUaGlzIGFkdmlzb3J5IGFsc28gcHJvdmlkZXMgZ3VpZGFuY2Ugb24gd2hhdCBkZXZlbG9wZXJzIGNhbiBkbyB0byB1cGRhdGUgdGhlaXIgYXBwbGljYXRpb25zIHRvIHJlbW92ZSB0aGlzIHZ1bG5lcmFiaWxpdHkuXG5cbkEgVnVsbmVyYWJpbGl0eSBleGlzdHMgd2hlbiBTeXN0ZW0uRm9ybWF0cy5Bc24xIGluIC5ORVQgcGFyc2VzIGFuIFguNTA5IGNlcnRpZmljYXRlIG9yIGNvbGxlY3Rpb24gb2YgY2VydGlmaWNhdGVzLCBhIG1hbGljaW91cyBjZXJ0aWZpY2F0ZSBjYW4gcmVzdWx0IGluIGV4Y2Vzc2l2ZSBDUFUgY29uc3VtcHRpb24gb24gYWxsIHBsYXRmb3JtcyByZXN1bHQgaW4gRGVuaWFsIG9mIFNlcnZpY2UuXG5cbiMjIEFubm91bmNlbWVudFxuXG5Bbm5vdW5jZW1lbnQgZm9yIHRoaXMgaXNzdWUgY2FuIGJlIGZvdW5kIGF0ICBodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L2Fubm91bmNlbWVudHMvaXNzdWVzLzMxMlxuXG4jIyA8YSBuYW1lPVwibWl0aWdhdGlvbi1mYWN0b3JzXCI+PC9hPk1pdGlnYXRpb24gZmFjdG9yc1xuXG5NaWNyb3NvZnQgaGFzIG5vdCBpZGVudGlmaWVkIGFueSBtaXRpZ2F0aW5nIGZhY3RvcnMgZm9yIHRoaXMgdnVsbmVyYWJpbGl0eS5cblxuIyMgPGEgbmFtZT1cImFmZmVjdGVkLXNvZnR3YXJlXCI+PC9hPkFmZmVjdGVkIHNvZnR3YXJlXG5cbiogQW55IC5ORVQgNi4wIGFwcGxpY2F0aW9uIHJ1bm5pbmcgb24gLk5FVCA2LjAuMzEgb3IgZWFybGllci5cbiogQW55IC5ORVQgOC4wIGFwcGxpY2F0aW9uIHJ1bm5pbmcgb24gLk5FVCA4LjAuNiBvciBlYXJsaWVyLlxuXG4jIyA8YSBuYW1lPVwiYWZmZWN0ZWQtcGFja2FnZXNcIj48L2E+QWZmZWN0ZWQgUGFja2FnZXNcblRoZSB2dWxuZXJhYmlsaXR5IGFmZmVjdHMgYW55IE1pY3Jvc29mdCAuTkVUIENvcmUgcHJvamVjdCBpZiBpdCB1c2VzIGFueSBvZiBhZmZlY3RlZCBwYWNrYWdlcyB2ZXJzaW9ucyBsaXN0ZWQgYmVsb3dcblxuIyMjIDxhIG5hbWU9XCIuTkVUIDZcIj48L2E+Lk5FVCA2XG5cblBhY2thZ2UgbmFtZSB8IEFmZmVjdGVkIHZlcnNpb24gfCBQYXRjaGVkIHZlcnNpb25cbi0tLS0tLS0tLS0tLSB8IC0tLS0tLS0tLS0tLS0tLS0gfCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtKSAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm02NCkgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm1dKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLWFybSkgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm02NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LW11c2wtYXJtNjQpIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC14NjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLXg2NCkgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgteDY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgteDY0KSAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LWFybTY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LWFybTY0KSAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLm9zeC14NjQpICAgICAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLWFybV0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi1hcm0pICAgICAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLWFybTY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLWFybTY0KSAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14NjQpICAgICAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLXg4Nl0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14ODYpICAgICAgICAgICAgICAgICAgIHwgPj02LjAuMCwgPD0gNi4wLjMxIHwgNi4wLjMyXG5bU3lzdGVtLkZvcm1hdHMuQXNuMV0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL1N5c3RlbS5Gb3JtYXRzLkFzbjEpICAgICAgICAgICAgICAgICAgIHwgPj01LjAuMC1wcmV2aWV3LjcuMjAzNjQuMTEgfCA2LjAuMVxuXG5cbiMjIyA8YSBuYW1lPVwiLk5FVCA4XCI+PC9hPi5ORVQgOFxuUGFja2FnZSBuYW1lIHwgQWZmZWN0ZWQgdmVyc2lvbiB8IFBhdGNoZWQgdmVyc2lvblxuLS0tLS0tLS0tLS0tIHwgLS0tLS0tLS0tLS0tLS0tLSB8IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm1dKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm0pICAgICAgICAgICAgICAgfCA+PTguMC4wLCA8PSA4LjAuNiB8IDguMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1hcm02NCkgICAgICAgICAgIHwgPj04LjAuMCwgPD0gOC4wLjYgfCA4LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LW11c2wtYXJtXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm0pICAgICB8ID49OC4wLjAsIDw9IDguMC42IHwgOC4wLjdcbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLWFybTY0XShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC1hcm02NCkgfCA+PTguMC4wLCA8PSA4LjAuNiB8IDguMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUubGludXgtbXVzbC14NjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5saW51eC1tdXNsLXg2NCkgICAgIHwgPj04LjAuMCwgPD0gOC4wLjYgfCA4LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLmxpbnV4LXg2NCkgICAgICAgICAgICAgICB8ID49OC4wLjAsIDw9IDguMC42IHwgOC4wLjdcbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5vc3gtYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS5vc3gtYXJtNjQpICAgICAgICAgICAgICAgfCA+PTguMC4wLCA8PSA4LjAuNiB8IDguMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUub3N4LXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLm9zeC14NjQpICAgICAgICAgICAgICAgICAgIHwgPj04LjAuMCwgPD0gOC4wLjYgfCA4LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi1hcm1dKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4tYXJtKSAgICAgICAgICAgICAgICAgICB8ID49OC4wLjAsIDw9IDguMC42IHwgOC4wLjdcbltNaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4tYXJtNjRdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4tYXJtNjQpICAgICAgICAgICAgICAgfCA+PTguMC4wLCA8PSA4LjAuNiB8IDguMC43XG5bTWljcm9zb2Z0Lk5ldENvcmUuQXBwLlJ1bnRpbWUud2luLXg2NF0oaHR0cHM6Ly93d3cubnVnZXQub3JnL3BhY2thZ2VzL01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14NjQpICAgICAgICAgICAgICAgICAgIHwgPj04LjAuMCwgPD0gOC4wLjYgfCA4LjAuN1xuW01pY3Jvc29mdC5OZXRDb3JlLkFwcC5SdW50aW1lLndpbi14ODZdKGh0dHBzOi8vd3d3Lm51Z2V0Lm9yZy9wYWNrYWdlcy9NaWNyb3NvZnQuTmV0Q29yZS5BcHAuUnVudGltZS53aW4teDg2KSAgICAgICAgICAgICAgICAgICB8ID49OC4wLjAsIDw9IDguMC42IHwgOC4wLjdcbltTeXN0ZW0uRm9ybWF0cy5Bc24xXShodHRwczovL3d3dy5udWdldC5vcmcvcGFja2FnZXMvU3lzdGVtLkZvcm1hdHMuQXNuMSkgICAgICAgICAgICAgICAgICAgfCA8PTYuMC4wLCA+PTcuMC4wLXByZXZpZXcuMS4yMjA3Ni44IHwgOC4wLjFcblxuIyMgQWR2aXNvcnkgRkFRXG5cbiMjIyA8YSBuYW1lPVwiaG93LWFmZmVjdGVkXCI+PC9hPkhvdyBkbyBJIGtub3cgaWYgSSBhbSBhZmZlY3RlZD9cblxuSWYgeW91IGhhdmUgYSBydW50aW1lIG9yIFNESyB3aXRoIGEgdmVyc2lvbiBsaXN0ZWQsIG9yIGFuIGFmZmVjdGVkIHBhY2thZ2UgbGlzdGVkIGluIFthZmZlY3RlZCBzb2Z0d2FyZV0oI2FmZmVjdGVkLXBhY2thZ2VzKSBvciBbYWZmZWN0ZWQgcGFja2FnZXNdKCNhZmZlY3RlZC1zb2Z0d2FyZSksIHlvdSdyZSBleHBvc2VkIHRvIHRoZSB2dWxuZXJhYmlsaXR5LlxuXG4jIyMgPGEgbmFtZT1cImhvdy1maXhcIj48L2E+SG93IGRvIEkgZml4IHRoZSBpc3N1ZT9cblxuKiBUbyBmaXggdGhlIGlzc3VlIHBsZWFzZSBpbnN0YWxsIHRoZSBsYXRlc3QgdmVyc2lvbiBvZiAuTkVUIDguMCBvciAuTkVUIDcuMCBvciAuTkVUIDYuMC4gSWYgeW91IGhhdmUgaW5zdGFsbGVkIG9uZSBvciBtb3JlIC5ORVQgU0RLcyB0aHJvdWdoIFZpc3VhbCBTdHVkaW8sIFZpc3VhbCBTdHVkaW8gd2lsbCBwcm9tcHQgeW91IHRvIHVwZGF0ZSBWaXN1YWwgU3R1ZGlvLCB3aGljaCB3aWxsIGFsc28gdXBkYXRlIHlvdXIgLk5FVCAgU0RLcy5cbiogSWYgeW91IGhhdmUgLk5FVCA2LjAgb3IgZ3JlYXRlciBpbnN0YWxsZWQsIHlvdSBjYW4gbGlzdCB0aGUgdmVyc2lvbnMgeW91IGhhdmUgaW5zdGFsbGVkIGJ5IHJ1bm5pbmcgdGhlIGBkb3RuZXQgLS1pbmZvYCBjb21tYW5kLiBZb3Ugd2lsbCBzZWUgb3V0cHV0IGxpa2UgdGhlIGZvbGxvd2luZztcblxuYGBgXG4uTkVUIENvcmUgU0RLIChyZWZsZWN0aW5nIGFueSBnbG9iYWwuanNvbik6XG5cblxuIFZlcnNpb246ICAgOC4wLjIwMFxuIENvbW1pdDogICAgODQ3MzE0NmU3ZFxuXG5SdW50aW1lIEVudmlyb25tZW50OlxuXG4gT1MgTmFtZTogICAgIFdpbmRvd3NcbiBPUyBWZXJzaW9uOiAgMTAuMC4xODM2M1xuIE9TIFBsYXRmb3JtOiBXaW5kb3dzXG4gUklEOiAgICAgICAgIHdpbjEwLXg2NFxuIEJhc2UgUGF0aDogICBDOlxcUHJvZ3JhbSBGaWxlc1xcZG90bmV0XFxzZGtcXDYuMC4zMDBcXFxuXG5Ib3N0ICh1c2VmdWwgZm9yIHN1cHBvcnQpOlxuXG4gIFZlcnNpb246IDguMC4zXG4gIENvbW1pdDogIDg0NzMxNDZlN2RcblxuLk5FVCBDb3JlIFNES3MgaW5zdGFsbGVkOlxuXG4gIDguMC4yMDAgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNka11cblxuLk5FVCBDb3JlIHJ1bnRpbWVzIGluc3RhbGxlZDpcblxuICBNaWNyb3NvZnQuQXNwQXNwTmV0Q29yZS5BcHAgOC4wLjMgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LkFzcEFzcE5ldENvcmUuQXBwXVxuICBNaWNyb3NvZnQuQXNwTmV0Q29yZS5BcHAgOC4wLjMgW0M6XFxQcm9ncmFtIEZpbGVzXFxkb3RuZXRcXHNoYXJlZFxcTWljcm9zb2Z0LkFzcE5ldENvcmUuQXBwXVxuICBNaWNyb3NvZnQuV2luZG93c0Rlc2t0b3AuQXBwIDguMC4zIFtDOlxcUHJvZ3JhbSBGaWxlc1xcZG90bmV0XFxzaGFyZWRcXE1pY3Jvc29mdC5XaW5kb3dzRGVza3RvcC5BcHBdXG5cblxuVG8gaW5zdGFsbCBhZGRpdGlvbmFsIC5ORVQgQ29yZSBydW50aW1lcyBvciBTREtzOlxuICBodHRwczovL2FrYS5tcy9kb3RuZXQtZG93bmxvYWRcbmBgYFxuXG4qIElmIHlvdSdyZSB1c2luZyAuTkVUIDguMCwgeW91IHNob3VsZCBkb3dubG9hZCBhbmQgaW5zdGFsbCAuTkVUIDguMC43ICBSdW50aW1lIG9yIC5ORVQgOC4wLjEwNyBTREsgKGZvciBWaXN1YWwgU3R1ZGlvIDIwMjIgdjE3LjgpIGZyb20gaHR0cHM6Ly9kb3RuZXQubWljcm9zb2Z0LmNvbS9kb3dubG9hZC9kb3RuZXQtY29yZS84LjAuXG4qIElmIHlvdSdyZSB1c2luZyAuTkVUIDYuMCwgeW91IHNob3VsZCBkb3dubG9hZCBhbmQgaW5zdGFsbCBSdW50aW1lIDYuMC4zMiBvciBTREsgNi4wLjEzMiAoZm9yIFZpc3VhbCBTdHVkaW8gMjAyMiB2MTcuNCkgZnJvbSBodHRwczovL2RvdG5ldC5taWNyb3NvZnQuY29tL2Rvd25sb2FkL2RvdG5ldC1jb3JlLzYuMC5cblxuLk5FVCA2LjAgYW5kIC5ORVQgOC4wIHVwZGF0ZXMgYXJlIGFsc28gYXZhaWxhYmxlIGZyb20gTWljcm9zb2Z0IFVwZGF0ZS4gVG8gYWNjZXNzIHRoaXMgZWl0aGVyIHR5cGUgXCJDaGVjayBmb3IgdXBkYXRlc1wiIGluIHlvdXIgV2luZG93cyBzZWFyY2gsIG9yIG9wZW4gU2V0dGluZ3MsIGNob29zZSBVcGRhdGUgJiBTZWN1cml0eSBhbmQgdGhlbiBjbGljayBDaGVjayBmb3IgVXBkYXRlcy5cblxuT25jZSB5b3UgaGF2ZSBpbnN0YWxsZWQgdGhlIHVwZGF0ZWQgcnVudGltZSBvciBTREssIHJlc3RhcnQgeW91ciBhcHBzIGZvciB0aGUgdXBkYXRlIHRvIHRha2UgZWZmZWN0LlxuXG5BZGRpdGlvbmFsbHksIGlmIHlvdSd2ZSBkZXBsb3llZCBbc2VsZi1jb250YWluZWQgYXBwbGljYXRpb25zXShodHRwczovL2RvY3MubWljcm9zb2Z0LmNvbS9kb3RuZXQvY29yZS9kZXBsb3lpbmcvI3NlbGYtY29udGFpbmVkLWRlcGxveW1lbnRzLXNjZCkgdGFyZ2V0aW5nIGFueSBvZiB0aGUgaW1wYWN0ZWQgdmVyc2lvbnMsIHRoZXNlIGFwcGxpY2F0aW9ucyBhcmUgYWxzbyB2dWxuZXJhYmxlIGFuZCBtdXN0IGJlIHJlY29tcGlsZWQgYW5kIHJlZGVwbG95ZWQuXG5cbiMjIE90aGVyIEluZm9ybWF0aW9uXG5cbiMjIyBSZXBvcnRpbmcgU2VjdXJpdHkgSXNzdWVzXG5cbklmIHlvdSBoYXZlIGZvdW5kIGEgcG90ZW50aWFsIHNlY3VyaXR5IGlzc3VlIGluIC5ORVQgOC4wIG9yIC5ORVQgNi4wLCBwbGVhc2UgZW1haWwgZGV0YWlscyB0byBzZWN1cmVAbWljcm9zb2Z0LmNvbS4gUmVwb3J0cyBtYXkgcXVhbGlmeSBmb3IgdGhlIE1pY3Jvc29mdCAuTkVUIENvcmUgJiAuTkVUIDUgQm91bnR5LiBEZXRhaWxzIG9mIHRoZSBNaWNyb3NvZnQgLk5FVCBCb3VudHkgUHJvZ3JhbSBpbmNsdWRpbmcgdGVybXMgYW5kIGNvbmRpdGlvbnMgYXJlIGF0IDxodHRwczovL2FrYS5tcy9jb3JlYm91bnR5Pi5cblxuIyMjIFN1cHBvcnRcblxuWW91IGNhbiBhc2sgcXVlc3Rpb25zIGFib3V0IHRoaXMgaXNzdWUgb24gR2l0SHViIGluIHRoZSAuTkVUIEdpdEh1YiBvcmdhbml6YXRpb24uIFRoZSBtYWluIHJlcG9zIGFyZSBsb2NhdGVkIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9kb3RuZXQvcnVudGltZSBhbmQgaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9hc3BuZXQvLiBUaGUgQW5ub3VuY2VtZW50cyByZXBvIChodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L0Fubm91bmNlbWVudHMpIHdpbGwgY29udGFpbiB0aGlzIGJ1bGxldGluIGFzIGFuIGlzc3VlIGFuZCB3aWxsIGluY2x1ZGUgYSBsaW5rIHRvIGEgZGlzY3Vzc2lvbiBpc3N1ZS4gWW91IGNhbiBhc2sgcXVlc3Rpb25zIGluIHRoZSBsaW5rZWQgZGlzY3Vzc2lvbiBpc3N1ZS5cblxuIyMjIERpc2NsYWltZXJcblxuVGhlIGluZm9ybWF0aW9uIHByb3ZpZGVkIGluIHRoaXMgYWR2aXNvcnkgaXMgcHJvdmlkZWQgXCJhcyBpc1wiIHdpdGhvdXQgd2FycmFudHkgb2YgYW55IGtpbmQuIE1pY3Jvc29mdCBkaXNjbGFpbXMgYWxsIHdhcnJhbnRpZXMsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQsIGluY2x1ZGluZyB0aGUgd2FycmFudGllcyBvZiBtZXJjaGFudGFiaWxpdHkgYW5kIGZpdG5lc3MgZm9yIGEgcGFydGljdWxhciBwdXJwb3NlLiBJbiBubyBldmVudCBzaGFsbCBNaWNyb3NvZnQgQ29ycG9yYXRpb24gb3IgaXRzIHN1cHBsaWVycyBiZSBsaWFibGUgZm9yIGFueSBkYW1hZ2VzIHdoYXRzb2V2ZXIgaW5jbHVkaW5nIGRpcmVjdCwgaW5kaXJlY3QsIGluY2lkZW50YWwsIGNvbnNlcXVlbnRpYWwsIGxvc3Mgb2YgYnVzaW5lc3MgcHJvZml0cyBvciBzcGVjaWFsIGRhbWFnZXMsIGV2ZW4gaWYgTWljcm9zb2Z0IENvcnBvcmF0aW9uIG9yIGl0cyBzdXBwbGllcnMgaGF2ZSBiZWVuIGFkdmlzZWQgb2YgdGhlIHBvc3NpYmlsaXR5IG9mIHN1Y2ggZGFtYWdlcy4gU29tZSBzdGF0ZXMgZG8gbm90IGFsbG93IHRoZSBleGNsdXNpb24gb3IgbGltaXRhdGlvbiBvZiBsaWFiaWxpdHkgZm9yIGNvbnNlcXVlbnRpYWwgb3IgaW5jaWRlbnRhbCBkYW1hZ2VzIHNvIHRoZSBmb3JlZ29pbmcgbGltaXRhdGlvbiBtYXkgbm90IGFwcGx5LlxuXG4jIyMgRXh0ZXJuYWwgTGlua3NcblxuW0NWRS0yMDI0LTM4MDk1XSggaHR0cHM6Ly93d3cuY3ZlLm9yZy9DVkVSZWNvcmQ/aWQ9Q1ZFLTIwMjQtMzgwOTUpXG5cbiMjIyBSZXZpc2lvbnNcblxuVjEuMCAoSnVseSAwOSwgMjAyNCk6IEFkdmlzb3J5IHB1Ymxpc2hlZC5cblxuX1ZlcnNpb24gMS4wX1xuXG5fTGFzdCBVcGRhdGVkIDIwMjQtMDctMDlfIiwicmVmZXJlbmNlcyI6WyJodHRwczovL2dpdGh1Yi5jb20vZG90bmV0L3J1bnRpbWUvc2VjdXJpdHkvYWR2aXNvcmllcy9HSFNBLTQ0N3Itd3BoMy05MnBtIiwiaHR0cHM6Ly9udmQubmlzdC5nb3YvdnVsbi9kZXRhaWwvQ1ZFLTIwMjQtMzgwOTUiLCJodHRwczovL21zcmMubWljcm9zb2Z0LmNvbS91cGRhdGUtZ3VpZGUvdnVsbmVyYWJpbGl0eS9DVkUtMjAyNC0zODA5NSIsImh0dHBzOi8vZ2l0aHViLmNvbS9hZHZpc29yaWVzL0dIU0EtNDQ3ci13cGgzLTkycG0iXSwiY3ZzcyI6eyJzY29yZSI6Ny41LCJ2ZWN0b3JTdHJpbmciOiJDVlNTOjMuMS9BVjpOL0FDOkwvUFI6Ti9VSTpOL1M6VS9DOk4vSTpOL0E6SCJ9LCJjd2VzIjpbeyJpZCI6IkNXRS0yMCIsIm5hbWUiOiJJbXByb3BlciBJbnB1dCBWYWxpZGF0aW9uIiwiZGVzY3JpcHRpb24iOiJUaGUgcHJvZHVjdCByZWNlaXZlcyBpbnB1dCBvciBkYXRhLCBidXQgaXQgZG9lcyBub3QgdmFsaWRhdGUgb3IgaW5jb3JyZWN0bHkgdmFsaWRhdGVzIHRoYXQgdGhlIGlucHV0IGhhcyB0aGUgcHJvcGVydGllcyB0aGF0IGFyZSByZXF1aXJlZCB0byBwcm9jZXNzIHRoZSBkYXRhIHNhZmVseSBhbmQgY29ycmVjdGx5LiJ9XSwiZXBzcyI6eyJwZXJjZW50YWdlIjowLjAwMDg0LCJwZXJjZW50aWxlIjowLjM3MzA3fSwicHVibGlzaGVkQXQiOiIyMDI0LTA3LTA5VDIxOjE0OjUzWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDgtMDhUMDU6MDY6MzhaIiwid2l0aGRyYXduQXQiOm51bGwsInBlcm1hbGluayI6Imh0dHBzOi8vZ2l0aHViLmNvbS9hZHZpc29yaWVzL0dIU0EtNDQ3ci13cGgzLTkycG0ifSwidnVsbmVyYWJsZVZlcnNpb25SYW5nZSI6Ij49IDcuMC4wLXByZXZpZXcuMS4yMjA3Ni44LCA8IDguMC4xIiwiZmlyc3RQYXRjaGVkVmVyc2lvbiI6IjguMC4xIn0=",
+          "comment": "GHSA security vulnerability details for GHSA-447r-wph3-92pm encoded as Base64 JSON text"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "SPDXID": "SPDXRef-Package-3505490951140ED4F9AEE7B75E2DF347926C49A4EC41E3FDDB277E46F56C6E46",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.Caching.Memory@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "SPDXID": "SPDXRef-Package-03D59A9847F8B707779ED14E9E8B45C1DF1CE09F29AEA2706935CA888E6C09CC",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.DependencyInjection@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Azure.Security.KeyVault.Secrets",
+      "SPDXID": "SPDXRef-Package-68A9472F5DD9D628B7DF2A13E3734F6564E1E340BDDD6523402390F170B82F34",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "4.1.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Azure.Security.KeyVault.Secrets@4.1.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "SPDXID": "SPDXRef-Package-9072CAF711EF3F7816C9CA11A1500951578C47C5463795B78FBC556470847F01",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Extensions.DependencyInjection.Abstractions@7.0.0"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.AspNetCore.DataProtection.Abstractions",
+      "SPDXID": "SPDXRef-Package-BED700E06AD2051DEE48023EE4656188FAA7DA9DEC2728CD8722CEECE24CBFBB",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "7.0.3",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.AspNetCore.DataProtection.Abstractions@7.0.3"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "My Package",
+      "SPDXID": "SPDXRef-RootPackage",
+      "downloadLocation": "NOASSERTION",
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "45feff2e4ff2f62b9c1e74e9da272fddd87146d9"
+      },
+      "filesAnalyzed": true,
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoFromFiles": ["NOASSERTION"],
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "20241128.2",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:swid/Rhys%20Koedijk/rhyskoedijk.com/My%20Package@20241128.2?tag_id=49be9731-515a-4355-87c2-4a67383d5a7e"
+        }
+      ],
+      "supplier": "Organization: Rhys Koedijk",
+      "hasFiles": ["SPDXRef-File--Project1.zip-9BA7630936E369BC5B1223A0E5B858DCE4B35529"]
+    }
+  ],
+  "externalDocumentRefs": [],
+  "relationships": [
+    {
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-RootPackage",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-BED700E06AD2051DEE48023EE4656188FAA7DA9DEC2728CD8722CEECE24CBFBB",
+      "spdxElementId": "SPDXRef-Package-82E53CB6E13DAFD4B3415C0A13A2D17F1D9E123BB5AFB69B354C1ED6D3F624A6"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-9072CAF711EF3F7816C9CA11A1500951578C47C5463795B78FBC556470847F01",
+      "spdxElementId": "SPDXRef-Package-870F545F5960EFFD36CBB480E5FC727B0CC884AFD5392ECDAFD996B964F5402E"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-68A9472F5DD9D628B7DF2A13E3734F6564E1E340BDDD6523402390F170B82F34",
+      "spdxElementId": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-03D59A9847F8B707779ED14E9E8B45C1DF1CE09F29AEA2706935CA888E6C09CC",
+      "spdxElementId": "SPDXRef-Package-D6B10CA94F55A75F0746B799EAE1E7372994298991EA077E6BA70102EA1CB0CE"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-3505490951140ED4F9AEE7B75E2DF347926C49A4EC41E3FDDB277E46F56C6E46",
+      "spdxElementId": "SPDXRef-Package-FE8DC86213C4FA4030DFF15DC8EF66EB565B18C94723248AAE98F9B31760A856"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-E1B2C8E756DB38668C657F05E49E00E0AE6E2AA93D9D57A26F3471C4C579DB29",
+      "spdxElementId": "SPDXRef-Package-148BA170BB3A0ECCA59205F0EB30F5199263FC9F863B1B63243199A61D43ED45"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-3AC0672AB1E7524C854606780C895A74D77D40696C93079EA14620045DA0C016",
+      "spdxElementId": "SPDXRef-Package-82E53CB6E13DAFD4B3415C0A13A2D17F1D9E123BB5AFB69B354C1ED6D3F624A6"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-32F9EA119543F242208EF411AF5466648D8BC5C3A76BCFA68957C31FFEC42C80",
+      "spdxElementId": "SPDXRef-Package-468D62235D09F167D09C5EE759802A9C4A540D3B5AB2DAFD533C3E94309A7352"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-316913AF490B11846FE579DC73595D9C1AD29D35201CD6BC392F45BC8BB28F81",
+      "spdxElementId": "SPDXRef-Package-5D2E3E3892C8B382054EFA2CD546B90E1821D89C1C971436E0DDD7DD24711600"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-82E53CB6E13DAFD4B3415C0A13A2D17F1D9E123BB5AFB69B354C1ED6D3F624A6",
+      "spdxElementId": "SPDXRef-Package-FE8DC86213C4FA4030DFF15DC8EF66EB565B18C94723248AAE98F9B31760A856"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-11A5E67C236F36E5825649B810307506498468201C97A1A5A8F6AC1503B186AC",
+      "spdxElementId": "SPDXRef-Package-60EDB19C61312565153A643D2A1C43EC7C062F73E9942656AD82A644C288D6E3"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-45B61C4E05FBE2335A7F9C4F822BEFF93BB2F7DAFDBA629833148956DD44E153",
+      "spdxElementId": "SPDXRef-Package-468D62235D09F167D09C5EE759802A9C4A540D3B5AB2DAFD533C3E94309A7352"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-5D2E3E3892C8B382054EFA2CD546B90E1821D89C1C971436E0DDD7DD24711600",
+      "spdxElementId": "SPDXRef-Package-94C1FD799A1321A0B1376230E28CADA8ABF55A3CDF22483B29DEA68FC393E943"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-6443DEE1972C66BB66CC00151EA2952F5BC5FF7ECFF978B376C02ECBCAE2195C",
+      "spdxElementId": "SPDXRef-Package-5D2E3E3892C8B382054EFA2CD546B90E1821D89C1C971436E0DDD7DD24711600"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-FE592971B7EF0DAB29055AD0CCE769DF80C7D47D3225914BE4285F2035C105B6",
+      "spdxElementId": "SPDXRef-Package-82E53CB6E13DAFD4B3415C0A13A2D17F1D9E123BB5AFB69B354C1ED6D3F624A6"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-FE8DC86213C4FA4030DFF15DC8EF66EB565B18C94723248AAE98F9B31760A856",
+      "spdxElementId": "SPDXRef-Package-6443DEE1972C66BB66CC00151EA2952F5BC5FF7ECFF978B376C02ECBCAE2195C"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-56227D0C9534C0E36A540D266B5B59110E8ACB1289FE15DDB859A2DE4FF28887",
+      "spdxElementId": "SPDXRef-Package-0285EDB74EFC537740BD6A6C16FF480E123B106291AEA4767373FDE5E8F170D5"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-659FC6F6442DDDEB1A085D79166237DC05B228DAF796D7615D512FA9E3217439",
+      "spdxElementId": "SPDXRef-Package-7F3F787481824EFB73F4AAC7D7210C8CEB08AFEDC49640FB3AB8FDF75EE77B9A"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-87F2E9DD3CF10FAEA6703A8AFE83724C1B5D13DE961907575F419E42C57770E8",
+      "spdxElementId": "SPDXRef-Package-82E53CB6E13DAFD4B3415C0A13A2D17F1D9E123BB5AFB69B354C1ED6D3F624A6"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F",
+      "spdxElementId": "SPDXRef-Package-5D2E3E3892C8B382054EFA2CD546B90E1821D89C1C971436E0DDD7DD24711600"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-B958DF6815E84E0B0DF04BA74704AF7C82ECFFBCAD55F666FC8367D357A947A8",
+      "spdxElementId": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-1A8ED08FCCB0E96A340A7589485C1A7D63FFDAD628A019657EC7169841E3DB83",
+      "spdxElementId": "SPDXRef-Package-3505490951140ED4F9AEE7B75E2DF347926C49A4EC41E3FDDB277E46F56C6E46"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-7F3F787481824EFB73F4AAC7D7210C8CEB08AFEDC49640FB3AB8FDF75EE77B9A",
+      "spdxElementId": "SPDXRef-Package-D6B10CA94F55A75F0746B799EAE1E7372994298991EA077E6BA70102EA1CB0CE"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-129568A707B7907D22BC0D26E125D7D7BC0C7DC8C931934D8BFBD93723363AF3",
+      "spdxElementId": "SPDXRef-Package-6443DEE1972C66BB66CC00151EA2952F5BC5FF7ECFF978B376C02ECBCAE2195C"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-8C0CF7980BDA0B1D7231BD2C20D43ACFC1F7C78C6317977BF538C53794610E8D",
+      "spdxElementId": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-E500AB09C427C236C65BF11267432378942449234CC96220AB3E73277F07A9C8",
+      "spdxElementId": "SPDXRef-Package-87F2E9DD3CF10FAEA6703A8AFE83724C1B5D13DE961907575F419E42C57770E8"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-AEEDBE4F5C65A38962B24061F4E8ACA23CD2E62D9EB0091799A9D849248B7AFC",
+      "spdxElementId": "SPDXRef-Package-316913AF490B11846FE579DC73595D9C1AD29D35201CD6BC392F45BC8BB28F81"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-D6B10CA94F55A75F0746B799EAE1E7372994298991EA077E6BA70102EA1CB0CE",
+      "spdxElementId": "SPDXRef-Package-870F545F5960EFFD36CBB480E5FC727B0CC884AFD5392ECDAFD996B964F5402E"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-D010D6803532B8F44E031576D059B01154585F59FD75B33C044C7A658BBB47D3",
+      "spdxElementId": "SPDXRef-Package-11A5E67C236F36E5825649B810307506498468201C97A1A5A8F6AC1503B186AC"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-148BA170BB3A0ECCA59205F0EB30F5199263FC9F863B1B63243199A61D43ED45",
+      "spdxElementId": "SPDXRef-Package-3AC0672AB1E7524C854606780C895A74D77D40696C93079EA14620045DA0C016"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-2A048EFF47C4A3603422771936915063286D22538798FF4AECFB60014878789B",
+      "spdxElementId": "SPDXRef-Package-87F2E9DD3CF10FAEA6703A8AFE83724C1B5D13DE961907575F419E42C57770E8"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-225EFF52E277D23AB16527105F8FD2301169354FF14D6EE79397130BD953F75E",
+      "spdxElementId": "SPDXRef-Package-81A37F08E5228FE4E73A9017987C44CB948CFBB7022CD968684BBEDCC533605E"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-4B89AC572DA59759172618501355EE6F17B0092DCD59E3D03269153974D53D26",
+      "spdxElementId": "SPDXRef-Package-0285EDB74EFC537740BD6A6C16FF480E123B106291AEA4767373FDE5E8F170D5"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-0285EDB74EFC537740BD6A6C16FF480E123B106291AEA4767373FDE5E8F170D5",
+      "spdxElementId": "SPDXRef-Package-468D62235D09F167D09C5EE759802A9C4A540D3B5AB2DAFD533C3E94309A7352"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-A5A3922616CDA74E136AF7764F7F6338CCE161D25AE6D10D479139A2724F2D9D",
+      "spdxElementId": "SPDXRef-Package-5D2E3E3892C8B382054EFA2CD546B90E1821D89C1C971436E0DDD7DD24711600"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-1AA56C193CE65B30FBCB74CB1B2F09D3887DC93CAB98C89056AC31ED216D527B",
+      "spdxElementId": "SPDXRef-Package-AEEDBE4F5C65A38962B24061F4E8ACA23CD2E62D9EB0091799A9D849248B7AFC"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-870F545F5960EFFD36CBB480E5FC727B0CC884AFD5392ECDAFD996B964F5402E",
+      "spdxElementId": "SPDXRef-Package-5D2E3E3892C8B382054EFA2CD546B90E1821D89C1C971436E0DDD7DD24711600"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-02E75C1581BEA9439CEE5344C805B8E3B1AD4EA9F77A69E8D1B9A40B1373B270",
+      "spdxElementId": "SPDXRef-Package-1AA56C193CE65B30FBCB74CB1B2F09D3887DC93CAB98C89056AC31ED216D527B"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-0FFF1FC4ECD43C637805D2F4BAEE2A5E9E85A5129F79CD18C9B4E3554756E580",
+      "spdxElementId": "SPDXRef-Package-1AA56C193CE65B30FBCB74CB1B2F09D3887DC93CAB98C89056AC31ED216D527B"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-99B6F9B2C3E257680B493D0D32986C07A66295DA7B01676ED98DC39D14D84CAA",
+      "spdxElementId": "SPDXRef-Package-32F9EA119543F242208EF411AF5466648D8BC5C3A76BCFA68957C31FFEC42C80"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-81A37F08E5228FE4E73A9017987C44CB948CFBB7022CD968684BBEDCC533605E",
+      "spdxElementId": "SPDXRef-Package-FE8DC86213C4FA4030DFF15DC8EF66EB565B18C94723248AAE98F9B31760A856"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-40E1A9E59C44F0CD9170AD10FCF36B05A76D5491CC455DE3F2ADE9EBF152931D",
+      "spdxElementId": "SPDXRef-Package-D6B10CA94F55A75F0746B799EAE1E7372994298991EA077E6BA70102EA1CB0CE"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-BC337EE5606ECEE2096F9E98A8ACBD1C8FCBE844822C9ED45690E7FC32E0A66D",
+      "spdxElementId": "SPDXRef-Package-0FFF1FC4ECD43C637805D2F4BAEE2A5E9E85A5129F79CD18C9B4E3554756E580"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-53BE199C17C0A64FE9557BDDA5EFE17F562F9A585756B4BA1723992F8EC771F3",
+      "spdxElementId": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-60EDB19C61312565153A643D2A1C43EC7C062F73E9942656AD82A644C288D6E3",
+      "spdxElementId": "SPDXRef-Package-AEEDBE4F5C65A38962B24061F4E8ACA23CD2E62D9EB0091799A9D849248B7AFC"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-94C1FD799A1321A0B1376230E28CADA8ABF55A3CDF22483B29DEA68FC393E943",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-468D62235D09F167D09C5EE759802A9C4A540D3B5AB2DAFD533C3E94309A7352",
+      "spdxElementId": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-D595C7CA243D238A94C6D0F9277EB98AE42EDA370259D4615A58E5BE78BAD562",
+      "spdxElementId": "SPDXRef-Package-D010D6803532B8F44E031576D059B01154585F59FD75B33C044C7A658BBB47D3"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-1E40DCF5268C5C3C66650FDFBB4E24B7F36BA30AEC9B879EEE656DCC65321759",
+      "spdxElementId": "SPDXRef-Package-6443DEE1972C66BB66CC00151EA2952F5BC5FF7ECFF978B376C02ECBCAE2195C"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-2CD142DB555D8B62DD3BDC26C980423C3B5CAD28955BE98388627B6288E93A86",
+      "spdxElementId": "SPDXRef-Package-DE76CE1DBD11E38965B9E447AE6469226B48AFD4D8D0A11A762CC7F465479D8F"
+    }
+  ],
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "My Package 20241128.2",
+  "documentNamespace": "https://rhyskoedijk.com/My%20Package/20241128.2/ppbh_S6Q7EWQn-wDISmgLQ",
+  "creationInfo": {
+    "created": "2024-11-27T23:54:47Z",
+    "creators": ["Organization: Rhys Koedijk", "Tool: Microsoft.SBOMTool-3.0.1"]
+  },
+  "documentDescribes": ["SPDXRef-RootPackage"]
+}

@@ -24,7 +24,7 @@ import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAd
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { ISeverity } from '../../../shared/models/severity/ISeverity';
 import { getSeverityByName } from '../../../shared/models/severity/Severities';
-import { getPackageDependsOnChain, IDocument } from '../../../shared/models/spdx/2.3/IDocument';
+import { getPackageAncestorPaths, IDocument, IPackageDependencyPath } from '../../../shared/models/spdx/2.3/IDocument';
 
 interface ISecurityAdvisoryTableItem {
   ghsaId: string;
@@ -33,7 +33,7 @@ interface ISecurityAdvisoryTableItem {
   package: IPackage;
   vulnerableVersionRange: string;
   firstPatchedVersion: string;
-  introducedThrough: string[];
+  introducedThrough: IPackageDependencyPath[];
   severity: ISeverity;
   cvssScore: number;
   cvssVector: string;
@@ -98,8 +98,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             vulnerableVersionRange: vuln.vulnerableVersionRange,
             fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
             firstPatchedVersion: vuln.firstPatchedVersion,
-            introducedThrough:
-              (packageSpdxId && getPackageDependsOnChain(props.document, packageSpdxId).map((p) => p.name)) || [],
+            introducedThrough: (packageSpdxId && getPackageAncestorPaths(props.document, packageSpdxId)) || [],
             severity: getSeverityByName(vuln.advisory.severity),
             cvssScore: vuln.advisory.cvss?.score,
             cvssVector: cvssParts?.[2]?.trim() || '',
@@ -421,11 +420,7 @@ function renderAdvisoryPackageCell(
     tableColumn: tableColumn,
     line1: (
       <Tooltip
-        text={
-          tableItem.introducedThrough?.length
-            ? `Transitive dependency introduced through:\n${tableItem.introducedThrough?.join('\n > ')}\n > ${tableItem.package?.name}`
-            : 'Direct dependency'
-        }
+        text={tableItem.introducedThrough?.map((p) => p.dependencyPath.map((d) => d.name).join(' > ')).join('\n\n')}
       >
         <div className="primary-text text-ellipsis">{tableItem.package?.name}</div>
       </Tooltip>
