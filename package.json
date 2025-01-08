@@ -10,6 +10,7 @@
     "build": "npm run build:task && npm run build:ui",
     "build:task": "cd task && webpack --mode development",
     "build:ui": "cd ui && webpack --mode development",
+    "test": "npx jest",
     "start:task": "cd task && node dist/task/index.js",
     "start:ui": "cd ui && webpack serve --mode development",
     "package": "node vss-extension.version.increment.js && npx tfx-cli extension create --manifests vss-extension.json --output-path dist",
@@ -47,8 +48,10 @@
     "@types/node": "^22.10.5",
     "@types/q": "^1.5.8",
     "husky": "^9.1.7",
+    "jest": "^29.7.0",
     "prettier": "3.4.2",
     "prettier-plugin-organize-imports": "4.1.0",
-    "pretty-quick": "^4.0.0"
+    "pretty-quick": "^4.0.0",
+    "ts-jest": "^29.2.5"
   }
 }

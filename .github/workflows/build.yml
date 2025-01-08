@@ -24,3 +24,6 @@ jobs:
 
       - name: Build extension
         run: npm run build
+
+      - name: Run unit tests
+        run: npm test
