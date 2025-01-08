@@ -56,7 +56,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
   static getDerivedStateFromProps(props: Props): State {
     const rawTableItems: IFileTableItem[] =
       props.files
-        ?.orderBy((file: IFile) => file.fileName)
+        ?.orderBy((file: IFile) => file.SPDXID)
         ?.map((x) => {
           return {
             id: x.SPDXID,
@@ -136,7 +136,7 @@ export class SpdxFileTableCard extends React.Component<Props, State> {
               ...(hasMultipleRootPackages
                 ? [
                     (item1: IFileTableItem, item2: IFileTableItem): number => {
-                      return item1.package!.localeCompare(item2.package!);
+                      return (item1.package + item1.name).localeCompare(item2.package + item2.name);
                     },
                   ]
                 : []),

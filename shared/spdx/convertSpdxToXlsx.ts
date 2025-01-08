@@ -110,7 +110,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'Checksum (SHA256)', value: 'checksum' },
     ],
     content: files
-      .orderBy((file: IFile) => file.fileName)
+      .orderBy((file: IFile) => file.SPDXID)
       .map((file: IFile) => {
         return {
           id: file.SPDXID,
