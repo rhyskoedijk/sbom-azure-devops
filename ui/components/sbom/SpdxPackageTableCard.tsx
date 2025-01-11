@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Icon, IconSize } from 'azure-devops-ui/Icon';
+import { Link } from 'azure-devops-ui/Link';
 import {
   ColumnSorting,
   ITableColumn,
@@ -14,6 +15,9 @@ import {
 } from 'azure-devops-ui/Table';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
+
+import { ExpandableList } from '../ExpandableList';
+import { VulnerabilitiesSummaryBadge } from './VulnerabilitiesSummaryBadge';
 
 import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
 import { getSeverityByName } from '../../../shared/models/severity/Severities';
@@ -36,8 +40,6 @@ import {
   IPackage,
 } from '../../../shared/models/spdx/2.3/IPackage';
 import { parseSpdxSecurityAdvisoriesLegacy } from '../../../shared/spdx/parseSpdxSecurityAdvisoriesLegacy';
-
-import { VulnerabilitiesSummaryBadge } from './VulnerabilitiesSummaryBadge';
 
 interface IPackageTableItem {
   id: string;
@@ -371,22 +373,30 @@ function renderPackageIntroducedThroughCell(
     tableColumn: tableColumn,
     children: (
       <div className="bolt-table-cell-content flex-column rhythm-vertical-4">
-        {tableItem.introducedThrough.map((ancestor, acestorIndex) => (
-          <div className="flex-row flex-wrap rhythm-horizontal-4">
-            {ancestor.dependencyPath.map((pkg, dependencyIndex) => (
-              <div
-                key={acestorIndex + '-' + dependencyIndex}
-                className={'text-ellipsis rhythm-horizontal-4' + (acestorIndex > 0 ? ' secondary-text' : undefined)}
-              >
-                {dependencyIndex > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
-                <span>{pkg.name}</span>
-              </div>
-            ))}
-          </div>
+        {tableItem.introducedThrough.map((ancestor, index) => (
+          <ExpandableList key={index} max={1} items={ancestor.dependencyPath} renderItem={renderPackageItem} />
         ))}
       </div>
     ),
   });
+}
+
+function renderPackageItem(item: IPackage, index: number): JSX.Element {
+  return (
+    <div key={index} className={'flex-row text-ellipsis ' + (index > 0 ? ' secondary-text' : undefined)}>
+      {index > 0 ? <Icon size={IconSize.small} iconName="ChevronRightSmall" /> : null}
+      <Link
+        className={'bolt-table-link bolt-table-link-inline flex-row flex-center'}
+        href={getExternalRefPackageManagerUrl(item.externalRefs)}
+        target={'_blank'}
+        excludeTabStop
+      >
+        <span>
+          {item.name} <span className="secondary-text">{item.versionInfo}</span>
+        </span>
+      </Link>
+    </div>
+  );
 }
 
 function renderPackageVulnerabilitiesCell(

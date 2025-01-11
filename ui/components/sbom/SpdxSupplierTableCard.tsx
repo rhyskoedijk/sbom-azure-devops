@@ -1,10 +1,8 @@
 import * as React from 'react';
 
-import { Button } from 'azure-devops-ui/Button';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Link } from 'azure-devops-ui/Link';
-import { Observer } from 'azure-devops-ui/Observer';
 import {
   ColumnSorting,
   ITableColumn,
@@ -17,17 +15,15 @@ import {
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
+import { ExpandableList } from '../ExpandableList';
+
 import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
 import { getExternalRefPackageManagerUrl } from '../../../shared/models/spdx/2.3/IExternalRef';
 import { getPackageSupplierOrganization } from '../../../shared/models/spdx/2.3/IPackage';
 
-const MAX_PACKAGES_VISIBLE = 3;
-
 interface ISupplierTableItem {
   id: string;
   name: string;
-  packagesTotal: number;
-  packagesVisible: ObservableValue<number>;
   packages: {
     name: string;
     version: string;
@@ -79,8 +75,6 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
           return {
             id: supplier || '',
             name: supplier || '',
-            packagesTotal: packagesFromSupplier.length,
-            packagesVisible: new ObservableValue<number>(MAX_PACKAGES_VISIBLE),
             packages: packagesFromSupplier,
           };
         }) || [];
@@ -113,7 +107,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>
-          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packagesTotal.toString()),
+          renderSimpleValueCell(rowIndex, columnIndex, tableColumn, tableItem.packages.length.toString()),
         sortProps: {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
@@ -153,7 +147,7 @@ export class SpdxSupplierTableCard extends React.Component<Props, State> {
               },
               // Sort on package count
               (item1: ISupplierTableItem, item2: ISupplierTableItem): number => {
-                return item1.packagesTotal - item2.packagesTotal;
+                return item1.packages.length - item2.packages.length;
               },
               null,
             ],
@@ -246,41 +240,28 @@ function renderPackagesCell(
     columnIndex: columnIndex,
     tableColumn: tableColumn,
     children: (
-      <Observer packagesVisible={tableItem.packagesVisible}>
-        {(props: { packagesVisible: number }) => (
-          <div className="bolt-table-cell-content flex-row flex-wrap flex-gap-4">
-            {tableItem.packages.slice(0, props.packagesVisible).map((pkg, index) => (
-              <Link
-                key={index}
-                className="bolt-table-link bolt-table-link-inline flex-row flex-center"
-                href={pkg.url}
-                target={pkg.url ? '_blank' : undefined}
-                excludeTabStop
-              >
-                <span>
-                  {pkg.name} <span className="secondary-text">{pkg.version}</span>
-                </span>
-              </Link>
-            ))}
-            {tableItem.packagesTotal > MAX_PACKAGES_VISIBLE && (
-              <Button
-                onClick={(e) => {
-                  tableItem.packagesVisible.value =
-                    props.packagesVisible !== tableItem.packagesTotal ? tableItem.packagesTotal : MAX_PACKAGES_VISIBLE;
-                  e.stopPropagation();
-                }}
-                iconProps={{
-                  iconName: props.packagesVisible !== tableItem.packagesTotal ? 'ChevronRight' : 'ChevronLeft',
-                }}
-                tooltipProps={{
-                  text: props.packagesVisible !== tableItem.packagesTotal ? 'Show more packages' : 'Show less packages',
-                }}
-                text={props.packagesVisible !== tableItem.packagesTotal ? 'More' : 'Less'}
-              />
-            )}
-          </div>
-        )}
-      </Observer>
+      <ExpandableList
+        className="bolt-table-cell-content"
+        items={tableItem.packages}
+        renderItem={renderPackageItem}
+        showMoreCount={true}
+      />
     ),
   });
+}
+
+function renderPackageItem(item: { name: string; version: string; url?: string }, index: number): JSX.Element {
+  return (
+    <Link
+      key={index}
+      className="bolt-table-link bolt-table-link-inline flex-row flex-center"
+      href={item.url}
+      target={item.url ? '_blank' : undefined}
+      excludeTabStop
+    >
+      <span>
+        {item.name} <span className="secondary-text">{item.version}</span>
+      </span>
+    </Link>
+  );
 }
