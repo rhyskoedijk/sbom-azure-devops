@@ -1,7 +1,7 @@
 {
   "private": true,
   "dependencies": {
-    "azure-devops-extension-api": "^4.245.1",
+    "azure-devops-extension-api": "^4.248.1",
     "azure-devops-extension-sdk": "^4.0.2",
     "azure-devops-ui": "^2.254.0",
     "path-browserify": "^1.0.1",
