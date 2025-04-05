@@ -10,11 +10,11 @@ Object.defineProperty(globalThis, 'crypto', { value: webcrypto });
 // Vizdom must be imported AFTER the getrandom shim above, else it will throw an error
 import { DirectedGraph, EdgeStyle, Shape, VertexWeakRef } from '@vizdom/vizdom-ts-node';
 
-import { SecurityAdvisorySeverity } from '../../../shared/ghsa/ISecurityAdvisory';
+import { SecurityAdvisorySeverity } from '../../../shared/ghsa/models/securityAdvisory';
 
-import { NOASSERTION } from '../../../shared/models/spdx/2.3/Constants';
-import { IDocument } from '../../../shared/models/spdx/2.3/IDocument';
-import { ExternalRefCategory, ExternalRefSecurityType } from '../../../shared/models/spdx/2.3/IExternalRef';
+import { NOASSERTION } from '../../../shared/spdx/models/2.3/constants';
+import { IDocument } from '../../../shared/spdx/models/2.3/document';
+import { ExternalRefCategory, ExternalRefSecurityType } from '../../../shared/spdx/models/2.3/externalRef';
 
 const VERTEX_DOC_FILL_COLOR = '#E0E0E0';
 const VERTEX_PKG_FILL_COLOR = '#E0E0E0';

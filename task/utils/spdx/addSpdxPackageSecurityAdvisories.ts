@@ -1,17 +1,17 @@
 import { existsSync as fileExistsSync } from 'fs';
 import * as fs from 'fs/promises';
 
-import { GitHubGraphClient } from '../../../shared/ghsa/GitHubGraphClient';
-import { IPackage } from '../../../shared/ghsa/IPackage';
-import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/ISecurityAdvisory';
-import { ISecurityVulnerability } from '../../../shared/ghsa/ISecurityVulnerability';
+import { GitHubGraphClient } from '../../../shared/ghsa/client';
+import { IPackage } from '../../../shared/ghsa/models/package';
+import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/models/securityAdvisory';
+import { ISecurityVulnerability } from '../../../shared/ghsa/models/securityVulnerability';
 
-import { DocumentVersion } from '../../../shared/models/spdx/2.3/IDocument';
+import { DocumentVersion } from '../../../shared/spdx/models/2.3/document';
 import {
   ExternalRefCategory,
   ExternalRefPackageManagerType,
   ExternalRefSecurityType,
-} from '../../../shared/models/spdx/2.3/IExternalRef';
+} from '../../../shared/spdx/models/2.3/externalRef';
 
 /**
  * Check SPDX packages for security advisories; adds external references for all applicable advisories

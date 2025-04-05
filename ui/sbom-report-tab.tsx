@@ -11,15 +11,15 @@ import { Spinner } from 'azure-devops-ui/Spinner';
 import { Tab, TabContent, TabList, TabSize } from 'azure-devops-ui/Tabs';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
-import { ISbomBuildArtifact } from '../shared/models/ISbomBuildArtifact';
-import { getDisplayNameForDocument, IDocument } from '../shared/models/spdx/2.3/IDocument';
+import { ISbomBuildArtifact } from '../shared/models/sbomBuildArtifact';
 import { mergeSpdxDocuments } from '../shared/spdx/mergeSpdxDocuments';
-import { BuildRestClient } from './clients/BuildRestClient';
-import { SbomDocumentPage } from './components/sbom/SbomDocumentPage';
+import { getDisplayNameForDocument, IDocument } from '../shared/spdx/models/2.3/document';
+import { BuildRestClient } from './clients/azureDevOpsWebApi/build';
+import { SbomDocumentPage } from './components/sbom/documentPage';
 
-import '../shared/extensions/ArrayExtensions';
-import '../shared/extensions/NumberExtensions';
-import '../shared/extensions/StringExtensions';
+import '../shared/extensions/array';
+import '../shared/extensions/number';
+import '../shared/extensions/string';
 
 import './sbom-report-tab.scss';
 

@@ -11,15 +11,15 @@ import {
   TaskResult,
 } from 'azure-pipelines-task-lib/task';
 
-import { getGithubAccessToken } from './utils/azureDevOps/getGithubAccessToken';
+import { getGithubAccessToken } from './utils/azurePipelines/accessTokens';
 import { getFilesMatchingPathGlobs, resolvePathGlobs } from './utils/globs';
-import { SbomToolRunner } from './utils/sbomToolRunner';
+import { SbomTool } from './utils/sbomTool';
 
 async function run() {
   let taskResult: TaskResult = TaskResult.Succeeded;
   let lastError: any;
   try {
-    const sbomTool = new SbomToolRunner(getInput('version', false));
+    const sbomTool = new SbomTool(getInput('version', false));
     const sbomCommand = getInput('command', true);
     switch (sbomCommand) {
       // Generate SBOM manifest(s)

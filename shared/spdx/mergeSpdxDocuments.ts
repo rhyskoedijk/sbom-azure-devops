@@ -1,9 +1,9 @@
 import md5 from 'md5';
 
-import { getCreatorOrganization } from '../models/spdx/2.3/ICreationInfo';
-import { DocumentVersion, IDocument } from '../models/spdx/2.3/IDocument';
-import { IFile } from '../models/spdx/2.3/IFile';
-import { IPackage } from '../models/spdx/2.3/IPackage';
+import { getCreatorOrganization } from '../spdx/models/2.3/creationInfo';
+import { DocumentVersion, IDocument } from '../spdx/models/2.3/document';
+import { IFile } from '../spdx/models/2.3/file';
+import { IPackage } from '../spdx/models/2.3/package';
 
 const SpdxRefPrefix = 'SPDXRef';
 const SpdxDocumentId = `${SpdxRefPrefix}-DOCUMENT`;

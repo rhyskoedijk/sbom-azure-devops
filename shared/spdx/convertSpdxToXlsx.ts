@@ -2,33 +2,33 @@ import * as Path from 'path';
 
 import { IJsonSheet } from 'json-as-xlsx';
 
-import { getSeverityByName } from '../models/severity/Severities';
-import { ChecksumAlgorithm, getChecksum } from '../models/spdx/2.3/IChecksum';
-import { getCreatorOrganization, getCreatorTool } from '../models/spdx/2.3/ICreationInfo';
-import { getPackageAncestorPaths, getPackageLevelName, IDocument } from '../models/spdx/2.3/IDocument';
+import { getSeverityByName } from '../models/severity';
+import { ChecksumAlgorithm, getChecksum } from '../spdx/models/2.3/checksum';
+import { getCreatorOrganization, getCreatorTool } from '../spdx/models/2.3/creationInfo';
+import { getPackageAncestorPaths, getPackageLevelName, IDocument } from '../spdx/models/2.3/document';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
   getExternalRefPackageManagerName,
   getExternalRefPackageManagerUrl,
   parseExternalRefsAs,
-} from '../models/spdx/2.3/IExternalRef';
-import { IFile } from '../models/spdx/2.3/IFile';
-import { getLicensesFromExpression, ILicense } from '../models/spdx/2.3/ILicense';
+} from '../spdx/models/2.3/externalRef';
+import { IFile } from '../spdx/models/2.3/file';
+import { getLicensesFromExpression, ILicense } from '../spdx/models/2.3/license';
 import {
   getPackageLicenseExpression,
   getPackageLicenseReferences,
   getPackageSupplierOrganization,
   IPackage,
-} from '../models/spdx/2.3/IPackage';
-import { IRelationship } from '../models/spdx/2.3/IRelationship';
-import { parseSpdxSecurityAdvisoriesLegacy } from './parseSpdxSecurityAdvisoriesLegacy';
+} from '../spdx/models/2.3/package';
+import { IRelationship } from '../spdx/models/2.3/relationship';
+import { parseSpdxLegacySecurityAdvisories } from './parseSpdxLegacySecurityAdvisories';
 
-import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../ghsa/ILicense';
-import { SecurityAdvisoryIdentifierType, SecurityAdvisorySeverity } from '../ghsa/ISecurityAdvisory';
-import { ISecurityVulnerability } from '../ghsa/ISecurityVulnerability';
+import { getLicenseRiskAssessment, LicenseRiskSeverity } from '../ghsa/models/license';
+import { SecurityAdvisoryIdentifierType, SecurityAdvisorySeverity } from '../ghsa/models/securityAdvisory';
+import { ISecurityVulnerability } from '../ghsa/models/securityVulnerability';
 
-import '../extensions/ArrayExtensions';
+import '../extensions/array';
 
 /**
  * Convert an SPDX document to XLSX spreadsheet
@@ -48,7 +48,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           ExternalRefCategory.Security,
           ExternalRefSecurityType.Url,
         ) ||
-        parseSpdxSecurityAdvisoriesLegacy(pkg) ||
+        parseSpdxLegacySecurityAdvisories(pkg) ||
         [],
     )
     .filter((vuln): vuln is ISecurityVulnerability => !!vuln && !!vuln.package && !!vuln.advisory)
@@ -153,7 +153,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
             ExternalRefCategory.Security,
             ExternalRefSecurityType.Url,
           ) ||
-          parseSpdxSecurityAdvisoriesLegacy(pkg) ||
+          parseSpdxLegacySecurityAdvisories(pkg) ||
           [];
         return {
           id: pkg.SPDXID,

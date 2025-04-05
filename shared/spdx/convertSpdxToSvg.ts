@@ -1,4 +1,4 @@
-import { IDocument } from '../models/spdx/2.3/IDocument';
+import { IDocument } from '../spdx/models/2.3/document';
 
 /**
  * Convert an SPDX document to SVG graph diagram
