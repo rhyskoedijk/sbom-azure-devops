@@ -313,7 +313,7 @@ export class Root extends React.Component<{}, State> {
                 {this.state.summaryArtifact && (
                   <Tab
                     id={this.state.summaryArtifact.id}
-                    name="Summary"
+                    name="All Manifests"
                     iconProps={{ iconName: 'ViewDashboard', className: 'margin-right-4' }}
                   />
                 )}

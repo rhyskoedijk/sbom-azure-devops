@@ -117,7 +117,7 @@ export class SpdxLicenseTableCard extends React.Component<Props, State> {
       },
       {
         id: 'packageCount',
-        name: 'Count',
+        name: 'Package Count',
         onSize: tableColumnResize,
         readonly: true,
         renderCell: (rowIndex, columnIndex, tableColumn, tableItem) =>

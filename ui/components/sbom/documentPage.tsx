@@ -123,14 +123,14 @@ export class SbomDocumentPage extends React.Component<Props, State> {
           {this.state.packages.length ? (
             <Tab id="packages" name="Packages" badgeCount={this.state.packages.length} />
           ) : null}
-          {this.state.securityAdvisories.length ? (
-            <Tab id="securityAdvisories" name="Security Advisories" badgeCount={this.state.securityAdvisories.length} />
-          ) : null}
           {this.state.licenses.length ? (
             <Tab id="licenses" name="Licenses" badgeCount={this.state.licenses.length} />
           ) : null}
           {this.state.suppliers.length ? (
             <Tab id="suppliers" name="Suppliers" badgeCount={this.state.suppliers.length} />
+          ) : null}
+          {this.state.securityAdvisories.length ? (
+            <Tab id="securityAdvisories" name="Security Advisories" badgeCount={this.state.securityAdvisories.length} />
           ) : null}
           {this.props.artifact.loadSvgDocumentAsync ? (
             <Tab
@@ -177,16 +177,6 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                       />
                     </div>
                   );
-                case 'securityAdvisories':
-                  return (
-                    <div className="page-content">
-                      <SpdxSecurityTableCard
-                        document={this.props.artifact.spdxDocument}
-                        securityAdvisories={this.state.securityAdvisories}
-                        filter={this.filter}
-                      />
-                    </div>
-                  );
                 case 'licenses':
                   return (
                     <div className="page-content">
@@ -203,6 +193,16 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                       <SpdxSupplierTableCard
                         document={this.props.artifact.spdxDocument}
                         suppliers={this.state.suppliers}
+                        filter={this.filter}
+                      />
+                    </div>
+                  );
+                case 'securityAdvisories':
+                  return (
+                    <div className="page-content">
+                      <SpdxSecurityTableCard
+                        document={this.props.artifact.spdxDocument}
+                        securityAdvisories={this.state.securityAdvisories}
                         filter={this.filter}
                       />
                     </div>
