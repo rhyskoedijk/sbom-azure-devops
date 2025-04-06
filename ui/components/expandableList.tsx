@@ -4,6 +4,8 @@ import { Button } from 'azure-devops-ui/Button';
 import { ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Observer } from 'azure-devops-ui/Observer';
 
+import './expandableList.scss';
+
 const MAX_ITEMS_VISIBLE = 3;
 
 interface Props<T> {
@@ -55,6 +57,7 @@ export class ExpandableList<T> extends React.Component<Props<T>, State<T>> {
                       : this.props.max || MAX_ITEMS_VISIBLE;
                   e.stopPropagation();
                 }}
+                className="expansion-toggle-button"
                 iconProps={{
                   iconName: props.itemsVisible !== this.state.itemsTotal ? 'ChevronRight' : 'ChevronLeft',
                 }}
