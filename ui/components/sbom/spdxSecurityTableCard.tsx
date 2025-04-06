@@ -318,6 +318,7 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
           containerClassName="h-scroll-auto"
           columns={this.state.tableColumns}
           itemProvider={this.state.tableItems}
+          virtualize={true}
           behaviors={this.state.tableSorting ? [this.state.tableSorting] : undefined}
           singleClickActivation={true}
           selectRowOnClick={true}
