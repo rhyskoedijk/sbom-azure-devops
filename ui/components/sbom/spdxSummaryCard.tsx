@@ -260,8 +260,8 @@ export class SpdxSummaryCard extends React.Component<Props, State> {
       );
     }
     return (
-      <Card className="flex-grow flex-column bolt-card bolt-card-white" contentProps={{ className: 'overflow-hidden' }}>
-        <div className="flex-column flex-gap-24">
+      <Card className="flex-grow flex-column bolt-card bolt-card-white">
+        <div className="flex-column flex-gap-24 margin-vertical-4">
           <div className="summary-row flex-row flex-wrap flex-gap-24">
             <Tile
               color={DEFAULT_SEVERITY.color}

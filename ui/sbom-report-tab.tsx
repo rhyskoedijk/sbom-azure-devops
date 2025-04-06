@@ -307,7 +307,7 @@ export class Root extends React.Component<{}, State> {
                 onSelectedTabChanged={this.onSelectedArtifactTabChanged}
                 selectedTabId={this.selectedArtifactId}
                 tabSize={TabSize.Compact}
-                className="bolt-tabbar-grey bolt-tabbar-compact flex-shrink"
+                className="bolt-tabbar-grey bolt-tabbar-compact flex-shrink full-view-height"
                 tabGroups={[{ id: 'manifests', name: 'Manifests' }]}
               >
                 {this.state.summaryArtifact && (
