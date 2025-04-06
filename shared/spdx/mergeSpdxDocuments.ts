@@ -57,7 +57,7 @@ export function mergeSpdxDocuments(
     documentNamespace: `${rootNamespaceUri.protocol}//${rootNamespaceUri.host}/${packageName}/${packageVersion}/${packageGuid}`,
     creationInfo: {
       created: new Date().toISOString(),
-      creators: [`Organization: ${rootOrganisation}`, `Tool: rhyskoedijk/sbom-azure-devops-1.0`],
+      creators: [`Organization: ${rootOrganisation}`, `Tool: rhyskoedijk/sbom-azure-devops`],
     },
     files: sourceDocuments.flatMap((d) => d.files),
     packages: sourceDocuments.flatMap((d) => d.packages).distinctBy((p) => p.SPDXID),
