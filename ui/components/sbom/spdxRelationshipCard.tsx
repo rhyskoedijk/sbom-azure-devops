@@ -3,7 +3,7 @@ import * as React from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { MessageCard, MessageCardSeverity } from 'azure-devops-ui/MessageCard';
-import { Spinner } from 'azure-devops-ui/Spinner';
+import { Spinner, SpinnerSize } from 'azure-devops-ui/Spinner';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { IDocument } from '../../../shared/spdx/models/2.3/document';
@@ -71,7 +71,7 @@ export class SpdxRelationshipCard extends React.Component<Props, State> {
         {this.state.loadError.message || 'An error occurred while loading the relationship graph data.'}
       </MessageCard>
     ) : this.state.documentGraphSvgMarkup === undefined ? (
-      <Spinner className="margin-vertical-32" label="Loading relationship graph data..." />
+      <Spinner className="margin-vertical-32" size={SpinnerSize.large} label="Loading relationship graph data..." />
     ) : this.state.documentGraphSvgMarkup === null ? (
       <ZeroData
         className="margin-vertical-32"

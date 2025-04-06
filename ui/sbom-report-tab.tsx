@@ -7,7 +7,7 @@ import { Attachment, BuildServiceIds, IBuildPageDataService } from 'azure-devops
 import { ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { MessageCard, MessageCardSeverity } from 'azure-devops-ui/MessageCard';
 import { Observer } from 'azure-devops-ui/Observer';
-import { Spinner } from 'azure-devops-ui/Spinner';
+import { Spinner, SpinnerSize } from 'azure-devops-ui/Spinner';
 import { Tab, TabContent, TabList, TabSize } from 'azure-devops-ui/Tabs';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
@@ -71,7 +71,7 @@ export class Root extends React.Component<{}, State> {
    */
   private async loadSbomArtifactsFromCurrentBuild(): Promise<void> {
     try {
-      this.setState({ loadingMessage: 'Finding SBOM artifacts for current build...' });
+      this.setState({ loadingMessage: 'Downloading SBOM build artifacts...' });
 
       // Get the current page project data
       const projectPageDataService = await SDK.getService<IProjectPageService>(CommonServiceIds.ProjectPageService);
@@ -283,6 +283,7 @@ export class Root extends React.Component<{}, State> {
         ) : this.state.loadingMessage ? (
           <Spinner
             className="margin-vertical-32"
+            size={SpinnerSize.large}
             label={this.state.loadingMessage || 'Loading SBOM build artifacts...'}
           />
         ) : (
