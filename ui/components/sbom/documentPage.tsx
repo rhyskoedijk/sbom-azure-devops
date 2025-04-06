@@ -109,7 +109,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
     }
     // TODO: Use page providers; https://developer.microsoft.com/en-us/azure-devops/components/page#page-with-providers
     return (
-      <Page orientation={Orientation.Vertical} className="flex-grow">
+      <Page orientation={Orientation.Vertical} className="flex-grow full-view-height ">
         <SbomDocumentHeader artifact={this.props.artifact} onLoadArtifacts={this.props.onLoadArtifacts} />
         <TabBar
           onSelectedTabChanged={this.onSelectedTabChanged}
@@ -146,7 +146,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
               switch (props.selectedTabId) {
                 case 'summary':
                   return (
-                    <div className="page-content">
+                    <div className="page-content flex-grow">
                       <SpdxSummaryCard
                         document={this.props.artifact.spdxDocument}
                         files={this.state.files}
@@ -159,7 +159,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                   );
                 case 'files':
                   return (
-                    <div className="page-content">
+                    <div className="page-content flex-grow">
                       <SpdxFileTableCard
                         document={this.props.artifact.spdxDocument}
                         files={this.state.files}
@@ -169,7 +169,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                   );
                 case 'packages':
                   return (
-                    <div className="page-content">
+                    <div className="page-content flex-grow">
                       <SpdxPackageTableCard
                         document={this.props.artifact.spdxDocument}
                         packages={this.state.packages}
@@ -179,7 +179,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                   );
                 case 'licenses':
                   return (
-                    <div className="page-content">
+                    <div className="page-content flex-grow">
                       <SpdxLicenseTableCard
                         document={this.props.artifact.spdxDocument}
                         licenses={this.state.licenses}
@@ -189,7 +189,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                   );
                 case 'suppliers':
                   return (
-                    <div className="page-content">
+                    <div className="page-content flex-grow">
                       <SpdxSupplierTableCard
                         document={this.props.artifact.spdxDocument}
                         suppliers={this.state.suppliers}
@@ -199,7 +199,7 @@ export class SbomDocumentPage extends React.Component<Props, State> {
                   );
                 case 'securityAdvisories':
                   return (
-                    <div className="page-content">
+                    <div className="page-content flex-grow">
                       <SpdxSecurityTableCard
                         document={this.props.artifact.spdxDocument}
                         securityAdvisories={this.state.securityAdvisories}

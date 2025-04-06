@@ -38,6 +38,10 @@ $severity-none-background: var(--status-neutral-background);
   margin-bottom: 32px;
 }
 
+.full-view-height {
+  height: 100vh;
+}
+
 .overflow-hidden {
   overflow: hidden !important;
 }
