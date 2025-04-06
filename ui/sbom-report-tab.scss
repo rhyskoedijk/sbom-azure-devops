@@ -51,8 +51,14 @@ $severity-none-background: var(--status-neutral-background);
 .bolt-tabbar-compact .bolt-tablist-heading,
 .bolt-tabbar-compact .bolt-tab {
   padding-left: 8px;
+  padding-right: 8px;
 }
 
 .bolt-tabbar-compact .bolt-tab-text {
   overflow: hidden !important;
+}
+
+.manifests-tabbar {
+  height: 100vh;
+  max-width: 15vw;
 }
