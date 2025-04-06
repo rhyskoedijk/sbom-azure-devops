@@ -44,7 +44,7 @@ export function getDisplayNameForDocument(document: IDocument): string | undefin
   }
 }
 
-export function getPackageAncestorPaths(document: IDocument, packageId: string): IPackageDependencyPath[] {
+export function getPackageAncestorDependencyPaths(document: IDocument, packageId: string): IPackageDependencyPath[] {
   const hasMultipleRootPackages = document.documentDescribes.length > 1;
   const rootPackageIds = document.documentDescribes;
   const relationships = document.relationships || [];

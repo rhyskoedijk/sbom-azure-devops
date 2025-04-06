@@ -1,9 +1,11 @@
 import * as React from 'react';
 
+import { Button } from 'azure-devops-ui/Button';
 import { Card } from 'azure-devops-ui/Card';
 import { IReadonlyObservableValue, ObservableArray, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { Icon, IconSize } from 'azure-devops-ui/Icon';
 import { Link } from 'azure-devops-ui/Link';
+import { Observer } from 'azure-devops-ui/Observer';
 import {
   ColumnSorting,
   ITableColumn,
@@ -17,12 +19,13 @@ import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
 import { ExpandableList } from '../expandableList';
+import { PackageAncestorPathsDialog } from './packageAncestorPathsDialog';
 import { VulnerabilitiesSummaryBadge } from './vulnerabilitiesSummaryBadge';
 
 import { ISecurityVulnerability } from '../../../shared/ghsa/models/securityVulnerability';
 import { getSeverityByName } from '../../../shared/models/severity';
 import {
-  getPackageAncestorPaths,
+  getPackageAncestorDependencyPaths,
   getPackageLevelName,
   IDocument,
   IPackageDependencyPath,
@@ -48,7 +51,8 @@ interface IPackageTableItem {
   packageManagerName: string;
   packageManagerUrl: string;
   type: string;
-  introducedThrough: IPackageDependencyPath[];
+  ancestorDependencyPaths: IPackageDependencyPath[];
+  isAncestorDependencyPathsDialogOpen: ObservableValue<boolean>;
   license: string;
   supplier: string;
   vulnerabilityServerityWeighting: number;
@@ -102,7 +106,8 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
             packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
             packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
             type: getPackageLevelName(props.document, pkg.SPDXID) || '',
-            introducedThrough: getPackageAncestorPaths(props.document, pkg.SPDXID),
+            ancestorDependencyPaths: getPackageAncestorDependencyPaths(props.document, pkg.SPDXID),
+            isAncestorDependencyPathsDialogOpen: new ObservableValue(false),
             license: getPackageLicenseExpression(pkg) || '',
             supplier: getPackageSupplierOrganization(pkg) || '',
             vulnerabilityServerityWeighting: securityAdvisories.reduce(
@@ -171,11 +176,11 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
         width: new ObservableValue(-7.5),
       },
       {
-        id: 'introducedThrough',
-        name: 'Introduced Through',
+        id: 'ancestorDependencyPaths',
+        name: 'Ancestor Package Paths',
         onSize: tableColumnResize,
         readonly: true,
-        renderCell: renderPackageIntroducedThroughCell,
+        renderCell: renderPackageAncestorDependencyPathsCell,
         sortProps: {
           ariaLabelAscending: 'Sorted low to high',
           ariaLabelDescending: 'Sorted high to low',
@@ -254,7 +259,7 @@ export class SpdxPackageTableCard extends React.Component<Props, State> {
               },
               // Sort on number of chained packages
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
-                return item1.introducedThrough.length - item2.introducedThrough.length;
+                return item1.ancestorDependencyPaths.length - item2.ancestorDependencyPaths.length;
               },
               // Sort on license
               (item1: IPackageTableItem, item2: IPackageTableItem): number => {
@@ -362,7 +367,7 @@ function renderSimpleValueCell(
   });
 }
 
-function renderPackageIntroducedThroughCell(
+function renderPackageAncestorDependencyPathsCell(
   rowIndex: number,
   columnIndex: number,
   tableColumn: ITableColumn<IPackageTableItem>,
@@ -374,9 +379,42 @@ function renderPackageIntroducedThroughCell(
     tableColumn: tableColumn,
     children: (
       <div className="bolt-table-cell-content flex-column rhythm-vertical-4">
-        {tableItem.introducedThrough.map((ancestor, index) => (
-          <ExpandableList key={index} max={1} items={ancestor.dependencyPath} renderItem={renderPackageItem} />
-        ))}
+        {tableItem.ancestorDependencyPaths.length > 1 ? (
+          <div className="flex-row flex-wrap flex-center flex-gap-4">
+            <span className="margin-horizontal-4">
+              {tableItem.ancestorDependencyPaths.length} packages
+              <span className="secondary-text"> introduced this package</span>
+            </span>
+            <Button
+              onClick={(e) => {
+                tableItem.isAncestorDependencyPathsDialogOpen.value = true;
+                e.stopPropagation();
+              }}
+              style={{ padding: '3px 6px' }}
+              iconProps={{ iconName: 'Info' }}
+              tooltipProps={{ text: 'Show all ancestor package paths' }}
+              text="Show"
+            />
+            <Observer isOpen={tableItem.isAncestorDependencyPathsDialogOpen}>
+              {(props: { isOpen: boolean }) => {
+                return props.isOpen ? (
+                  <PackageAncestorPathsDialog
+                    packageName={tableItem.name}
+                    packageVersion={tableItem.version}
+                    packageDependencyPaths={tableItem.ancestorDependencyPaths}
+                    onDismiss={() => (tableItem.isAncestorDependencyPathsDialogOpen.value = false)}
+                  />
+                ) : null;
+              }}
+            </Observer>
+          </div>
+        ) : (
+          <div className="flex-column rhythm-vertical-4">
+            {tableItem.ancestorDependencyPaths.map((ancestor, index) => (
+              <ExpandableList key={index} max={1} items={ancestor.dependencyPath} renderItem={renderPackageItem} />
+            ))}
+          </div>
+        )}
       </div>
     ),
   });

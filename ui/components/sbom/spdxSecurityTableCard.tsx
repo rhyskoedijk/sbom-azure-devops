@@ -15,7 +15,6 @@ import {
   TableCell,
   TwoLineTableCell,
 } from 'azure-devops-ui/Table';
-import { Tooltip } from 'azure-devops-ui/TooltipEx';
 import { FILTER_CHANGE_EVENT, IFilter } from 'azure-devops-ui/Utilities/Filter';
 import { ZeroData } from 'azure-devops-ui/ZeroData';
 
@@ -23,7 +22,7 @@ import { IPackage } from '../../../shared/ghsa/models/package';
 import { SecurityAdvisoryIdentifierType } from '../../../shared/ghsa/models/securityAdvisory';
 import { ISecurityVulnerability } from '../../../shared/ghsa/models/securityVulnerability';
 import { getSeverityByName, ISeverity } from '../../../shared/models/severity';
-import { getPackageAncestorPaths, IDocument, IPackageDependencyPath } from '../../../shared/spdx/models/2.3/document';
+import { IDocument } from '../../../shared/spdx/models/2.3/document';
 
 interface ISecurityAdvisoryTableItem {
   ghsaId: string;
@@ -32,7 +31,6 @@ interface ISecurityAdvisoryTableItem {
   package: IPackage;
   vulnerableVersionRange: string;
   firstPatchedVersion: string;
-  introducedThrough: IPackageDependencyPath[];
   severity: ISeverity;
   cvssScore: number;
   cvssVector: string;
@@ -97,7 +95,6 @@ export class SpdxSecurityTableCard extends React.Component<Props, State> {
             vulnerableVersionRange: vuln.vulnerableVersionRange,
             fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
             firstPatchedVersion: vuln.firstPatchedVersion,
-            introducedThrough: (packageSpdxId && getPackageAncestorPaths(props.document, packageSpdxId)) || [],
             severity: getSeverityByName(vuln.advisory.severity),
             cvssScore: vuln.advisory.cvss?.score,
             cvssVector: cvssParts?.[2]?.trim() || '',
@@ -418,13 +415,7 @@ function renderAdvisoryPackageCell(
     ariaRowIndex: rowIndex,
     columnIndex: columnIndex,
     tableColumn: tableColumn,
-    line1: (
-      <Tooltip
-        text={tableItem.introducedThrough?.map((p) => p.dependencyPath.map((d) => d.name).join(' > ')).join('\n\n')}
-      >
-        <div className="primary-text text-ellipsis">{tableItem.package?.name}</div>
-      </Tooltip>
-    ),
+    line1: <div className="primary-text text-ellipsis">{tableItem.package?.name}</div>,
     line2: <div className="secondary-text text-ellipsis">{tableItem.package?.version}</div>,
   });
 }

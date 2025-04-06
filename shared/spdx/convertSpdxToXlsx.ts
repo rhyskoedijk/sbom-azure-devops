@@ -5,7 +5,7 @@ import { IJsonSheet } from 'json-as-xlsx';
 import { getSeverityByName } from '../models/severity';
 import { ChecksumAlgorithm, getChecksum } from '../spdx/models/2.3/checksum';
 import { getCreatorOrganization, getCreatorTool } from '../spdx/models/2.3/creationInfo';
-import { getPackageAncestorPaths, getPackageLevelName, IDocument } from '../spdx/models/2.3/document';
+import { getPackageAncestorDependencyPaths, getPackageLevelName, IDocument } from '../spdx/models/2.3/document';
 import {
   ExternalRefCategory,
   ExternalRefSecurityType,
@@ -134,7 +134,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'Package Manager', value: 'packageManagerName' },
       { label: 'Package URL', value: 'packageManagerUrl' },
       { label: 'Type', value: 'type' },
-      { label: 'Introduced Through', value: 'introducedThrough' },
+      { label: 'Ancestor Package Paths', value: 'ancestorDependencyPaths' },
       { label: 'License', value: 'license' },
       { label: 'Supplier', value: 'supplier' },
       { label: 'Total Vulnerabilities', value: 'totalVulnerabilities' },
@@ -162,8 +162,8 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
           packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
           type: getPackageLevelName(spdx, pkg.SPDXID) || '',
-          introducedThrough:
-            getPackageAncestorPaths(spdx, pkg.SPDXID)
+          ancestorDependencyPaths:
+            getPackageAncestorDependencyPaths(spdx, pkg.SPDXID)
               .map((p) => p.dependencyPath.map((p) => p.name).join(' > '))
               .join(', ') || '',
           license: getPackageLicenseExpression(pkg) || '',
@@ -201,7 +201,6 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       { label: 'Vulnerable Versions', value: 'vulnerableVersionRange' },
       { label: 'Fix Available', value: 'fixAvailable' },
       { label: 'Fixed In', value: 'firstPatchedVersion' },
-      { label: 'Introduced Through', value: 'introducedThrough' },
       { label: 'Severity', value: 'severity' },
       { label: 'CVSS Score', value: 'cvssScore' },
       { label: 'CVSS Vector', value: 'cvssVector' },
@@ -225,12 +224,6 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           vulnerableVersionRange: vuln.vulnerableVersionRange,
           fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
           firstPatchedVersion: vuln.firstPatchedVersion,
-          introducedThrough:
-            (packageSpdxId &&
-              getPackageAncestorPaths(spdx, packageSpdxId)
-                .map((p) => p.dependencyPath.map((p) => p.name).join(' > '))
-                .join(', ')) ||
-            '',
           severity: vuln.advisory.severity?.toPascalCase(),
           cvssScore: vuln.advisory.cvss?.score || '',
           cvssVector: vuln.advisory.cvss?.vectorString || '',
