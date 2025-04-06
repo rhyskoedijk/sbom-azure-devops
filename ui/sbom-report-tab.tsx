@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { CommonServiceIds, getClient, IProjectPageService } from 'azure-devops-extension-api';
-import { BuildServiceIds, IBuildPageDataService } from 'azure-devops-extension-api/Build';
+import { Attachment, BuildServiceIds, IBuildPageDataService } from 'azure-devops-extension-api/Build';
 import { ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { MessageCard, MessageCardSeverity } from 'azure-devops-ui/MessageCard';
 import { Observer } from 'azure-devops-ui/Observer';
@@ -96,75 +96,44 @@ export class Root extends React.Component<{}, State> {
         },
       });
 
-      // Get all SPDX JSON artifact attachments for the current build
+      // Get all SPDX JSON artifact attached to the current build
       const buildClient = getClient(BuildRestClient);
       const spdxJsonAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_JSON_ATTACHMENT_TYPE);
       const spdxSvgAttachments = await buildClient.getAttachments(projectId, buildId, SPDX_SVG_ATTACHMENT_TYPE);
-      console.info(`Detected ${spdxJsonAttachments.length} SBOM artifact attachment(s) for build ${buildId}`);
+      console.info(`Found ${spdxJsonAttachments.length} SBOM artifact attachment(s) for build ${buildId}`);
 
-      // Download and process each SBOM artifact attachment
+      // Load and parse each artifact
       const sbomArtifacts: ISbomBuildArtifact[] = [];
-      for (const spdxJsonAttachment of spdxJsonAttachments) {
+      const loadedSpdxJsonAttachments = await Promise.all(
+        spdxJsonAttachments.map((attachment) => this.getBuildAttachment(buildClient, attachment)),
+      );
+      for (const spdxJsonAttachment of loadedSpdxJsonAttachments) {
         try {
           this.setState({
-            loadingMessage: `Loading '${spdxJsonAttachment.name}' (${spdxJsonAttachments.indexOf(spdxJsonAttachment) + 1}/${spdxJsonAttachments.length})...`,
+            loadingMessage: `Parsing '${spdxJsonAttachment.name}' (${loadedSpdxJsonAttachments.indexOf(spdxJsonAttachment) + 1}/${loadedSpdxJsonAttachments.length})...`,
           });
 
-          // Extract the attachment identifiers from the url
-          // Format: `/{projectId}/_apis/build/builds/{buildId}/{timelineId}/{timelineRecordId}/attachments/{attachmentType}/{attachmentName}`
-          // TODO: Change this if/when the DevOps API provides a better way to get the attachment stream
-          const spdxJsonUrl = spdxJsonAttachment._links?.self?.href;
-          if (!spdxJsonUrl) {
-            throw new Error(`Attachment url not found for '${spdxJsonAttachment.name}'`);
-          }
-          const spdxJsonUrlMatch = spdxJsonUrl.match(
-            /([a-f-0-9]*)\/_apis\/build\/builds\/([a-f-0-9]*)\/([a-f-0-9]*)\/([a-f-0-9]*)\/attachments\//i,
-          );
-          if (!spdxJsonUrlMatch) {
-            throw new Error(`Attachment url format not recognized for '${spdxJsonAttachment.name}'`);
-          }
-
-          // Download the SPDX document
-          const spdxJsonStream = await buildClient.getAttachment(
-            spdxJsonUrlMatch[1],
-            spdxJsonUrlMatch[2],
-            spdxJsonUrlMatch[3],
-            spdxJsonUrlMatch[4],
-            SPDX_JSON_ATTACHMENT_TYPE,
-            spdxJsonAttachment.name,
-          );
-          if (!spdxJsonStream) {
-            throw new Error(`Attachment stream '${spdxJsonAttachment.name}' could not be retrieved`);
-          }
-
           // Parse the SPDX document JSON
-          const spdxDocument = JSON.parse(new TextDecoder().decode(spdxJsonStream)) as IDocument;
+          const spdxDocument = JSON.parse(new TextDecoder().decode(spdxJsonAttachment.stream)) as IDocument;
           if (!spdxDocument) {
             throw new Error(`Attachment stream '${spdxJsonAttachment.name}' could not be parsed as JSON`);
           }
 
           // TODO: Remove SVG loading once web browser SPDX to SVG generation is implemented
-          const hasSvgAttachment = spdxSvgAttachments.find(
+          const spdxSvgAttachment = spdxSvgAttachments.find(
             (a) => a.name === spdxJsonAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
           );
-          const loadSvgDocumentAsync = hasSvgAttachment
+          const loadSvgDocumentAsync = spdxSvgAttachment
             ? async () => {
-                return await buildClient.getAttachment(
-                  spdxJsonUrlMatch[1],
-                  spdxJsonUrlMatch[2],
-                  spdxJsonUrlMatch[3],
-                  spdxJsonUrlMatch[4],
-                  SPDX_SVG_ATTACHMENT_TYPE,
-                  spdxJsonAttachment.name.replace(SPDX_JSON_ATTACHMENT_TYPE, SPDX_SVG_ATTACHMENT_TYPE),
-                );
+                return (await this.getBuildAttachment(buildClient, spdxSvgAttachment))?.stream;
               }
             : undefined;
 
-          // Add the SBOM artifact to the list
+          // Add the parsed artifact to the list
           sbomArtifacts.push({
             id: spdxDocument.documentNamespace,
             spdxDocument: spdxDocument,
-            spdxJsonDocument: spdxJsonStream,
+            spdxJsonDocument: spdxJsonAttachment.stream,
             loadSvgDocumentAsync: loadSvgDocumentAsync,
           });
         } catch (error) {
@@ -200,8 +169,8 @@ export class Root extends React.Component<{}, State> {
   private async loadSbomArtifactsFromFileUpload(files: File[]): Promise<void> {
     for (const file of files) {
       try {
-        // Load the SPDX JSON file
-        console.info(`Loading SBOM artifact from file upload '${file.name}'...`);
+        // Parse the SPDX JSON file
+        console.info(`Parsing SBOM artifact from file upload '${file.name}'...`);
         const spdxJsonStream = await file.arrayBuffer();
         const spdxJsonDocument = JSON.parse(new TextDecoder().decode(spdxJsonStream)) as IDocument;
         if (!spdxJsonDocument) {
@@ -223,7 +192,7 @@ export class Root extends React.Component<{}, State> {
           loadError: undefined,
         });
 
-        // Generate a summary SBOM artifact if multiple artifacts were loaded
+        // Regenerate the summary SBOM artifact, if multiple artifacts are now loaded
         this.generateSbomSummaryArtifact();
       } catch (error) {
         console.error(error);
@@ -234,21 +203,66 @@ export class Root extends React.Component<{}, State> {
   }
 
   /**
-   * Merge all SBOM artifacts into a single summary artifact
+   * Download the byte stream of a build attachment
+   * @param client The build client
+   * @param attachment The attachment to download
+   * @returns The name and byte stream of the attachment
+   */
+  private async getBuildAttachment(
+    client: BuildRestClient,
+    attachment: Attachment,
+  ): Promise<{ name: string; stream: ArrayBuffer }> {
+    const attachmentUrl = attachment._links?.self?.href;
+    if (!attachmentUrl) {
+      throw new Error(`Attachment url not found for '${attachment.name}'`);
+    }
+
+    // Extract the attachment identifiers from the url
+    // Format: `/{projectId}/_apis/build/builds/{buildId}/{timelineId}/{timelineRecordId}/attachments/{attachmentType}/{attachmentName}`
+    // TODO: Change this if/when the DevOps API provides a better way to get the attachment stream
+    const attachmentUrlParts = attachmentUrl.match(
+      /([a-f-0-9]*)\/_apis\/build\/builds\/([a-f-0-9]*)\/([a-f-0-9]*)\/([a-f-0-9]*)\/attachments\/([^\/]*)\/(.*)/i,
+    );
+    if (!attachmentUrlParts) {
+      throw new Error(`Attachment url format not recognized for '${attachment.name}'`);
+    }
+
+    // Download the attachment
+    const attachmentStream = await client.getAttachment(
+      attachmentUrlParts[1],
+      attachmentUrlParts[2],
+      attachmentUrlParts[3],
+      attachmentUrlParts[4],
+      attachmentUrlParts[5],
+      attachmentUrlParts[6] || attachment.name,
+    );
+    if (!attachmentStream) {
+      throw new Error(`Attachment stream '${attachment.name}' could not be retrieved`);
+    }
+
+    return {
+      name: attachment.name,
+      stream: attachmentStream,
+    };
+  }
+
+  /**
+   * Merges all SBOM artifacts into a single "summary artifact" document;
+   * This allows the user to view all information across all artifacts from a single view
    */
   private generateSbomSummaryArtifact() {
     if (this.state?.artifacts) {
       if (this.state.artifacts.length > 1) {
-        const mergedDocument = mergeSpdxDocuments(
+        const summarisedSpdxDocument = mergeSpdxDocuments(
           this.state.build?.name,
           this.state.build?.number,
           this.state.artifacts.map((a) => a.spdxDocument),
         );
         this.setState({
           summaryArtifact: {
-            id: mergedDocument.documentNamespace,
-            spdxDocument: mergedDocument,
-            spdxJsonDocument: new TextEncoder().encode(JSON.stringify(mergedDocument, null, 2)).buffer,
+            id: summarisedSpdxDocument.documentNamespace,
+            spdxDocument: summarisedSpdxDocument,
+            spdxJsonDocument: new TextEncoder().encode(JSON.stringify(summarisedSpdxDocument, null, 2)).buffer,
           },
         });
       }
