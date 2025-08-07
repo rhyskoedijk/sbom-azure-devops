@@ -265,7 +265,7 @@ async function installToolLinuxAsync(directory: string, architecture?: string, v
     await tool(which('bash', true))
       .arg([
         '-c',
-        `curl "${GITHUB_RELEASES_URL}/${version ? 'v' + version : 'latest'}/download/sbom-tool-linux-${architecture}" -Lo "${toolPath}" && chmod +x "${toolPath}"`,
+        `curl "${GITHUB_RELEASES_URL}/${version ? 'download/v' + version : 'latest/download'}/sbom-tool-linux-${architecture}" -Lo "${toolPath}" && chmod +x "${toolPath}"`,
       ])
       .execAsync();
     return toolPath;
