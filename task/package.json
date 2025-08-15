@@ -6,7 +6,7 @@
     "glob": "^11.0.3"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^13.0.0",
+    "copy-webpack-plugin": "^13.0.1",
     "terser-webpack-plugin": "^5.3.14",
     "ts-loader": "^9.5.2",
     "webpack": "^5.101.0",
