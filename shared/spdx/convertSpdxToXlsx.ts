@@ -30,6 +30,8 @@ import { ISecurityVulnerability } from '../ghsa/models/securityVulnerability';
 
 import '../extensions/array';
 
+const MAX_CELL_LENGTH = 32767;
+
 /**
  * Convert an SPDX document to XLSX spreadsheet
  * @param spdx The SPDX document
@@ -85,14 +87,14 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
     content: [
       {
         id: spdx.SPDXID,
-        name: spdx.name,
+        name: spdx.name.truncate(MAX_CELL_LENGTH),
         spdxVersion: spdx.spdxVersion,
         dataLicense: spdx.dataLicense,
         created: new Date(spdx.creationInfo.created).toLocaleString(),
-        organization: getCreatorOrganization(spdx.creationInfo) || '',
-        tool: getCreatorTool(spdx.creationInfo) || '',
-        namespace: spdx.documentNamespace || '',
-        describes: spdx.documentDescribes.join(', ') || '',
+        organization: getCreatorOrganization(spdx.creationInfo)?.truncate(MAX_CELL_LENGTH) || '',
+        tool: getCreatorTool(spdx.creationInfo)?.truncate(MAX_CELL_LENGTH) || '',
+        namespace: spdx.documentNamespace?.truncate(MAX_CELL_LENGTH) || '',
+        describes: spdx.documentDescribes.join(', ').truncate(MAX_CELL_LENGTH) || '',
       },
     ],
   };
@@ -114,8 +116,8 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
       .map((file: IFile) => {
         return {
           id: file.SPDXID,
-          package: packages.find((p) => p.hasFiles?.includes(file.SPDXID))?.name || '',
-          name: Path.normalize(file.fileName),
+          package: packages.find((p) => p.hasFiles?.includes(file.SPDXID))?.name?.truncate(MAX_CELL_LENGTH) || '',
+          name: Path.normalize(file.fileName)?.truncate(MAX_CELL_LENGTH) || '',
           checksum: getChecksum(file.checksums, ChecksumAlgorithm.SHA256) || '',
         };
       }),
@@ -157,17 +159,18 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           [];
         return {
           id: pkg.SPDXID,
-          name: pkg.name,
-          version: pkg.versionInfo,
-          packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs) || '',
-          packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs) || '',
+          name: pkg.name?.truncate(MAX_CELL_LENGTH),
+          version: pkg.versionInfo?.truncate(MAX_CELL_LENGTH),
+          packageManagerName: getExternalRefPackageManagerName(pkg.externalRefs)?.truncate(MAX_CELL_LENGTH) || '',
+          packageManagerUrl: getExternalRefPackageManagerUrl(pkg.externalRefs)?.truncate(MAX_CELL_LENGTH) || '',
           type: getPackageLevelName(spdx, pkg.SPDXID) || '',
           ancestorDependencyPaths:
             getPackageAncestorDependencyPaths(spdx, pkg.SPDXID)
               .map((p) => p.dependencyPath.map((p) => p.name).join(' > '))
-              .join(', ') || '',
-          license: getPackageLicenseExpression(pkg) || '',
-          supplier: getPackageSupplierOrganization(pkg) || '',
+              .join(', ')
+              .truncate(MAX_CELL_LENGTH) || '',
+          license: getPackageLicenseExpression(pkg)?.truncate(MAX_CELL_LENGTH) || '',
+          supplier: getPackageSupplierOrganization(pkg)?.truncate(MAX_CELL_LENGTH) || '',
           totalVulnerabilities: securityAdvisories.length,
           criticalVulnerabilities: securityAdvisories.filter(
             (a) => a.advisory?.severity === SecurityAdvisorySeverity.Critical,
@@ -182,7 +185,8 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           securityAdvisories:
             securityAdvisories
               .map((a) => a.advisory?.identifiers?.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value)
-              .join(', ') || '',
+              .join(', ')
+              .truncate(MAX_CELL_LENGTH) || '',
         };
       }),
   };
@@ -219,8 +223,8 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
         return {
           ghsaId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Ghsa)?.value || '',
           cveId: vuln.advisory.identifiers.find((i) => i.type == SecurityAdvisoryIdentifierType.Cve)?.value || '',
-          summary: vuln.advisory.summary,
-          package: `${vuln.package.name} ${vuln.package.version}`,
+          summary: vuln.advisory.summary?.truncate(MAX_CELL_LENGTH),
+          package: `${vuln.package.name} ${vuln.package.version}`.truncate(MAX_CELL_LENGTH),
           vulnerableVersionRange: vuln.vulnerableVersionRange,
           fixAvailable: vuln.firstPatchedVersion ? 'Yes' : 'No',
           firstPatchedVersion: vuln.firstPatchedVersion,
@@ -260,11 +264,11 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
         const licenseRisk = getLicenseRiskAssessment(license.id);
         return {
           id: license.id,
-          name: license.name,
+          name: license.name?.truncate(MAX_CELL_LENGTH),
           packages: packagesWithLicense.length,
           riskSeverity: (licenseRisk?.severity || LicenseRiskSeverity.Low).toPascalCase(),
           riskReasons: licenseRisk?.reasons?.join('; ') || '',
-          url: license.url || '',
+          url: license.url?.truncate(MAX_CELL_LENGTH),
         };
       }),
   };
@@ -287,7 +291,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           .map((p) => `${p.name || ''}@${p.versionInfo || ''}`)
           .distinct();
         return {
-          name: supplier || '',
+          name: supplier?.truncate(MAX_CELL_LENGTH),
           packages: packagesFromSupplier.length,
         };
       }),
