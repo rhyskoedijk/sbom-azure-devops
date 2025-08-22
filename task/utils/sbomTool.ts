@@ -218,11 +218,30 @@ export class SbomTool {
       return this.toolPath;
     }
 
-    // Check if sbom-tool is already installed
-    this.toolPath = which('sbom-tool', false);
-    if (this.toolPath) {
+    // Check if sbom-tool is already installed to the path environment
+    const envToolPath = which('sbom-tool', false);
+    if (envToolPath) {
+      this.toolPath = envToolPath;
       return this.toolPath;
     }
+
+    // Check if sbom-tool is already installed to the agent tools directory
+    let agentToolPath: string | undefined;
+    switch (this.agentOperatingSystem) {
+      case 'Darwin':
+      case 'Linux':
+        agentToolPath = path.join(this.agentToolsDirectory, 'sbom-tool');
+        break;
+      case 'Windows_NT':
+        agentToolPath = path.join(this.agentToolsDirectory, 'sbom-tool.exe');
+        break;
+    }
+    if (agentToolPath && fileExistsSync(agentToolPath)) {
+      this.toolPath = agentToolPath;
+      return this.toolPath;
+    }
+
+    // We can't find sbom-tool, check if we are allowed to install it
     if (!installIfMissing) {
       throw new Error('SBOM Tool install not found');
     }
