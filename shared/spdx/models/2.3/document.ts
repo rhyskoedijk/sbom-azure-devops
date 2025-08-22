@@ -4,6 +4,8 @@ import { IFile } from './file';
 import { IPackage } from './package';
 import { IRelationship, RelationshipType } from './relationship';
 
+import '../../../extensions/array';
+
 /**
  * https://spdx.github.io/spdx-spec/v2.3/document-creation-information/
  */
@@ -61,10 +63,26 @@ export function getPackageAncestorDependencyPaths(document: IDocument, packageId
   }
 
   // Walk the dependency tree via all "DependsOn" relationships with the package to discover all possible package dependency paths
-  const ancestorDependencyReleationships = dependsOnRelationships.filter((r) => r.relatedSpdxElement === packageId);
-  return ancestorDependencyReleationships.flatMap((relationship) =>
-    getPackageAncestorPathsRecursive(dependsOnRelationships, packages, relationship.spdxElementId, [currentPackage]),
+  const ancestorDependencyReleationships = dependsOnRelationships
+    .filter((r: IRelationship) => r.relatedSpdxElement === packageId)
+    .distinctBy((r: IRelationship) => r.spdxElementId + r.relatedSpdxElement);
+  const ancestorDependencyPaths = ancestorDependencyReleationships.flatMap((relationship) =>
+    getPackageAncestorPathsRecursive(dependsOnRelationships, packages, relationship.spdxElementId, [currentPackage], 1),
   );
+
+  // Ensure there is only one ancestor dependency path per top-level package (prefer the longest path if multiple)
+  const shortestUniqueAncestorDependencyPaths: Record<string, IPackageDependencyPath> = {};
+  for (const path of ancestorDependencyPaths) {
+    const topLevelPackage = path.dependencyPath[0];
+    if (
+      !shortestUniqueAncestorDependencyPaths[topLevelPackage.SPDXID] ||
+      shortestUniqueAncestorDependencyPaths[topLevelPackage.SPDXID].dependencyPath.length < path.dependencyPath.length
+    ) {
+      shortestUniqueAncestorDependencyPaths[topLevelPackage.SPDXID] = path;
+    }
+  }
+
+  return Object.values(shortestUniqueAncestorDependencyPaths);
 }
 
 function getPackageAncestorPathsRecursive(
@@ -72,19 +90,28 @@ function getPackageAncestorPathsRecursive(
   packages: IPackage[],
   packageId: string,
   pathSoFar: IPackage[],
+  depth: number,
 ): IPackageDependencyPath[] {
   const currentPackage = packages.find((p) => p.SPDXID === packageId);
   if (!currentPackage) {
     return [{ dependencyPath: pathSoFar }];
   }
+  if (depth > 30) {
+    console.warn(
+      `Maximum depth of 30 reached while resolving package ancestor paths for '${pathSoFar.map((p) => p.name).join(' -> ')}'`,
+    );
+    return [{ dependencyPath: pathSoFar }];
+  }
 
   const newPath = [currentPackage, ...pathSoFar].filter((p) => p !== undefined);
   const ancestorDependencyPaths: IPackageDependencyPath[] = [];
-  const ancestorDependencyReleationships = relationships.filter((r) => r.relatedSpdxElement === packageId);
+  const ancestorDependencyReleationships = relationships
+    .filter((r: IRelationship) => r.relatedSpdxElement === packageId)
+    .distinctBy((r: IRelationship) => r.spdxElementId + r.relatedSpdxElement);
   if (ancestorDependencyReleationships.length > 0) {
     for (const relationship of ancestorDependencyReleationships) {
       ancestorDependencyPaths.push(
-        ...getPackageAncestorPathsRecursive(relationships, packages, relationship.spdxElementId, newPath),
+        ...getPackageAncestorPathsRecursive(relationships, packages, relationship.spdxElementId, newPath, depth + 1),
       );
     }
   } else {
