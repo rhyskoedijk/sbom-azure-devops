@@ -268,7 +268,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           packages: packagesWithLicense.length,
           riskSeverity: (licenseRisk?.severity || LicenseRiskSeverity.Low).toPascalCase(),
           riskReasons: licenseRisk?.reasons?.join('; ') || '',
-          url: license.url?.truncate(MAX_CELL_LENGTH),
+          url: license.url?.truncate(MAX_CELL_LENGTH) || '',
         };
       }),
   };
@@ -291,7 +291,7 @@ export async function convertSpdxToXlsxAsync(spdx: IDocument): Promise<Buffer> {
           .map((p) => `${p.name || ''}@${p.versionInfo || ''}`)
           .distinct();
         return {
-          name: supplier?.truncate(MAX_CELL_LENGTH),
+          name: supplier?.truncate(MAX_CELL_LENGTH) || '',
           packages: packagesFromSupplier.length,
         };
       }),
