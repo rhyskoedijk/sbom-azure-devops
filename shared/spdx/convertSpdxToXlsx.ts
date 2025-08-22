@@ -29,6 +29,8 @@ import { SecurityAdvisoryIdentifierType, SecurityAdvisorySeverity } from '../ghs
 import { ISecurityVulnerability } from '../ghsa/models/securityVulnerability';
 
 import '../extensions/array';
+import '../extensions/number';
+import '../extensions/string';
 
 const MAX_CELL_LENGTH = 32767;
 

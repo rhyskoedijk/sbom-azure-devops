@@ -2,10 +2,6 @@ import { expect, jest } from '@jest/globals';
 import { Buffer } from 'buffer';
 import { convertSpdxToXlsxAsync } from './convertSpdxToXlsx';
 
-import '../../shared/extensions/array';
-import '../../shared/extensions/number';
-import '../../shared/extensions/string';
-
 // Mocks for dependencies
 jest.mock('../models/severity', () => ({
   getSeverityByName: jest.fn(() => ({ weight: 1 })),

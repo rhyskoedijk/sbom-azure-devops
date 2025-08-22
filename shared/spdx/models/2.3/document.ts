@@ -4,6 +4,8 @@ import { IFile } from './file';
 import { IPackage } from './package';
 import { IRelationship, RelationshipType } from './relationship';
 
+import '../../../extensions/array';
+
 /**
  * https://spdx.github.io/spdx-spec/v2.3/document-creation-information/
  */
