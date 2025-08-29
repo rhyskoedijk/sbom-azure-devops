@@ -3,7 +3,7 @@
   "dependencies": {
     "azure-devops-extension-api": "^4.258.0",
     "azure-devops-extension-sdk": "^4.0.2",
-    "azure-devops-ui": "^2.260.0",
+    "azure-devops-ui": "^2.261.0",
     "path-browserify": "^1.0.1",
     "react-zoom-pan-pinch": "^3.7.0",
     "recharts": "^2.15.3"
