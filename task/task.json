@@ -115,6 +115,15 @@
       "visibleRule": "command=generate"
     },
     {
+      "name": "licenseInformationTimeoutInSeconds",
+      "type": "string",
+      "label": "License Information Timeout (Seconds)",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Specifies the timeout in seconds for fetching the license information. Defaults to 30 seconds. Has no effect if the `fetchLicenseInformation` argument is false or not provided. A negative value corresponds to an infinite timeout.",
+      "visibleRule": "command=generate"
+    },
+    {
       "name": "fetchSecurityAdvisories",
       "type": "boolean",
       "label": "Fetch Security Advisory Information",
