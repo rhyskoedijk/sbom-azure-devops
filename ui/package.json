@@ -1,9 +1,9 @@
 {
   "private": true,
   "dependencies": {
-    "azure-devops-extension-api": "^4.258.0",
-    "azure-devops-extension-sdk": "^4.0.2",
-    "azure-devops-ui": "^2.260.0",
+    "azure-devops-extension-api": "^4.260.0",
+    "azure-devops-extension-sdk": "^4.1.0",
+    "azure-devops-ui": "^2.262.0",
     "path-browserify": "^1.0.1",
     "react-zoom-pan-pinch": "^3.7.0",
     "recharts": "^2.15.3"
@@ -13,12 +13,12 @@
     "@types/react-dom": "~16.9.25",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^7.1.2",
-    "sass": "^1.90.0",
+    "sass": "^1.93.2",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.14",
-    "ts-loader": "^9.5.2",
-    "webpack": "^5.101.3",
+    "ts-loader": "^9.5.4",
+    "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   }

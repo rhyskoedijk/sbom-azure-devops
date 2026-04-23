@@ -49,6 +49,7 @@ async function run() {
               enableManifestGraphGeneration: getBoolInput('enableManifestGraphGeneration', false),
               enablePackageMetadataParsing: getBoolInput('enablePackageMetadataParsing', false),
               fetchLicenseInformation: getBoolInput('fetchLicenseInformation', false),
+              licenseInformationTimeoutInSeconds: getInput('licenseInformationTimeoutInSeconds', false),
               fetchSecurityAdvisories: getBoolInput('fetchSecurityAdvisories', false),
               gitHubAccessToken: getGithubAccessToken(),
               packageName:

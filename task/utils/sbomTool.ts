@@ -31,6 +31,7 @@ export interface SbomToolGenerateArgs {
   enableManifestGraphGeneration?: boolean;
   enablePackageMetadataParsing?: boolean;
   fetchLicenseInformation?: boolean;
+  licenseInformationTimeoutInSeconds?: string;
   fetchSecurityAdvisories?: boolean;
   gitHubAccessToken?: string;
   packageName: string;
@@ -96,6 +97,9 @@ export class SbomTool {
       }
       if (args.fetchLicenseInformation) {
         sbomToolArguments.push('-li', 'true');
+        if (args.licenseInformationTimeoutInSeconds) {
+          sbomToolArguments.push('-lto', args.licenseInformationTimeoutInSeconds);
+        }
       }
       sbomToolArguments.push('-pn', args.packageName);
       sbomToolArguments.push('-pv', args.packageVersion);
