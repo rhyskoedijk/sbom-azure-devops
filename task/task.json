@@ -8,8 +8,12 @@
   "helpUrl": "https://github.com/rhyskoedijk/sbom-azure-devops/issues",
   "releaseNotes": "https://github.com/rhyskoedijk/sbom-azure-devops/releases",
   "category": "Azure Pipelines",
-  "visibility": ["Build"],
-  "runsOn": ["Agent"],
+  "visibility": [
+    "Build"
+  ],
+  "runsOn": [
+    "Agent"
+  ],
   "minimumAgentVersion": "3.232.1",
   "author": "Rhys Koedijk",
   "version": {
@@ -157,8 +161,7 @@
       "label": "Package Name",
       "defaultValue": "$(Build.Repository.Name)",
       "required": false,
-      "helpMarkDown": "The name of the package that this SBOM will describe. Defaults to the build repository name if `buildSourcePath` is a single directory; Defaults to the parent directory name when `buildSourcePath` is a glob pattern.",
-      "visibleRule": "command=generate"
+      "helpMarkDown": "The name of the package that this SBOM will describe. Defaults to the build repository name if `buildSourcePath` is a single directory; Defaults to the parent directory name when `buildSourcePath` is a glob pattern."
     },
     {
       "groupName": "package",
@@ -167,8 +170,7 @@
       "label": "Package Version",
       "defaultValue": "$(Build.BuildNumber)",
       "required": false,
-      "helpMarkDown": "The version of the package that this SBOM will describe. Defaults to the build pipeline version number. ",
-      "visibleRule": "command=generate"
+      "helpMarkDown": "The version of the package that this SBOM will describe. Defaults to the build pipeline version number. "
     },
     {
       "groupName": "package",
@@ -177,8 +179,7 @@
       "label": "Package Supplier",
       "defaultValue": "$(System.CollectionId)",
       "required": false,
-      "helpMarkDown": "The supplier name of the package that this SBOM will describe. Defaults to the parent collection GUID.",
-      "visibleRule": "command=generate"
+      "helpMarkDown": "The supplier name of the package that this SBOM will describe. Defaults to the parent collection GUID."
     },
     {
       "groupName": "package",
@@ -187,8 +188,7 @@
       "label": "Package Namespace URI Base",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The base path of the SPDX namespace URI that this SBOM will describe. Defaults to `https://{packageSupplier}.com`. For example, a base path of `https://companyName.com/teamName` will create the (unique) namespace URI `https://companyName.com/teamName/{packageName}/{packageVersion}/{newGuid}`.",
-      "visibleRule": "command=generate"
+      "helpMarkDown": "The base path of the SPDX namespace URI that this SBOM will describe. Defaults to `https://{packageSupplier}.com`. For example, a base path of `https://companyName.com/teamName` will create the (unique) namespace URI `https://companyName.com/teamName/{packageName}/{packageVersion}/{newGuid}`."
     },
     {
       "groupName": "package",
@@ -197,8 +197,7 @@
       "label": "Package Namespace URI Unique Part",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "A unique valid URI part that will be appended to the SPDX namespace URI. If specified, this value should be globally unique.",
-      "visibleRule": "command=generate"
+      "helpMarkDown": "A unique valid URI part that will be appended to the SPDX namespace URI. If specified, this value should be globally unique."
     },
     {
       "groupName": "advanced",
@@ -207,8 +206,7 @@
       "label": "Additional Component Detector Arguments",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Additional arguments for [Component Detector](https://github.com/microsoft/component-detection). Arguments must be space-delimited list of `--key value` pairs. See: https://github.com/microsoft/component-detection/blob/main/docs/detector-arguments.md",
-      "visibleRule": "command=generate"
+      "helpMarkDown": "Additional arguments for [Component Detector](https://github.com/microsoft/component-detection). Arguments must be space-delimited list of `--key value` pairs. See: https://github.com/microsoft/component-detection/blob/main/docs/detector-arguments.md"
     },
     {
       "groupName": "advanced",
@@ -217,8 +215,7 @@
       "label": "External Document Reference List",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "A list of external SBOMs (one per line) that will be included as external document references in the SBOM. Referenced files must be in SPDX 2.X format.",
-      "visibleRule": "command=generate"
+      "helpMarkDown": "A list of external SBOMs (one per line) that will be included as external document references in the SBOM. Referenced files must be in SPDX 2.X format."
     }
   ],
   "execution": {
