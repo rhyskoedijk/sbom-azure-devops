@@ -8,12 +8,8 @@
   "helpUrl": "https://github.com/rhyskoedijk/sbom-azure-devops/issues",
   "releaseNotes": "https://github.com/rhyskoedijk/sbom-azure-devops/releases",
   "category": "Azure Pipelines",
-  "visibility": [
-    "Build"
-  ],
-  "runsOn": [
-    "Agent"
-  ],
+  "visibility": ["Build"],
+  "runsOn": ["Agent"],
   "minimumAgentVersion": "3.232.1",
   "author": "Rhys Koedijk",
   "version": {
