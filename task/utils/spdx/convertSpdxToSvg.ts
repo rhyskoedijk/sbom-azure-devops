@@ -160,7 +160,15 @@ export async function convertSpdxToSvgAsync(spdx: IDocument): Promise<Buffer> {
 
   // Export the graph as SVG text
   console.info(`Writing SVG image`);
-  return Buffer.from(positioned.to_svg().to_string(), 'utf8');
+  try {
+    const svg = positioned.to_svg();
+    return Buffer.from(svg.to_string(), 'utf8');
+  }
+  catch (error: unknown) {
+    // If SVG generation fails, return a minimal valid SVG
+    console.warn(`Failed to generate SVG image.  ${ (error as Error)?.message }`);
+    return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>`, 'utf8');
+  }
 }
 
 function graphFileAndParentDirectoriesRecursive(
